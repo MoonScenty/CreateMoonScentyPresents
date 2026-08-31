@@ -3,7 +3,7 @@ package me.moonscenty.createmoonscentypresents.content.kinetics;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.simpleRelays.CogWheelBlock;
 
-import me.moonscenty.createmoonscentypresents.ModBlockEntityTypes;
+import me.moonscenty.createmoonscentypresents.registry.ModBlockEntityTypes;
 
 import net.minecraft.world.level.block.entity.BlockEntityType;
 

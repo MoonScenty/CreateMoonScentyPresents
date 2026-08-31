@@ -9,7 +9,7 @@ import com.simibubi.create.content.kinetics.simpleRelays.ShaftBlock;
 import com.simibubi.create.content.kinetics.steamEngine.PoweredShaftBlock;
 import com.simibubi.create.foundation.placement.PoleHelper;
 
-import me.moonscenty.createmoonscentypresents.ModBlockEntityTypes;
+import me.moonscenty.createmoonscentypresents.registry.ModBlockEntityTypes;
 
 import net.createmod.catnip.placement.IPlacementHelper;
 import net.createmod.catnip.placement.PlacementHelpers;

@@ -1,4 +1,6 @@
-package me.moonscenty.createmoonscentypresents;
+package me.moonscenty.createmoonscentypresents.registry;
+
+import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
 
 import me.moonscenty.createmoonscentypresents.content.sawing.SawingRecipe;
 

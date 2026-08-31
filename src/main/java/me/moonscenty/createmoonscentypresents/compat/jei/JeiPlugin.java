@@ -3,8 +3,8 @@ package me.moonscenty.createmoonscentypresents.compat.jei;
 import java.util.List;
 
 import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
-import me.moonscenty.createmoonscentypresents.ModItems;
-import me.moonscenty.createmoonscentypresents.ModRecipeTypes;
+import me.moonscenty.createmoonscentypresents.registry.ModItems;
+import me.moonscenty.createmoonscentypresents.registry.ModRecipeTypes;
 import me.moonscenty.createmoonscentypresents.content.sawing.SawingRecipe;
 
 import mezz.jei.api.IModPlugin;

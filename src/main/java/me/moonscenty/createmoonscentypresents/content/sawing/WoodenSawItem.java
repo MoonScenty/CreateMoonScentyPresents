@@ -2,7 +2,7 @@ package me.moonscenty.createmoonscentypresents.content.sawing;
 
 import com.simibubi.create.foundation.item.CustomUseEffectsItem;
 
-import me.moonscenty.createmoonscentypresents.ModDataComponents;
+import me.moonscenty.createmoonscentypresents.registry.ModDataComponents;
 
 import net.createmod.catnip.data.TriState;
 import net.minecraft.core.particles.ItemParticleOption;

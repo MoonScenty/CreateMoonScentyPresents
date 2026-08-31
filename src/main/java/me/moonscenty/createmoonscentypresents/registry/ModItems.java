@@ -1,4 +1,6 @@
-package me.moonscenty.createmoonscentypresents;
+package me.moonscenty.createmoonscentypresents.registry;
+
+import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
 
 import com.simibubi.create.foundation.data.recipe.CommonMetal;
 import com.tterrag.registrate.util.entry.ItemEntry;

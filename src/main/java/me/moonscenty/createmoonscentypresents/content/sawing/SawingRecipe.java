@@ -5,7 +5,7 @@ import java.util.List;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import me.moonscenty.createmoonscentypresents.ModRecipeTypes;
+import me.moonscenty.createmoonscentypresents.registry.ModRecipeTypes;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;

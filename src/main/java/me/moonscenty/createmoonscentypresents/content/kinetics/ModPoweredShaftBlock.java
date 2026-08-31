@@ -5,7 +5,7 @@ import java.util.function.Supplier;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.steamEngine.PoweredShaftBlock;
 
-import me.moonscenty.createmoonscentypresents.ModBlockEntityTypes;
+import me.moonscenty.createmoonscentypresents.registry.ModBlockEntityTypes;
 
 import net.createmod.catnip.placement.IPlacementHelper;
 import net.createmod.catnip.placement.PlacementHelpers;

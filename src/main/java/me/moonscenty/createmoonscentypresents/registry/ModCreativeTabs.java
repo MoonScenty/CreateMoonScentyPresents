@@ -1,4 +1,6 @@
-package me.moonscenty.createmoonscentypresents;
+package me.moonscenty.createmoonscentypresents.registry;
+
+import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;

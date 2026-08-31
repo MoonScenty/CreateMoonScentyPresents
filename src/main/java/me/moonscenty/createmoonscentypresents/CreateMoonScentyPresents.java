@@ -5,6 +5,14 @@ import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 
+import me.moonscenty.createmoonscentypresents.registry.ModBlockEntityTypes;
+import me.moonscenty.createmoonscentypresents.registry.ModBlocks;
+import me.moonscenty.createmoonscentypresents.registry.ModCreativeTabs;
+import me.moonscenty.createmoonscentypresents.registry.ModDataComponents;
+import me.moonscenty.createmoonscentypresents.registry.ModItems;
+import me.moonscenty.createmoonscentypresents.registry.ModRecipeTypes;
+import me.moonscenty.createmoonscentypresents.registry.ModRecipes;
+
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 

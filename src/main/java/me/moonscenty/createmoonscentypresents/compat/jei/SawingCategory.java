@@ -1,8 +1,8 @@
 package me.moonscenty.createmoonscentypresents.compat.jei;
 
 import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
-import me.moonscenty.createmoonscentypresents.ModItems;
-import me.moonscenty.createmoonscentypresents.ModRecipes;
+import me.moonscenty.createmoonscentypresents.registry.ModItems;
+import me.moonscenty.createmoonscentypresents.registry.ModRecipes;
 import me.moonscenty.createmoonscentypresents.content.sawing.SawingRecipe;
 
 import com.mojang.blaze3d.vertex.PoseStack;
