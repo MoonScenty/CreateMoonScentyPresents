@@ -1,0 +1,17 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "createmoonscentypresents:block/bronze_powered_shaft",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "createmoonscentypresents:block/bronze_powered_shaft"
+    },
+    "axis=z": {
+      "model": "createmoonscentypresents:block/bronze_powered_shaft",
+      "x": 90,
+      "y": 180
+    }
+  }
+}

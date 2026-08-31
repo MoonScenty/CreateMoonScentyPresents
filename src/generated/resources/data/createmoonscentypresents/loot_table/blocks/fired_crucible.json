@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "createmoonscentypresents:fired_crucible"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "createmoonscentypresents:blocks/fired_crucible"
+}

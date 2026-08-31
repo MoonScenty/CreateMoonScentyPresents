@@ -1,0 +1,10 @@
+{
+  "type": "createmoonscentypresents:sawing",
+  "ingredient": {
+    "tag": "minecraft:acacia_logs"
+  },
+  "result": {
+    "count": 6,
+    "id": "minecraft:acacia_planks"
+  }
+}

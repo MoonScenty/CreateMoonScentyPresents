@@ -1,0 +1,10 @@
+{
+  "type": "createmoonscentypresents:sawing",
+  "ingredient": {
+    "tag": "minecraft:spruce_logs"
+  },
+  "result": {
+    "count": 6,
+    "id": "minecraft:spruce_planks"
+  }
+}

@@ -1,0 +1,92 @@
+{
+	"format_version": "1.21.11",
+	"credit": "Made with Blockbench",
+	"parent": "block/block",
+	"textures": {
+		"1": "createmoonscentypresents:block/pit_kiln_lid",
+		"3": "createmoonscentypresents:block/pit_kiln_lid_top",
+		"12": "createmoonscentypresents:block/pit_kiln",
+		"particle": "createmoonscentypresents:block/pit_kiln"
+	},
+	"elements": [
+		{
+			"name": "Pit Kiln Lid",
+			"from": [0, 14, 0],
+			"to": [16, 16, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, -2, 0]},
+			"faces": {
+				"north": {"uv": [8, 0, 0, 1], "texture": "#12"},
+				"east": {"uv": [8, 0, 0, 1], "texture": "#12"},
+				"south": {"uv": [8, 0, 0, 1], "texture": "#12"},
+				"west": {"uv": [8, 0, 0, 1], "texture": "#12"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#3"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#1"}
+			}
+		},
+		{
+			"name": "Pit Kiln Lid Knob",
+			"from": [5, 16, 5],
+			"to": [11, 18, 11],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, -2, 0]},
+			"faces": {
+				"north": {"uv": [11, 6, 5, 4], "texture": "#3"},
+				"east": {"uv": [11, 6, 5, 4], "texture": "#3"},
+				"south": {"uv": [11, 6, 5, 4], "texture": "#3"},
+				"west": {"uv": [11, 6, 5, 4], "texture": "#3"},
+				"up": {"uv": [11, 11, 5, 5], "texture": "#3"},
+				"down": {"uv": [4, 4, 0, 8], "texture": "#3"}
+			}
+		},
+		{
+			"name": "Pit Kiln",
+			"from": [0, 2, 0],
+			"to": [16, 14, 16],
+			"faces": {
+				"north": {"uv": [0, 1, 8, 7], "texture": "#12"},
+				"east": {"uv": [0, 1, 8, 7], "texture": "#12"},
+				"south": {"uv": [0, 1, 8, 7], "texture": "#12"},
+				"west": {"uv": [0, 1, 8, 7], "texture": "#12"},
+				"up": {"uv": [0, 8, 8, 16], "texture": "#12"},
+				"down": {"uv": [0, 8, 8, 16], "texture": "#12"}
+			}
+		},
+		{
+			"name": "Pit Kiln Interior",
+			"from": [1.95, 2, 1.95],
+			"to": [14.05, 2, 14.05],
+			"faces": {
+				"north": {"uv": [9, 1, 15, 7], "rotation": 180, "texture": "#12"},
+				"east": {"uv": [9, 1, 15, 7], "rotation": 180, "texture": "#12"},
+				"south": {"uv": [9, 1, 15, 7], "rotation": 180, "texture": "#12"},
+				"west": {"uv": [9, 1, 15, 7], "rotation": 180, "texture": "#12"},
+				"up": {"uv": [9, 9, 15, 15], "rotation": 90, "texture": "#12"}
+			}
+		},
+		{
+			"name": "Pit Kiln Base",
+			"from": [2, 0, 2],
+			"to": [14, 2, 14],
+			"faces": {
+				"north": {"uv": [1, 7, 7, 8], "texture": "#12"},
+				"east": {"uv": [1, 7, 7, 8], "texture": "#12"},
+				"south": {"uv": [1, 7, 7, 8], "texture": "#12"},
+				"west": {"uv": [1, 7, 7, 8], "texture": "#12"},
+				"down": {"uv": [9, 9, 15, 15], "texture": "#12"}
+			}
+		}
+	],
+	"groups": [
+		0,
+		1,
+		{
+			"name": "Pit Kiln",
+			"origin": [8, 8, 8],
+			"scope": 0,
+			"color": 0,
+			"children": []
+		},
+		2,
+		3,
+		4
+	]
+}

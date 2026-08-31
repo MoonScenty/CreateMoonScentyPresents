@@ -1,0 +1,10 @@
+{
+  "type": "createmoonscentypresents:sawing",
+  "ingredient": {
+    "tag": "minecraft:oak_logs"
+  },
+  "result": {
+    "count": 6,
+    "id": "minecraft:oak_planks"
+  }
+}
