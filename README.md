@@ -24,7 +24,7 @@
 |---|---|---|---|
 | 식물 섬유 | `plant_fiber` | 끈과 밧줄 제작에 사용하는 가장 기초적인 섬유 재료 | 잔디, 키 큰 풀, 일부 작물을 Flint Knife로 절단 시 획득 |
 | 끈 | `twine` | 도구 결속, 가죽 가공, 원시 기계 제작용 중간 재료 | Plant Fiber ×3 → Twine ×1 |
-| 밧줄 | `rope` | 수차, 벨트, 기계 프레임 등 하중을 받는 원시 부품 제작 | Twine ×3 → Rope ×1 |
+| 밧줄 | `rope` | 수차, 벨트 등 하중을 받는 원시 부품 제작 | Twine ×3 → Rope ×1 |
 | 나무 수지 | `resin` | 목재 기계 부품의 접착 및 밀봉용 재료 | 원목에 Flint Knife 또는 별도 수지 채취 도구 사용 |
 | 가죽 스트립 | `leather_strip` | 풀무, 원시 벨트, 기계 결속 부품 제작 | Leather ×1 + Flint Knife → Leather Strip ×3~4 |
 | 숯 가루 | `charcoal_dust` | 원시 제련, 탄소 재료, 후속 혼합 공정용 | Charcoal → Primitive Millstone 또는 Mortar로 분쇄 |
@@ -65,7 +65,7 @@
 | 청동 축 | `bronze_shaft` | 64 RPM을 견디는 최초의 고급 회전축 | Bronze Ingot/Plate + Casting |
 | 청동 베어링 | `bronze_bearing` | 64 RPM 회전체와 브론즈 시대 기계 제작용 핵심 부품 | Bronze Ring/Plate + Wooden Bearing + Resin |
 | 청동 기어 | `bronze_cogwheel` | 64 RPM 기어비 구성용 브론즈 부품 | Bronze Plate/Ingot + Wooden Gear Core 또는 Casting |
-| 청동 기계 프레임 | `bronze_machine_frame` | 브론즈 시대 첫 기계들의 공통 베이스 부품 | Bronze Plate ×4 + Bronze Bearing ×1 + Wooden Frame/Plank ×4 |
+| 청동 기어박스 부품 | `bronze_gearbox_component` | Bronze Gearbox 제작용 핵심 중간 부품 | Bronze Shaft ×1 + Bronze Cogwheel ×1 + Bronze Plate ×4 |
 
 ### 블록
 
@@ -95,7 +95,7 @@
 | 내화 벽돌 블록 | `fire_bricks` | Crucible Furnace와 이후 고온 멀티블록의 구조 재료 | Fire Brick ×4 → Fire Bricks Block ×1 |
 | 원시 화로 | `primitive_furnace` | 음식, 벽돌, 유리, 일반 가열 전용. 금속 광석 직접 제련은 불가 | Cobblestone/Stone ×8 |
 | 원시 모루 | `primitive_anvil` | Copper/Bronze Ingot을 수동으로 Plate 및 간단한 부품으로 가공 | Stone Block ×3 + Smooth Stone ×3 |
-| 브론즈 기어박스 | `bronze_gearbox` | 64 RPM 회전망의 시작점. 브론즈 시대 진입용 동력 전달 블록 | Bronze Plate ×4 + Bronze Cogwheel ×2 + Bronze Shaft ×1 + Bronze Bearing ×1 |
+| 브론즈 기어박스 | `bronze_gearbox` | 64 RPM 회전망의 시작점. 브론즈 시대 진입용 동력 전달 블록 | Bronze Gearbox Component ×1 + Bronze Plate ×4 + Bronze Cogwheel ×2 |
 
 ### 석기시대 기본 가공 흐름
 
