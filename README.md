@@ -360,7 +360,6 @@ Primitive Vertical Gearbox
 
 | 블록 이름 | registry_id | 기능 내용 | 제작 방법 |
 |---|---|---|---|
-| 원시 작업대 | `primitive_workbench` | 석기 시대 기계 부품 및 복잡한 수동 제작용 작업대 | Crafting Table + Stone + Plank |
 | 건조대 | `drying_rack` | 가죽, 섬유, 젖은 재료 등을 시간 기반으로 건조 | Stick + Twine/Rope |
 | 구덩이 가마 | `pit_kiln` | Unfired Crucible, Ingot Mold, Fire Brick 등을 소성 | Clay + Stone 계열 재료 또는 월드 구조 방식 |
 | 숯가마 | `charcoal_pit` | Log를 Charcoal과 Ash로 변환 | Log 밀폐 구조 또는 전용 블록 방식 |
