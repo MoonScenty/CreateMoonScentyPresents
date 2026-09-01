@@ -39,6 +39,7 @@ public class ModPartialModels {
         simple("bronze_powered_shaft");
         simple("bronze_cogwheel");
         largeCogwheel("large_stone_cogwheel", "cogwheel_shaft");
+        ROTATING.put("primitive_millstone", block("primitive_millstone/inner"));
         GEARBOX_SHAFTS.put("primitive_gearbox", block("wooden_shaft_half"));
     }
 

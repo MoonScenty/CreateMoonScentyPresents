@@ -15,6 +15,7 @@ import java.util.Map;
 
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModCogwheelBlock;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModGearboxBlock;
+import me.moonscenty.createmoonscentypresents.content.kinetics.ModMillstoneBlock;
 import me.moonscenty.createmoonscentypresents.content.processing.BasinShapedBlock;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRackBlock;
 import me.moonscenty.createmoonscentypresents.content.processing.HorizontalCubeBlock;
@@ -80,6 +81,25 @@ public class ModBlocks {
             .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(),
                     prov.models().getExistingFile(prov.modLoc("block/drying_rack")), 270))
             .simpleItem()
+            .register();
+
+    // Stone Age - grinds concentrates, charcoal and grain. Create's millstone taken
+    // whole: its block class, block entity, renderer and milling recipes are reused,
+    // and its model and textures are copied into this mod so they can be redrawn.
+    //
+    // No noOcclusion, matching Create: the millstone's own shape is not a full cube, so
+    // light already reaches the cell the turning cog is drawn in.
+    public static final BlockEntry<ModMillstoneBlock> PRIMITIVE_MILLSTONE = CreateMoonScentyPresents.REGISTRATE
+            .block("primitive_millstone", ModMillstoneBlock::new)
+            .initialProperties(() -> Blocks.STONE)
+            .properties(p -> p.mapColor(MapColor.METAL))
+            .transform(TagGen.pickaxeOnly())
+            .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
+                    prov.models().getExistingFile(prov.modLoc("block/primitive_millstone/block"))))
+            .item()
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(),
+                    prov.modLoc("block/primitive_millstone/item")))
+            .build()
             .register();
 
     // Stone Age - splits and reverses rotation across four sides. Create's gearbox

@@ -31,6 +31,7 @@ public class ModKineticLimits {
             // The vertical gearbox is the same block placed on a different axis, so it
             // is covered by this one entry.
             "primitive_gearbox", 32,
+            "primitive_millstone", 32,
             "bronze_shaft", 64,
             "bronze_powered_shaft", 64,
             "bronze_cogwheel", 64);

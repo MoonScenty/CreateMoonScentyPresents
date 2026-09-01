@@ -11,6 +11,8 @@ import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModGearboxBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModKineticBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModKineticVisual;
+import me.moonscenty.createmoonscentypresents.content.kinetics.ModMillstoneBlockEntity;
+import me.moonscenty.createmoonscentypresents.content.kinetics.ModMillstoneRenderer;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModPoweredShaftBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRackBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRackRenderer;
@@ -36,6 +38,16 @@ public class ModBlockEntityTypes {
             .visual(() -> GearboxVisual::new)
             .validBlocks(ModBlocks.PRIMITIVE_GEARBOX)
             .renderer(() -> GearboxRenderer::new)
+            .register();
+
+    // Create's millstone block entity and renderer, with this mod's turning cog.
+    public static final BlockEntityEntry<ModMillstoneBlockEntity> MILLSTONE = CreateMoonScentyPresents.REGISTRATE
+            .blockEntity("millstone", ModMillstoneBlockEntity::new)
+            // true: the housing still draws as a normal block model, and only the cog
+            // inside is handed to Flywheel.
+            .visual(() -> ModKineticVisual::millstone, true)
+            .validBlocks(ModBlocks.PRIMITIVE_MILLSTONE)
+            .renderer(() -> ModMillstoneRenderer::new)
             .register();
 
     // Holds the one item hung on a drying rack, and draws it.
