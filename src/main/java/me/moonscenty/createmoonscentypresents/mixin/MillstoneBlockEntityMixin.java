@@ -9,8 +9,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.kinetics.millstone.MillstoneBlockEntity;
 
-import me.moonscenty.createmoonscentypresents.content.kinetics.ModMillstoneBlockEntity;
-import me.moonscenty.createmoonscentypresents.registry.ModRecipeTypes;
+import me.moonscenty.createmoonscentypresents.content.kinetics.PrimitiveGrinder;
 
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -35,9 +34,9 @@ public class MillstoneBlockEntityMixin {
                             + "Lnet/minecraft/world/level/Level;)Ljava/util/Optional;"))
     private <I extends RecipeInput, R extends Recipe<I>> Optional<RecipeHolder<R>>
             createmoonscentypresents$findPrimitiveRecipe(AllRecipeTypes milling, I input, Level level) {
-        if (!((Object) this instanceof ModMillstoneBlockEntity))
+        if (!((Object) this instanceof PrimitiveGrinder grinder))
             return milling.find(input, level);
-        return level.getRecipeManager().getRecipeFor(ModRecipeTypes.PRIMITIVE_MILLING.get(), input, level)
+        return level.getRecipeManager().getRecipeFor(grinder.primitiveRecipeType(), input, level)
                 .map(holder -> (RecipeHolder<R>) (RecipeHolder<?>) holder);
     }
 }

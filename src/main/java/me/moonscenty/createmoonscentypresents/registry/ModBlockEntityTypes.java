@@ -13,6 +13,7 @@ import me.moonscenty.createmoonscentypresents.content.kinetics.ModKineticBlockEn
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModKineticVisual;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModMillstoneBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModMillstoneRenderer;
+import me.moonscenty.createmoonscentypresents.content.kinetics.ModSifterBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModPoweredShaftBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRackBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRackRenderer;
@@ -64,6 +65,15 @@ public class ModBlockEntityTypes {
             .visual(() -> ModKineticVisual::poweredShaft, false)
             .validBlocks(ModBlocks.WOODEN_POWERED_SHAFT, ModBlocks.BRONZE_POWERED_SHAFT)
             .renderer(() -> KineticBlockEntityRenderer::new)
+            .register();
+
+    // Shares the millstone's renderer and visual: both draw a housing plus one turning
+    // cog, and each looks its model up by block.
+    public static final BlockEntityEntry<ModSifterBlockEntity> SIFTER = CreateMoonScentyPresents.REGISTRATE
+            .blockEntity("sifter", ModSifterBlockEntity::new)
+            .visual(() -> ModKineticVisual::millstone, true)
+            .validBlocks(ModBlocks.PRIMITIVE_SIFTER)
+            .renderer(() -> ModMillstoneRenderer::new)
             .register();
 
     // Called from the mod constructor purely to load this class, which declares

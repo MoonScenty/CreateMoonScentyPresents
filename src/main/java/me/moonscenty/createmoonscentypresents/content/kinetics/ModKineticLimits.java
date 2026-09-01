@@ -23,18 +23,19 @@ public class ModKineticLimits {
     /** Parts with no entry are not gated. */
     public static final int UNLIMITED = 0;
 
-    private static final Map<String, Integer> LIMITS = Map.of(
-            "wooden_shaft", 32,
-            "wooden_powered_shaft", 32,
-            "stone_cogwheel", 32,
-            "large_stone_cogwheel", 32,
+    private static final Map<String, Integer> LIMITS = Map.ofEntries(
+            Map.entry("wooden_shaft", 32),
+            Map.entry("wooden_powered_shaft", 32),
+            Map.entry("stone_cogwheel", 32),
+            Map.entry("large_stone_cogwheel", 32),
             // The vertical gearbox is the same block placed on a different axis, so it
             // is covered by this one entry.
-            "primitive_gearbox", 32,
-            "primitive_millstone", 32,
-            "bronze_shaft", 64,
-            "bronze_powered_shaft", 64,
-            "bronze_cogwheel", 64);
+            Map.entry("primitive_gearbox", 32),
+            Map.entry("primitive_millstone", 32),
+            Map.entry("primitive_sifter", 32),
+            Map.entry("bronze_shaft", 64),
+            Map.entry("bronze_powered_shaft", 64),
+            Map.entry("bronze_cogwheel", 64));
 
     public static int of(BlockState state) {
         ResourceLocation id = BuiltInRegistries.BLOCK.getKey(state.getBlock());

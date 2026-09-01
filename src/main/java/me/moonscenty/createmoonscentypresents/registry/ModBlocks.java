@@ -21,6 +21,7 @@ import me.moonscenty.createmoonscentypresents.content.processing.DryingRackBlock
 import me.moonscenty.createmoonscentypresents.content.processing.HorizontalCubeBlock;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModPoweredShaftBlock;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModShaftBlock;
+import me.moonscenty.createmoonscentypresents.content.kinetics.ModSifterBlock;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -105,6 +106,21 @@ public class ModBlocks {
     // Stone Age - splits and reverses rotation across four sides. Create's gearbox
     // taken whole: its block class, block entity, renderer and visual are reused, and
     // its model and textures are copied into this mod so they can be redrawn.
+    // Built on Create's millstone: one input worked over time by rotation. A wooden
+    // frame rather than a stone one, which is also what tells it apart in the world.
+    public static final BlockEntry<ModSifterBlock> PRIMITIVE_SIFTER = CreateMoonScentyPresents.REGISTRATE
+            .block("primitive_sifter", ModSifterBlock::new)
+            .initialProperties(() -> Blocks.OAK_PLANKS)
+            .properties(p -> p.mapColor(MapColor.WOOD).sound(SoundType.WOOD))
+            .transform(TagGen.axeOrPickaxe())
+            .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
+                    prov.models().getExistingFile(prov.modLoc("block/primitive_sifter/block"))))
+            .item()
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(),
+                    prov.modLoc("block/primitive_sifter/item")))
+            .build()
+            .register();
+
     public static final BlockEntry<ModGearboxBlock> PRIMITIVE_GEARBOX = CreateMoonScentyPresents.REGISTRATE
             .block("primitive_gearbox", ModGearboxBlock::new)
             .initialProperties(() -> Blocks.STONE)

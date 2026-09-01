@@ -6,6 +6,7 @@ import me.moonscenty.createmoonscentypresents.content.processing.DryingRecipe;
 import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 
 import me.moonscenty.createmoonscentypresents.content.kinetics.PrimitiveMillingRecipe;
+import me.moonscenty.createmoonscentypresents.content.kinetics.PrimitiveSiftingRecipe;
 import me.moonscenty.createmoonscentypresents.content.sawing.SawingRecipe;
 
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -47,6 +48,15 @@ public class ModRecipeTypes {
     public static final DeferredHolder<RecipeSerializer<?>, StandardProcessingRecipe.Serializer<PrimitiveMillingRecipe>>
             PRIMITIVE_MILLING_SERIALIZER = SERIALIZERS.register("primitive_milling",
                     () -> new StandardProcessingRecipe.Serializer<>(PrimitiveMillingRecipe::new));
+
+    public static final DeferredHolder<RecipeType<?>, RecipeType<PrimitiveSiftingRecipe>> PRIMITIVE_SIFTING =
+            TYPES.register("primitive_sifting", () -> RecipeType.simple(
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(
+                            CreateMoonScentyPresents.MODID, "primitive_sifting")));
+
+    public static final DeferredHolder<RecipeSerializer<?>, StandardProcessingRecipe.Serializer<PrimitiveSiftingRecipe>>
+            PRIMITIVE_SIFTING_SERIALIZER = SERIALIZERS.register("primitive_sifting",
+                    () -> new StandardProcessingRecipe.Serializer<>(PrimitiveSiftingRecipe::new));
 
     public static void register(IEventBus modEventBus) {
         TYPES.register(modEventBus);
