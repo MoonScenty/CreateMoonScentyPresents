@@ -164,6 +164,8 @@ Planks / Stripped Log
 
 광석 파쇄 결과물은 별도의 `crushed_*_ore` 아이템을 추가하지 않고 **Create 모드에 이미 존재하는 Crushed Ore 계열 아이템을 그대로 사용한다.**
 
+Bronze 합금에 필요한 Tin은 바닐라와 Create 어느 쪽에도 없으므로 이 모드가 직접 추가하며, **`tin_ore`와 `deepslate_tin_ore`를 월드 생성으로 배치한다.** Copper는 바닐라 광석을 그대로 사용한다.
+
 기본 광석 처리 흐름은 다음과 같다.
 
 ```text
@@ -339,6 +341,10 @@ Primitive Vertical Gearbox
 | 광물 팬 | `ore_pan` | Create Crushed Ore의 수동 선광 | Wooden Bowl + Plank |
 | 나무 집게 | `wooden_tongs` | 뜨거운 도가니 및 주조 작업 보조 | Stick ×2 + Twine |
 | 원시 체 | `primitive_sieve` | Primitive Sifter 제작용 내부 체망 부품 | Stick/Plank + Twine |
+| 나무 베어링 | `wooden_bearing` | 회전체를 지지하는 원시 부품. 수차, 맷돌, 풀무에 사용 | Plank + Resin + Stone |
+| 나무 기어박스 부품 | `wooden_gearbox_component` | Primitive Gearbox / Vertical Gearbox 제작용 중간 부품 | Plank + Stone Cogwheel + Wooden Shaft |
+| 주석 원석 | `raw_tin` | 주석 광석에서 채굴한 원석 | Tin Ore 채굴 |
+| 주석 주괴 | `tin_ingot` | Bronze 합금용 금속. 바닐라와 Create에 없어 이 모드가 추가 | Tin Dust → Fired Crucible → Ingot Mold |
 | 구리 정광 | `copper_concentrate` | 선광된 구리 제련 원료 | Create Crushed Copper → Ore Pan / Primitive Sifter |
 | 주석 정광 | `tin_concentrate` | 선광된 주석 제련 원료 | Create Crushed Tin → Ore Pan / Primitive Sifter |
 | 구리 분말 | `copper_dust` | Fired Crucible 제련용 구리 원료 | Copper Concentrate → Primitive Millstone |
@@ -381,6 +387,11 @@ Primitive Vertical Gearbox
 | 내화 벽돌 블록 | `fire_bricks` | 고온 설비 및 후속 시대 화로 구조 재료 | Fire Brick ×4 |
 | 원시 화로 | `primitive_furnace` | 음식, 유리, 일반 가열용. 금속 광석 직접 제련 불가 | Stone / Cobblestone |
 | 원시 모루 | `primitive_anvil` | Copper / Bronze를 Plate 및 간단한 부품으로 가공 | Stone Block + Smooth Stone |
+| 주석 광석 | `tin_ore` | 주석 원석을 채굴할 수 있는 광석 | 월드 생성 |
+| 심층암 주석 광석 | `deepslate_tin_ore` | 심층암 지대의 주석 광석 | 월드 생성 |
+| 주석 원석 블록 | `raw_tin_block` | 주석 원석 보관용 압축 블록 | Raw Tin ×9 |
+| 주석 블록 | `tin_block` | 주석 주괴 보관용 압축 블록 | Tin Ingot ×9 |
+| 청동 축 | `bronze_shaft` | 64 RPM 회전망의 회전력 전달용 브론즈 회전축 | Bronze 계열 재료 가공 |
 | 청동 톱니바퀴 | `bronze_cogwheel` | 64 RPM 회전망의 기어비 구성용 브론즈 회전 블록 | Bronze 계열 재료 + Stone Cogwheel 또는 직접 주조 |
 
 ### 석기 시대 회전 부품 제한
@@ -405,6 +416,7 @@ Primitive Vertical Gearbox
 ```text
 bronze_ingot
 bronze_plate
+bronze_shaft
 bronze_bearing
 bronze_cogwheel
 bronze_gearbox_component
