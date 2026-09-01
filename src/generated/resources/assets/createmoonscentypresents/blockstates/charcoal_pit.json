@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "createmoonscentypresents:block/charcoal_pit",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "createmoonscentypresents:block/charcoal_pit"
+    },
+    "facing=south": {
+      "model": "createmoonscentypresents:block/charcoal_pit",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "createmoonscentypresents:block/charcoal_pit",
+      "y": 270
+    }
+  }
+}

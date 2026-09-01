@@ -14,7 +14,10 @@ import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import java.util.Map;
 
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModCogwheelBlock;
+import me.moonscenty.createmoonscentypresents.content.kinetics.ModGearboxBlock;
 import me.moonscenty.createmoonscentypresents.content.processing.BasinShapedBlock;
+import me.moonscenty.createmoonscentypresents.content.processing.DryingRackBlock;
+import me.moonscenty.createmoonscentypresents.content.processing.HorizontalCubeBlock;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModPoweredShaftBlock;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModShaftBlock;
 
@@ -44,6 +47,58 @@ public class ModBlocks {
             .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
                     prov.models().getExistingFile(prov.modLoc("block/pit_kiln"))))
             .simpleItem()
+            .register();
+
+    // Stone Age - wood into charcoal. Model and textures only, no behaviour yet:
+    // vanilla's blast furnace shape, with its plain stone body replaced by the bricks
+    // texture pulled towards grey. The furnace's own face and base are left alone.
+    public static final BlockEntry<HorizontalCubeBlock> CHARCOAL_PIT = CreateMoonScentyPresents.REGISTRATE
+            .block("charcoal_pit", HorizontalCubeBlock::new)
+            .initialProperties(() -> Blocks.BRICKS)
+            .properties(p -> p.mapColor(MapColor.STONE))
+            .transform(TagGen.pickaxeOnly())
+            .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(),
+                    prov.models().orientable(ctx.getName(),
+                            prov.modLoc("block/charcoal_pit_side"),
+                            prov.modLoc("block/charcoal_pit_front"),
+                            prov.modLoc("block/charcoal_pit_top"))))
+            .simpleItem()
+            .register();
+
+    // Stone Age - time based drying. Hand made model; see
+    // assets/.../models/block/drying_rack.json.
+    //
+    // 270 rather than the default 180: the rack is meant to be seen from its broad
+    // side, with the pole running left to right, but the model is drawn with that
+    // side lying along east-west. The extra quarter turn puts it square to whoever placed
+    // it, instead of showing them one of the end frames.
+    public static final BlockEntry<DryingRackBlock> DRYING_RACK = CreateMoonScentyPresents.REGISTRATE
+            .block("drying_rack", DryingRackBlock::new)
+            .initialProperties(() -> Blocks.OAK_FENCE)
+            .properties(p -> p.sound(SoundType.WOOD).mapColor(MapColor.WOOD).noOcclusion())
+            .transform(TagGen.axeOrPickaxe())
+            .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(),
+                    prov.models().getExistingFile(prov.modLoc("block/drying_rack")), 270))
+            .simpleItem()
+            .register();
+
+    // Stone Age - splits and reverses rotation across four sides. Create's gearbox
+    // taken whole: its block class, block entity, renderer and visual are reused, and
+    // its model and textures are copied into this mod so they can be redrawn.
+    public static final BlockEntry<ModGearboxBlock> PRIMITIVE_GEARBOX = CreateMoonScentyPresents.REGISTRATE
+            .block("primitive_gearbox", ModGearboxBlock::new)
+            .initialProperties(() -> Blocks.STONE)
+            // noOcclusion is not cosmetic here. The shafts on the faces are drawn by the
+            // renderer at the block's own position, so they take that cell's light; left
+            // occluding, the cell is dark and the shafts come out black.
+            .properties(p -> p.noOcclusion().mapColor(MapColor.PODZOL))
+            .transform(TagGen.axeOrPickaxe())
+            .blockstate((ctx, prov) -> BlockStateGen.axisBlock(ctx, prov,
+                    state -> prov.models().getExistingFile(prov.modLoc("block/primitive_gearbox/block")), true))
+            .item()
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(),
+                    prov.modLoc("block/primitive_gearbox/item")))
+            .build()
             .register();
 
     // Stone Age - 32 RPM power transmission. Copied from Create's cogwheel: same

@@ -3,6 +3,8 @@ package me.moonscenty.createmoonscentypresents.content.kinetics;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.simibubi.create.AllPartialModels;
+
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 
 import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
@@ -10,6 +12,7 @@ import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * Flywheel renders kinetic blocks from partial models rather than the block's own
@@ -25,6 +28,8 @@ public class ModPartialModels {
     private static final Map<String, PartialModel> ROTATING = new HashMap<>();
     /** Large cogs spin a shaftless body plus this shaft, offset so the teeth mesh. */
     private static final Map<String, PartialModel> COG_SHAFTS = new HashMap<>();
+    /** The stub of shaft a gearbox draws on each face it can drive. */
+    private static final Map<String, PartialModel> GEARBOX_SHAFTS = new HashMap<>();
 
     static {
         simple("stone_cogwheel");
@@ -34,6 +39,7 @@ public class ModPartialModels {
         simple("bronze_powered_shaft");
         simple("bronze_cogwheel");
         largeCogwheel("large_stone_cogwheel", "cogwheel_shaft");
+        GEARBOX_SHAFTS.put("primitive_gearbox", block("wooden_shaft_half"));
     }
 
     /** A block whose rotating model is just its own block model. */
@@ -56,6 +62,19 @@ public class ModPartialModels {
 
     public static PartialModel cogShaft(Block block) {
         return require(COG_SHAFTS, block, "cogwheel shaft");
+    }
+
+    /**
+     * The shaft stub a gearbox draws on the faces it can drive.
+     *
+     * <p>Create draws its own gearbox with the same code this is hooked into, so the
+     * question gets asked for every gearbox in the game. Anything that is not one of
+     * this mod's keeps Create's own shaft.
+     */
+    public static PartialModel gearboxShaft(BlockState state) {
+        Block block = state.getBlock();
+        return block instanceof ModGearboxBlock ? require(GEARBOX_SHAFTS, block, "gearbox shaft")
+                : AllPartialModels.SHAFT_HALF;
     }
 
     private static PartialModel require(Map<String, PartialModel> models, Block block, String what) {

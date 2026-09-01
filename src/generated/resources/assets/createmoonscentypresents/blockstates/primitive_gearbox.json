@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "createmoonscentypresents:block/primitive_gearbox/block",
+      "uvlock": true,
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "createmoonscentypresents:block/primitive_gearbox/block",
+      "uvlock": true
+    },
+    "axis=z": {
+      "model": "createmoonscentypresents:block/primitive_gearbox/block",
+      "uvlock": true,
+      "x": 90,
+      "y": 180
+    }
+  }
+}

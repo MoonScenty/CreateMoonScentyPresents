@@ -1,0 +1,10 @@
+{
+  "type": "createmoonscentypresents:drying",
+  "ingredient": {
+    "item": "minecraft:wet_sponge"
+  },
+  "processing_time": 400,
+  "result": {
+    "id": "minecraft:sponge"
+  }
+}

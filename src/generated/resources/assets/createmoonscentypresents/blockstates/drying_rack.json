@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "createmoonscentypresents:block/drying_rack",
+      "y": 180
+    },
+    "facing=north": {
+      "model": "createmoonscentypresents:block/drying_rack",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "createmoonscentypresents:block/drying_rack",
+      "y": 270
+    },
+    "facing=west": {
+      "model": "createmoonscentypresents:block/drying_rack"
+    }
+  }
+}

@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.tterrag.registrate.providers.ProviderType;
 
+import me.moonscenty.createmoonscentypresents.content.processing.DryingRecipe;
 import me.moonscenty.createmoonscentypresents.content.sawing.SawingRecipe;
 
 import net.minecraft.resources.ResourceLocation;
@@ -18,9 +19,14 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 
 public class ModRecipes {
-    /** Vanilla 2x2 crafting gives 4 planks per log; the saw is worth using because it gives more. */
-    private static final int PLANKS_PER_LOG = 6;
-    private static final int PLANKS_PER_BAMBOO_BLOCK = 3;
+    // Sawing by hand is deliberately no better than the vanilla yield: the stone age is
+    // meant to be slow, and the gain arrives later with the Mechanical Saw. Bamboo is
+    // worth half a log in vanilla, and stays worth half here.
+    private static final int PLANKS_PER_LOG = 4;
+    private static final int PLANKS_PER_BAMBOO_BLOCK = 2;
+
+    /** 20 seconds. Balancing comes later, like every other number in this pack. */
+    private static final int DRYING_TIME = 400;
 
     private record Wood(String name, TagKey<Item> logs, ItemLike planks, int count) {
         Wood(String name, TagKey<Item> logs, ItemLike planks) {
@@ -46,8 +52,24 @@ public class ModRecipes {
     public static final String SAWING_CATEGORY_KEY =
             "gui." + CreateMoonScentyPresents.MODID + ".category.sawing";
 
+    public static final String DRYING_CATEGORY_KEY =
+            "gui." + CreateMoonScentyPresents.MODID + ".category.drying";
+
+    /** How long a drying recipe takes, in seconds. */
+    public static final String DRYING_TIME_KEY =
+            "gui." + CreateMoonScentyPresents.MODID + ".drying.seconds";
+
     public static void register() {
         CreateMoonScentyPresents.REGISTRATE.addRawLang(SAWING_CATEGORY_KEY, "Sawing");
+        CreateMoonScentyPresents.REGISTRATE.addRawLang(DRYING_CATEGORY_KEY, "Drying");
+        CreateMoonScentyPresents.REGISTRATE.addRawLang(DRYING_TIME_KEY, "%ss");
+        // The only drying recipe so far. It is the plainest case of what the rack is
+        // for - a wet thing left out until it is not - and it makes the rack testable
+        // before the stone age materials that will really use it exist.
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov -> prov.accept(
+                ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, "drying/sponge"),
+                new DryingRecipe(Ingredient.of(Items.WET_SPONGE), new ItemStack(Items.SPONGE), DRYING_TIME),
+                null));
         CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov -> {
             for (Wood wood : WOODS)
                 prov.accept(ResourceLocation.fromNamespaceAndPath(

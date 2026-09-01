@@ -5,6 +5,7 @@ import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
 import com.simibubi.create.foundation.data.recipe.CommonMetal;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
+import me.moonscenty.createmoonscentypresents.content.kinetics.ModVerticalGearboxItem;
 import me.moonscenty.createmoonscentypresents.content.sawing.WoodenSawItem;
 
 import net.minecraft.tags.TagKey;
@@ -108,6 +109,18 @@ public class ModItems {
             .register();
 
     public static final ItemEntry<Item> BRONZE_BEARING = simple("bronze_bearing");
+
+    // Not a block of its own: a second item for ModBlocks.PRIMITIVE_GEARBOX that stands
+    // it on end. Lives here because it is registered as an item, not as a block.
+    public static final ItemEntry<ModVerticalGearboxItem> PRIMITIVE_VERTICAL_GEARBOX =
+            CreateMoonScentyPresents.REGISTRATE
+                    .item("primitive_vertical_gearbox", ModVerticalGearboxItem::new)
+                    .model((ctx, prov) -> prov.withExistingParent(ctx.getName(),
+                            prov.modLoc("block/primitive_gearbox/item_vertical")))
+                    .register();
+
+    // The 64 RPM counterpart of the wooden component; both feed their era's gearbox.
+    public static final ItemEntry<Item> BRONZE_GEARBOX_COMPONENT = simple("bronze_gearbox_component");
 
     private static ItemEntry<Item> fragment(String name, TagKey<Item> metalTag) {
         return CreateMoonScentyPresents.REGISTRATE.item(name, Item::new)

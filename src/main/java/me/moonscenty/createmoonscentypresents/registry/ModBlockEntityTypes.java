@@ -2,20 +2,25 @@ package me.moonscenty.createmoonscentypresents.registry;
 
 import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
 
-import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockEntity;
 import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockEntityRenderer;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
-import com.simibubi.create.content.kinetics.steamEngine.PoweredShaftBlockEntity;
+import com.simibubi.create.content.kinetics.gearbox.GearboxRenderer;
+import com.simibubi.create.content.kinetics.gearbox.GearboxVisual;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
+import me.moonscenty.createmoonscentypresents.content.kinetics.ModGearboxBlockEntity;
+import me.moonscenty.createmoonscentypresents.content.kinetics.ModKineticBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModKineticVisual;
+import me.moonscenty.createmoonscentypresents.content.kinetics.ModPoweredShaftBlockEntity;
+import me.moonscenty.createmoonscentypresents.content.processing.DryingRackBlockEntity;
+import me.moonscenty.createmoonscentypresents.content.processing.DryingRackRenderer;
 
 public class ModBlockEntityTypes {
     // Create's own simple kinetic type only lists Create's blocks as valid, so the
     // cogwheels need an equivalent type of their own. The block entity class,
     // renderer and Flywheel visual are reused as they are.
-    public static final BlockEntityEntry<BracketedKineticBlockEntity> SIMPLE_KINETIC = CreateMoonScentyPresents.REGISTRATE
-            .blockEntity("simple_kinetic", BracketedKineticBlockEntity::new)
+    public static final BlockEntityEntry<ModKineticBlockEntity> SIMPLE_KINETIC = CreateMoonScentyPresents.REGISTRATE
+            .blockEntity("simple_kinetic", ModKineticBlockEntity::new)
             // Create's visual only knows its own cogwheel blocks; ours supplies this
             // mod's models instead.
             .visual(() -> ModKineticVisual::create, false)
@@ -24,10 +29,26 @@ public class ModBlockEntityTypes {
             .renderer(() -> BracketedKineticBlockEntityRenderer::new)
             .register();
 
+    // Create's gearbox block entity, renderer and visual, reused as they are. Only the
+    // type is ours, so that our block passes Create's valid-block check.
+    public static final BlockEntityEntry<ModGearboxBlockEntity> GEARBOX = CreateMoonScentyPresents.REGISTRATE
+            .blockEntity("gearbox", ModGearboxBlockEntity::new)
+            .visual(() -> GearboxVisual::new)
+            .validBlocks(ModBlocks.PRIMITIVE_GEARBOX)
+            .renderer(() -> GearboxRenderer::new)
+            .register();
+
+    // Holds the one item hung on a drying rack, and draws it.
+    public static final BlockEntityEntry<DryingRackBlockEntity> DRYING_RACK = CreateMoonScentyPresents.REGISTRATE
+            .blockEntity("drying_rack", DryingRackBlockEntity::new)
+            .validBlocks(ModBlocks.DRYING_RACK)
+            .renderer(() -> DryingRackRenderer::new)
+            .register();
+
     // Create's powered shaft type only lists Create's block. The block entity class
     // itself is reused unchanged - the steam engine finds it by class, not by block.
-    public static final BlockEntityEntry<PoweredShaftBlockEntity> POWERED_SHAFT = CreateMoonScentyPresents.REGISTRATE
-            .blockEntity("powered_shaft", PoweredShaftBlockEntity::new)
+    public static final BlockEntityEntry<ModPoweredShaftBlockEntity> POWERED_SHAFT = CreateMoonScentyPresents.REGISTRATE
+            .blockEntity("powered_shaft", ModPoweredShaftBlockEntity::new)
             .visual(() -> ModKineticVisual::poweredShaft, false)
             .validBlocks(ModBlocks.WOODEN_POWERED_SHAFT, ModBlocks.BRONZE_POWERED_SHAFT)
             .renderer(() -> KineticBlockEntityRenderer::new)

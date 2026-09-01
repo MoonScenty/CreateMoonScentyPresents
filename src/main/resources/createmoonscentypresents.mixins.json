@@ -8,6 +8,10 @@
     "SteamEnginePlacementHelperMixin",
     "PoweredShaftBlockMixin"
   ],
+  "client": [
+    "GearboxRendererMixin",
+    "GearboxVisualMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   },

@@ -2,6 +2,7 @@ package me.moonscenty.createmoonscentypresents.registry;
 
 import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
 
+import me.moonscenty.createmoonscentypresents.content.processing.DryingRecipe;
 import me.moonscenty.createmoonscentypresents.content.sawing.SawingRecipe;
 
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -24,6 +25,14 @@ public class ModRecipeTypes {
 
     public static final DeferredHolder<RecipeSerializer<?>, SawingRecipe.Serializer> SAWING_SERIALIZER =
             SERIALIZERS.register("sawing", SawingRecipe.Serializer::new);
+
+    public static final DeferredHolder<RecipeType<?>, RecipeType<DryingRecipe>> DRYING =
+            TYPES.register("drying", () -> RecipeType.simple(
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(
+                            CreateMoonScentyPresents.MODID, "drying")));
+
+    public static final DeferredHolder<RecipeSerializer<?>, DryingRecipe.Serializer> DRYING_SERIALIZER =
+            SERIALIZERS.register("drying", DryingRecipe.Serializer::new);
 
     public static void register(IEventBus modEventBus) {
         TYPES.register(modEventBus);
