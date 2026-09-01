@@ -3,6 +3,9 @@ package me.moonscenty.createmoonscentypresents.registry;
 import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
 
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRecipe;
+import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
+
+import me.moonscenty.createmoonscentypresents.content.kinetics.PrimitiveMillingRecipe;
 import me.moonscenty.createmoonscentypresents.content.sawing.SawingRecipe;
 
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -33,6 +36,17 @@ public class ModRecipeTypes {
 
     public static final DeferredHolder<RecipeSerializer<?>, DryingRecipe.Serializer> DRYING_SERIALIZER =
             SERIALIZERS.register("drying", DryingRecipe.Serializer::new);
+
+    // Kept apart from create:milling so the primitive millstone and Create's own
+    // grind different things; see PrimitiveMillingRecipe.
+    public static final DeferredHolder<RecipeType<?>, RecipeType<PrimitiveMillingRecipe>> PRIMITIVE_MILLING =
+            TYPES.register("primitive_milling", () -> RecipeType.simple(
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(
+                            CreateMoonScentyPresents.MODID, "primitive_milling")));
+
+    public static final DeferredHolder<RecipeSerializer<?>, StandardProcessingRecipe.Serializer<PrimitiveMillingRecipe>>
+            PRIMITIVE_MILLING_SERIALIZER = SERIALIZERS.register("primitive_milling",
+                    () -> new StandardProcessingRecipe.Serializer<>(PrimitiveMillingRecipe::new));
 
     public static void register(IEventBus modEventBus) {
         TYPES.register(modEventBus);

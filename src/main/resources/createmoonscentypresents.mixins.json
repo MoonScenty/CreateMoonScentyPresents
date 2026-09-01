@@ -6,7 +6,8 @@
   "mixins": [
     "SteamEngineBlockMixin",
     "SteamEnginePlacementHelperMixin",
-    "PoweredShaftBlockMixin"
+    "PoweredShaftBlockMixin",
+    "MillstoneBlockEntityMixin"
   ],
   "client": [
     "GearboxRendererMixin",
