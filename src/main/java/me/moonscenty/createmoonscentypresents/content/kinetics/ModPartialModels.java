@@ -28,6 +28,9 @@ public class ModPartialModels {
     private static final Map<String, PartialModel> ROTATING = new HashMap<>();
     /** Large cogs spin a shaftless body plus this shaft, offset so the teeth mesh. */
     private static final Map<String, PartialModel> COG_SHAFTS = new HashMap<>();
+    /** The swinging handle of a hand crank, and the base it turns on. */
+    private static final Map<String, PartialModel> CRANK_HANDLES = new HashMap<>();
+    private static final Map<String, PartialModel> CRANK_BASES = new HashMap<>();
     /** The stub of shaft a gearbox draws on each face it can drive. */
     private static final Map<String, PartialModel> GEARBOX_SHAFTS = new HashMap<>();
 
@@ -41,6 +44,8 @@ public class ModPartialModels {
         largeCogwheel("large_stone_cogwheel", "cogwheel_shaft");
         ROTATING.put("primitive_millstone", block("primitive_millstone/inner"));
         ROTATING.put("primitive_sifter", block("primitive_sifter/inner"));
+        CRANK_HANDLES.put("primitive_hand_crank", block("primitive_hand_crank/handle"));
+        CRANK_BASES.put("primitive_hand_crank", block("primitive_hand_crank/block"));
         GEARBOX_SHAFTS.put("primitive_gearbox", block("wooden_shaft_half"));
     }
 
@@ -60,6 +65,14 @@ public class ModPartialModels {
 
     public static PartialModel rotating(Block block) {
         return require(ROTATING, block, "rotating");
+    }
+
+    public static PartialModel crankHandle(Block block) {
+        return require(CRANK_HANDLES, block, "crank handle");
+    }
+
+    public static PartialModel crankBase(Block block) {
+        return require(CRANK_BASES, block, "crank base");
     }
 
     public static PartialModel cogShaft(Block block) {

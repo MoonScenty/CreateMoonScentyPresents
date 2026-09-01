@@ -11,7 +11,8 @@
   ],
   "client": [
     "GearboxRendererMixin",
-    "GearboxVisualMixin"
+    "GearboxVisualMixin",
+    "HandCrankVisualMixin"
   ],
   "injectors": {
     "defaultRequire": 1

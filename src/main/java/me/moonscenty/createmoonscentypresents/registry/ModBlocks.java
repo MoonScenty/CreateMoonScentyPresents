@@ -2,6 +2,7 @@ package me.moonscenty.createmoonscentypresents.registry;
 
 import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
 
+import com.simibubi.create.api.stress.BlockStressValues;
 import com.simibubi.create.foundation.data.BlockStateGen;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.data.TagGen;
@@ -15,6 +16,7 @@ import java.util.Map;
 
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModCogwheelBlock;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModGearboxBlock;
+import me.moonscenty.createmoonscentypresents.content.kinetics.ModHandCrankBlock;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModMillstoneBlock;
 import me.moonscenty.createmoonscentypresents.content.processing.BasinShapedBlock;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRackBlock;
@@ -106,6 +108,22 @@ public class ModBlocks {
     // Stone Age - splits and reverses rotation across four sides. Create's gearbox
     // taken whole: its block class, block entity, renderer and visual are reused, and
     // its model and textures are copied into this mod so they can be redrawn.
+    // Create's crank already turns at 32 RPM, the stone age cap, so only its looks
+    // and block entity needed redirecting.
+    public static final BlockEntry<ModHandCrankBlock> PRIMITIVE_HAND_CRANK = CreateMoonScentyPresents.REGISTRATE
+            .block("primitive_hand_crank", ModHandCrankBlock::new)
+            .initialProperties(() -> Blocks.OAK_PLANKS)
+            .properties(p -> p.mapColor(MapColor.WOOD).sound(SoundType.WOOD))
+            .transform(TagGen.axeOrPickaxe())
+            .blockstate(BlockStateGen.directionalBlockProvider(true))
+            .onRegister(BlockStressValues.setGeneratorSpeed(32))
+            .onRegister(block -> BlockStressValues.CAPACITIES.register(block, () -> 8.0))
+            .item()
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(),
+                    prov.modLoc("block/primitive_hand_crank/item")))
+            .build()
+            .register();
+
     // Built on Create's millstone: one input worked over time by rotation. A wooden
     // frame rather than a stone one, which is also what tells it apart in the world.
     public static final BlockEntry<ModSifterBlock> PRIMITIVE_SIFTER = CreateMoonScentyPresents.REGISTRATE

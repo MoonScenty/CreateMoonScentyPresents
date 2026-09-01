@@ -4,6 +4,8 @@ import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
 
 import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockEntityRenderer;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
+import com.simibubi.create.content.kinetics.crank.HandCrankRenderer;
+import com.simibubi.create.content.kinetics.crank.HandCrankVisual;
 import com.simibubi.create.content.kinetics.gearbox.GearboxRenderer;
 import com.simibubi.create.content.kinetics.gearbox.GearboxVisual;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
@@ -13,6 +15,7 @@ import me.moonscenty.createmoonscentypresents.content.kinetics.ModKineticBlockEn
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModKineticVisual;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModMillstoneBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModMillstoneRenderer;
+import me.moonscenty.createmoonscentypresents.content.kinetics.ModHandCrankBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModSifterBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModPoweredShaftBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRackBlockEntity;
@@ -74,6 +77,15 @@ public class ModBlockEntityTypes {
             .visual(() -> ModKineticVisual::millstone, true)
             .validBlocks(ModBlocks.PRIMITIVE_SIFTER)
             .renderer(() -> ModMillstoneRenderer::new)
+            .register();
+
+    // Create's renderer and visual are reused; both were pointed at this mod's models
+    // by overriding getRenderedHandle and by HandCrankVisualMixin.
+    public static final BlockEntityEntry<ModHandCrankBlockEntity> HAND_CRANK = CreateMoonScentyPresents.REGISTRATE
+            .blockEntity("hand_crank", ModHandCrankBlockEntity::new)
+            .visual(() -> HandCrankVisual::new, false)
+            .validBlocks(ModBlocks.PRIMITIVE_HAND_CRANK)
+            .renderer(() -> HandCrankRenderer::new)
             .register();
 
     // Called from the mod constructor purely to load this class, which declares
