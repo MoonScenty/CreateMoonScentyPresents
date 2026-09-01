@@ -70,7 +70,7 @@ Stone Hammer 수동 가공
 ↓
 Create 기존 Crushed Ore
 ↓
-Ore Pan / Primitive Sifter
+Primitive Sifter
 ↓
 Ore Concentrate
 ↓
@@ -175,7 +175,7 @@ Stone Hammer
 ↓
 Create Crushed Ore
 ↓
-Ore Pan / Primitive Sifter
+Primitive Sifter
 ↓
 Ore Concentrate
 ↓
@@ -191,8 +191,6 @@ Ingot Mold
 ↓
 Metal Ingot
 ```
-
-`Ore Pan`은 초기 수동 선광 도구이며, `Primitive Sifter`를 제작하면 동일한 선광 공정을 회전 동력으로 처리할 수 있다.
 
 ### Primitive Sifter
 
@@ -338,15 +336,14 @@ Primitive Vertical Gearbox
 | 돌 망치머리 | `stone_hammer_head` | Stone Hammer 제작용 중간 부품 | Stone 가공 |
 | 돌 끌 | `stone_chisel` | 석재 및 목재 부품 형상 가공 | Flint 또는 Stone + Stick + Twine |
 | 나무 톱 | `wooden_saw` | Log 및 목재 재료의 수동 가공 | Plank + Flint + Twine |
-| 광물 팬 | `ore_pan` | Create Crushed Ore의 수동 선광 | Wooden Bowl + Plank |
 | 나무 집게 | `wooden_tongs` | 뜨거운 도가니 및 주조 작업 보조 | Stick ×2 + Twine |
 | 원시 체 | `primitive_sieve` | Primitive Sifter 제작용 내부 체망 부품 | Stick/Plank + Twine |
 | 나무 베어링 | `wooden_bearing` | 회전체를 지지하는 원시 부품. 수차, 맷돌, 풀무에 사용 | Plank + Resin + Stone |
 | 나무 기어박스 부품 | `wooden_gearbox_component` | Primitive Gearbox / Vertical Gearbox 제작용 중간 부품 | Plank + Stone Cogwheel + Wooden Shaft |
 | 주석 원석 | `raw_tin` | 주석 광석에서 채굴한 원석 | Tin Ore 채굴 |
 | 주석 주괴 | `tin_ingot` | Bronze 합금용 금속. 바닐라와 Create에 없어 이 모드가 추가 | Tin Dust → Fired Crucible → Ingot Mold |
-| 구리 정광 | `copper_concentrate` | 선광된 구리 제련 원료 | Create Crushed Copper → Ore Pan / Primitive Sifter |
-| 주석 정광 | `tin_concentrate` | 선광된 주석 제련 원료 | Create Crushed Tin → Ore Pan / Primitive Sifter |
+| 구리 정광 | `copper_concentrate` | 선광된 구리 제련 원료 | Create Crushed Copper → Primitive Sifter |
+| 주석 정광 | `tin_concentrate` | 선광된 주석 제련 원료 | Create Crushed Tin → Primitive Sifter |
 | 구리 분말 | `copper_dust` | Fired Crucible 제련용 구리 원료 | Copper Concentrate → Primitive Millstone |
 | 주석 분말 | `tin_dust` | Fired Crucible 제련용 주석 원료 | Tin Concentrate → Primitive Millstone |
 | 철 분말 | `iron_dust` | 후속 시대 제련용 철 원료 | Iron Concentrate → Primitive Millstone |

@@ -61,7 +61,6 @@ public class ModItems {
                     .end()
                     .end())
             .register();
-    public static final ItemEntry<Item> ORE_PAN = simple("ore_pan");
     public static final ItemEntry<Item> WOODEN_TONGS = simple("wooden_tongs");
     public static final ItemEntry<Item> PRIMITIVE_SIEVE = simple("primitive_sieve");
 
