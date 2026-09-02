@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "createmoonscentypresents:fired_crucible"
+          "name": "createmoonscentypresents:foundry_mixer"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "createmoonscentypresents:blocks/fired_crucible"
+  "random_sequence": "createmoonscentypresents:blocks/foundry_mixer"
 }

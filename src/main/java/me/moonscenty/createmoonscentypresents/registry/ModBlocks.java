@@ -25,7 +25,7 @@ import me.moonscenty.createmoonscentypresents.content.firing.PitKilnBlock;
 import me.moonscenty.createmoonscentypresents.content.foundry.FaucetBlock;
 import me.moonscenty.createmoonscentypresents.content.foundry.FoundryBasinBlock;
 import me.moonscenty.createmoonscentypresents.content.foundry.FoundryLidBlock;
-import me.moonscenty.createmoonscentypresents.content.processing.BasinShapedBlock;
+import me.moonscenty.createmoonscentypresents.content.foundry.FoundryMixerBlock;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRackBlock;
 import me.moonscenty.createmoonscentypresents.content.processing.HorizontalCubeBlock;
 import me.moonscenty.createmoonscentypresents.content.tapping.TapperBlock;
@@ -224,6 +224,21 @@ public class ModBlocks {
             .build()
             .register();
 
+    // Not for this age: alloying needs a kinetic network the stone age cannot build.
+    // Registered so the block and its recipe type are in place for the one that can.
+    public static final BlockEntry<FoundryMixerBlock> FOUNDRY_MIXER = CreateMoonScentyPresents.REGISTRATE
+            .block("foundry_mixer", FoundryMixerBlock::new)
+            .initialProperties(() -> Blocks.BRICKS)
+            .properties(p -> p.mapColor(MapColor.COLOR_GRAY).noOcclusion())
+            .transform(TagGen.pickaxeOnly())
+            .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
+                    prov.models().getExistingFile(prov.modLoc("block/foundry_mixer/block"))))
+            .item()
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(),
+                    prov.modLoc("block/foundry_mixer/item")))
+            .build()
+            .register();
+
     // Stone Age - shuts a foundry basin in so what is in it can melt.
     public static final BlockEntry<FoundryLidBlock> FOUNDRY_LID = CreateMoonScentyPresents.REGISTRATE
             .block("foundry_lid", FoundryLidBlock::new)
@@ -236,20 +251,6 @@ public class ModBlocks {
             .model((ctx, prov) -> prov.withExistingParent(ctx.getName(),
                     prov.modLoc("block/foundry_lid/block")))
             .build()
-            .register();
-
-    // Stone Age - the vessel metal is melted in. Create's basin shape and render
-    // layer, but none of its behaviour: no block entity, no item or fluid handling,
-    // no processing recipes. Just the hollow it needs to look right.
-    public static final BlockEntry<BasinShapedBlock> FIRED_CRUCIBLE = CreateMoonScentyPresents.REGISTRATE
-            .block("fired_crucible", BasinShapedBlock::new)
-            .initialProperties(() -> Blocks.BRICKS)
-            .properties(p -> p.mapColor(MapColor.COLOR_RED))
-            .transform(TagGen.pickaxeOnly())
-            .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
-                    prov.models().getExistingFile(prov.modLoc("block/fired_crucible"))))
-            .addLayer(() -> RenderType::cutoutMipped)
-            .simpleItem()
             .register();
 
     // Stone Age - 32 RPM power transmission. Copied from Create's shaft.

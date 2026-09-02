@@ -170,6 +170,24 @@ public class ModRecipeTypes {
     public static final DeferredHolder<RecipeSerializer<?>, CastingRecipe.Serializer> CASTING_SERIALIZER =
             SERIALIZERS.register("casting", CastingRecipe.Serializer::new);
 
+    // Two molten metals stirred into a third. Nothing uses it in the stone age - a
+    // foundry mixer needs a kinetic network that does not exist yet - but the type has
+    // to be here for the mixer to have a list to read.
+    public static final ResourceLocation ALLOYING_ID =
+            ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, "alloying");
+
+    public static final DeferredHolder<RecipeType<?>, RecipeType<FoundryRecipe>> ALLOYING =
+            TYPES.register("alloying", () -> RecipeType.simple(ALLOYING_ID));
+
+    /** Declared before the serializer that names it, so the reference resolves. */
+    public static final ModRecipeTypeInfo ALLOYING_INFO =
+            new ModRecipeTypeInfo(ALLOYING_ID, ALLOYING, () -> ModRecipeTypes.ALLOYING_SERIALIZER.get());
+
+    public static final DeferredHolder<RecipeSerializer<?>, StandardProcessingRecipe.Serializer<FoundryRecipe>>
+            ALLOYING_SERIALIZER = SERIALIZERS.register("alloying",
+                    () -> new StandardProcessingRecipe.Serializer<>(
+                            params -> new FoundryRecipe(ALLOYING_INFO, params)));
+
     public static void register(IEventBus modEventBus) {
         TYPES.register(modEventBus);
         SERIALIZERS.register(modEventBus);

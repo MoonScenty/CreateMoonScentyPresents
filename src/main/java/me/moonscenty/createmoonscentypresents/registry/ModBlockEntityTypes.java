@@ -19,6 +19,7 @@ import me.moonscenty.createmoonscentypresents.content.firing.PitKilnBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.foundry.FaucetBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.foundry.FoundryBasinBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.foundry.FoundryLidBlockEntity;
+import me.moonscenty.createmoonscentypresents.content.foundry.FoundryMixerBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.milling.MillstoneBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModRotatingCoreRenderer;
 import me.moonscenty.createmoonscentypresents.content.sifting.SifterBlockEntity;
@@ -90,6 +91,14 @@ public class ModBlockEntityTypes {
             CreateMoonScentyPresents.REGISTRATE
                     .blockEntity("casting_table", CastingTableBlockEntity::new)
                     .validBlocks(ModBlocks.CASTING_TABLE)
+                    .register();
+
+    // Kept for the age that alloys. Create's own mixer renderer and visual draw it,
+    // pointed at this mod's models through ModPartialModels.
+    public static final BlockEntityEntry<FoundryMixerBlockEntity> FOUNDRY_MIXER =
+            CreateMoonScentyPresents.REGISTRATE
+                    .blockEntity("foundry_mixer", FoundryMixerBlockEntity::new)
+                    .validBlocks(ModBlocks.FOUNDRY_MIXER)
                     .register();
 
     // Drains whatever it is stuck to into whatever is under it.

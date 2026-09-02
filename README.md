@@ -360,7 +360,7 @@ wooden_shaft + 케이싱 + 철 블록 + Die ×2 → create:mechanical_press
 
 Tapper는 유체 캐퍼빌리티를 내놓지 않는다. 석기 시대에는 통에서 유체를 빼낼 수단이 없으므로 굳기를 기다리는 것 외에 길이 없고, 이 제약이 통이 차면 멈추는 규칙을 의미 있게 만든다. 파이프가 생기는 시대에 열면 된다.
 
-**이 시대에 쓰지 않는다** — `drying_rack`, `pit_kiln`, `charcoal_pit`, `fired_crucible`, `primitive_sifter`, 점토 가공 라인, 광석 정광·분말 라인, 주석 라인. 전부 브론즈 이후로 미룬다.
+**이 시대에 쓰지 않는다** — `drying_rack`, `pit_kiln`, `charcoal_pit`, `primitive_sifter`, 점토 가공 라인, 광석 정광·분말 라인, 주석 라인. 전부 브론즈 이후로 미룬다.
 
 #### 확인이 필요한 것
 

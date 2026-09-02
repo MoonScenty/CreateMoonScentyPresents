@@ -373,7 +373,9 @@ public class ModRecipes {
                         new ItemStack(Items.CHARCOAL), CHARRING_TIME, HeatLevel.WARM),
                 null));
 
-        firing("fired_crucible", ModItems.UNFIRED_CRUCIBLE, () -> new ItemStack(ModBlocks.FIRED_CRUCIBLE.get()));
+        // The unfired crucible fires into the foundry basin itself: the basin is what a
+        // crucible turned out to be once it had to actually hold and pour metal.
+        firing("foundry_basin", ModItems.UNFIRED_CRUCIBLE, () -> new ItemStack(ModBlocks.FOUNDRY_BASIN.get()));
         firing("ingot_mold", ModItems.UNFIRED_INGOT_MOLD, () -> new ItemStack(ModItems.INGOT_MOLD.get()));
         firing("fire_brick", ModItems.UNFIRED_FIRE_BRICK, () -> new ItemStack(ModItems.FIRE_BRICK.get()));
     }
