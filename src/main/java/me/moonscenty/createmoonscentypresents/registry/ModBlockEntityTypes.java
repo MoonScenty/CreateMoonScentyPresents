@@ -14,6 +14,7 @@ import me.moonscenty.createmoonscentypresents.content.kinetics.ModGearboxBlockEn
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModKineticBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModKineticVisual;
 import me.moonscenty.createmoonscentypresents.content.casting.CastingTableBlockEntity;
+import me.moonscenty.createmoonscentypresents.content.casting.CastingTableRenderer;
 import me.moonscenty.createmoonscentypresents.content.charring.CharcoalPitBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.firing.PitKilnBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.foundry.FaucetBlockEntity;
@@ -91,6 +92,7 @@ public class ModBlockEntityTypes {
             CreateMoonScentyPresents.REGISTRATE
                     .blockEntity("casting_table", CastingTableBlockEntity::new)
                     .validBlocks(ModBlocks.CASTING_TABLE)
+                    .renderer(() -> CastingTableRenderer::new)
                     .register();
 
     // Kept for the age that alloys. Create's own mixer renderer and visual draw it,

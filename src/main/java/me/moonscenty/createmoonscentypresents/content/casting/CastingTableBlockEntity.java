@@ -148,6 +148,7 @@ public class CastingTableBlockEntity extends SmartBlockEntity implements Clearab
 
         reset();
         setChanged();
+        notifyUpdate();
     }
 
     /** Wipes what is in progress; the mould and the casting stay where they are. */

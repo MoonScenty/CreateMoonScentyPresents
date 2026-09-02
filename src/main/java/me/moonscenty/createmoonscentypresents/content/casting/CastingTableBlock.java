@@ -72,6 +72,7 @@ public class CastingTableBlock extends Block implements IBE<CastingTableBlockEnt
             if (!table.getResult().isEmpty()) {
                 player.getInventory().placeItemBackInInventory(table.getResult());
                 table.resultInv.setStackInSlot(0, ItemStack.EMPTY);
+                table.notifyUpdate();
                 level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, .2f,
                         1f + level.getRandom().nextFloat());
                 return ItemInteractionResult.SUCCESS;
@@ -80,6 +81,7 @@ public class CastingTableBlock extends Block implements IBE<CastingTableBlockEnt
             if (!stack.isEmpty() && table.getMold().isEmpty()) {
                 table.moldInv.setStackInSlot(0, stack.copyWithCount(1));
                 stack.shrink(1);
+                table.notifyUpdate();
                 level.playSound(null, pos, SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.PLAYERS, 1f,
                         1f + level.getRandom().nextFloat());
                 return ItemInteractionResult.SUCCESS;
@@ -89,6 +91,7 @@ public class CastingTableBlock extends Block implements IBE<CastingTableBlockEnt
                 player.getInventory().placeItemBackInInventory(table.getMold());
                 table.moldInv.setStackInSlot(0, ItemStack.EMPTY);
                 table.reset();
+                table.notifyUpdate();
                 level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, .2f,
                         1f + level.getRandom().nextFloat());
                 return ItemInteractionResult.SUCCESS;
