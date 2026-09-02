@@ -1,6 +1,5 @@
 {
   "type": "createmoonscentypresents:melting",
-  "heat_requirement": "heated",
   "ingredients": [
     {
       "tag": "c:ingots/zinc"

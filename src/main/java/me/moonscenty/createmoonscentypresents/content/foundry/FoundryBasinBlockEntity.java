@@ -6,6 +6,7 @@ import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehavi
 import com.simibubi.create.content.processing.basin.BasinBlock;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinInventory;
+import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
@@ -181,6 +182,16 @@ public class FoundryBasinBlockEntity extends BasinBlockEntity {
             if (forceFill(targetTank, fluidResult.copy(), action) != fluidResult.getAmount())
                 return false;
         return true;
+    }
+
+    /**
+     * The fire under it. Create keeps its own accessor package private, so this reads
+     * the block below through the static it exposes instead.
+     */
+    public BlazeBurnerBlock.HeatLevel heatLevel() {
+        if (level == null)
+            return BlazeBurnerBlock.HeatLevel.NONE;
+        return getHeatLevelOf(level.getBlockState(worldPosition.below()));
     }
 
     /** Create keeps both of these protected; a capability registration needs them. */

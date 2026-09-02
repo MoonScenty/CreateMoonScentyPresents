@@ -5,6 +5,7 @@ import java.util.Optional;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
+import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.crafting.Recipe;
@@ -51,10 +52,20 @@ public abstract class FoundryBasinOperatingBlockEntity extends BasinOperatingBlo
         basin.notifyChangeOfContents();
     }
 
+    /**
+     * Create's own lowest heat condition, {@code none}, passes with no fire at all -
+     * which is right for a basin being stirred but not for a foundry. A recipe that
+     * names no particular fire still needs one, so the floor is put back here; naming
+     * {@code heated} on top of that is what asks for a blaze burner.
+     */
     @Override
     protected <I extends RecipeInput> boolean matchBasinRecipe(Recipe<I> recipe) {
         if (recipe == null)
             return false;
-        return getBasin().filter(basin -> BasinRecipe.match(basin, recipe)).isPresent();
+        return getBasin()
+                .filter(basin -> !(basin instanceof FoundryBasinBlockEntity foundry)
+                        || foundry.heatLevel() != BlazeBurnerBlock.HeatLevel.NONE)
+                .filter(basin -> BasinRecipe.match(basin, recipe))
+                .isPresent();
     }
 }

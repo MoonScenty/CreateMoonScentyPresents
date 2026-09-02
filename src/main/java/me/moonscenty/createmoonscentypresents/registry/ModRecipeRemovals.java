@@ -22,7 +22,15 @@ public class ModRecipeRemovals {
             create("crafting/kinetics/shaft"),
             create("item_application/andesite_casing_from_log"),
             create("item_application/andesite_casing_from_wood"),
-            create("crafting/kinetics/mechanical_press"));
+            create("crafting/kinetics/mechanical_press"),
+            // Zinc only comes out of a foundry. Leaving the furnace open would leave the
+            // whole clay, kiln and charcoal line with nothing to do.
+            create("smelting/zinc_ingot_from_ore"),
+            create("smelting/zinc_ingot_from_raw_ore"),
+            create("smelting/zinc_ingot_from_crushed"),
+            create("blasting/zinc_ingot_from_ore"),
+            create("blasting/zinc_ingot_from_raw_ore"),
+            create("blasting/zinc_ingot_from_crushed"));
 
     private static ResourceLocation create(String path) {
         return ResourceLocation.fromNamespaceAndPath("create", path);

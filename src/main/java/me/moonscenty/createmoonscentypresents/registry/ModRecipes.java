@@ -9,7 +9,6 @@ import java.util.function.Supplier;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
-import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 
 import me.moonscenty.createmoonscentypresents.content.casting.CastingRecipe;
@@ -427,9 +426,10 @@ public class ModRecipes {
      * What the foundry basin melts under a closed lid.
      *
      * <p>Zinc is the metal this age turns on: the alloy needs its nuggets, and Create
-     * ordinarily smelts them in a furnace. Melting asks for a blaze burner rather than a
-     * campfire, which is what keeps the whole foundry line - clay, kiln, charcoal - in
-     * front of it.
+     * ordinarily smelts them in a furnace - a path this pack closes, so the foundry is
+     * the only way to any. It melts over a plain fire, which is true of the metal and
+     * also what makes the age possible: a blaze burner is on the far side of the Nether,
+     * and gating zinc behind one would gate the whole age behind it.
      */
     private static void registerMelting() {
         melting("zinc_from_raw", AllTags.commonItemTag("raw_materials/zinc"),
@@ -447,7 +447,6 @@ public class ModRecipes {
                     params -> new FoundryRecipe(ModRecipeTypes.MELTING_INFO, params), id)
                             .require(input)
                             .output(result.get())
-                            .requiresHeat(HeatCondition.HEATED)
                             .duration(MELTING_TIME)
                             .build(), null);
         });
