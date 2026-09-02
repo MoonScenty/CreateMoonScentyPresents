@@ -4,9 +4,14 @@ import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
 
 import java.util.List;
 
+import com.simibubi.create.AllItems;
+import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
+import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
+import com.simibubi.create.AllTags;
 import com.tterrag.registrate.providers.ProviderType;
 
 import me.moonscenty.createmoonscentypresents.content.applying.ApplyingRecipe;
+import me.moonscenty.createmoonscentypresents.content.hammering.HammeringRecipe;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRecipe;
 import me.moonscenty.createmoonscentypresents.content.sawing.SawingRecipe;
 import me.moonscenty.createmoonscentypresents.content.tapping.CoagulatingRecipe;
@@ -124,6 +129,57 @@ public class ModRecipes {
         });
 
         registerTapping();
+        registerGates();
+    }
+
+    // --- Create gates --------------------------------------------------------
+
+    /**
+     * The four gates do not overwrite Create's files - shipping a file at the same path
+     * only wins if our pack happens to sort on top. Create's recipes are dropped by id in
+     * {@link ModRecipeRemovals} and the replacements below are ordinary recipes of ours
+     * that happen to produce Create's items.
+     */
+    private static void registerGates() {
+        // Gate 1: andesite alloy. The 2x2 pattern is full, so there is no room to add an
+        // ingredient - the andesite in it becomes grit instead. Same shape, same count,
+        // same look in JEI; the cost is the hammering that now sits in front of it.
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov -> prov.accept(
+                ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, "hammering/andesite_grit"),
+                new HammeringRecipe(Ingredient.of(Blocks.ANDESITE),
+                        new ItemStack(ModItems.ANDESITE_GRIT.get())),
+                null));
+
+        // Only the zinc variant comes back. Iron nuggets are not a stone age material,
+        // and leaving that route open would let the alloy skip zinc entirely.
+        andesiteAlloy("andesite_alloy_from_zinc", AllTags.commonItemTag("nuggets/zinc"));
+        // The mixer route has to move with it, or a mixer would put the gate back to
+        // plain andesite. Same two ingredients as the bench recipe.
+        andesiteAlloyMixing("mixing/andesite_alloy_from_zinc", AllTags.commonItemTag("nuggets/zinc"));
+    }
+
+    private static void andesiteAlloyMixing(String name, TagKey<Item> nugget) {
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov -> {
+            ResourceLocation id =
+                    ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, name);
+            prov.accept(id, new StandardProcessingRecipe.Builder<>(MixingRecipe::new, id)
+                    .require(ModItems.ANDESITE_GRIT.get())
+                    .require(nugget)
+                    .output(AllItems.ANDESITE_ALLOY.get())
+                    .build(), null);
+        });
+    }
+
+    private static void andesiteAlloy(String name, TagKey<Item> nugget) {
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, AllItems.ANDESITE_ALLOY.get())
+                        .pattern("BA")
+                        .pattern("AB")
+                        .define('A', ModItems.ANDESITE_GRIT.get())
+                        .define('B', nugget)
+                        .unlockedBy("has_andesite_grit", prov.has(ModItems.ANDESITE_GRIT.get()))
+                        .save(prov, ResourceLocation.fromNamespaceAndPath(
+                                CreateMoonScentyPresents.MODID, name)));
     }
 
     // --- tapping -------------------------------------------------------------

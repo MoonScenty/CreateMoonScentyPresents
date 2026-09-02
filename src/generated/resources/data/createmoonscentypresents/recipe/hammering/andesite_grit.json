@@ -1,0 +1,10 @@
+{
+  "type": "createmoonscentypresents:hammering",
+  "ingredient": {
+    "item": "minecraft:andesite"
+  },
+  "result": {
+    "count": 1,
+    "id": "createmoonscentypresents:andesite_grit"
+  }
+}

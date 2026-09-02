@@ -29,6 +29,11 @@ public class ModItems {
     // Stone Age - binding and sealing materials
     public static final ItemEntry<Item> RESIN = simple("resin");
 
+    // Gate 1. Andesite alloy is the first thing every Create line needs, and this is
+    // what stands in front of it: andesite has to be beaten into grit by hand before
+    // it can be alloyed at all.
+    public static final ItemEntry<Item> ANDESITE_GRIT = simple("andesite_grit");
+
     // Holds one substance and works it into a placed block. The brush is the reusable
     // part and the load is the consumable, so another substance later needs a recipe
     // and nothing else - not another item, and not another mechanic.
