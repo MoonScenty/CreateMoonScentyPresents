@@ -1,0 +1,6 @@
+{
+  "sources": [
+    { "type": "single", "resource": "createmoonscentypresents:fluid/liquid_resin_still" },
+    { "type": "single", "resource": "createmoonscentypresents:fluid/liquid_resin_flow" }
+  ]
+}
