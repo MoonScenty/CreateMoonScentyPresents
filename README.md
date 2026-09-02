@@ -412,27 +412,39 @@ wooden_shaft + 케이싱 + 철 블록 + Die ×2 → create:mechanical_press
 
 ### 구현 현황
 
-**동작까지 완료** — 손 가공 4종(`sawing` / `hammering` / `shaping` / `applying`)의 레시피 타입·도구·데이터 컴포넌트, `applicator_brush`(적재·회수·블록 적용·4종 브러시 모델), 수액 채취 한 줄 전부(`hand_drill`, 구멍 난 통나무 8종, `tapper`, `liquid_resin` 유체, `tapping`·`coagulating` 레시피 타입과 그 레시피들), `ModKineticLimits`(32 RPM), `primitive_hand_crank`, `primitive_millstone`, `wooden_shaft`, `stone_cogwheel`, `large_stone_cogwheel`, `primitive_gearbox`.
+**설계한 것은 전부 들어갔다.** 크리에이티브 없이 1장부터 5장까지 이어지고, 남은 것은 문서가 아니라 플레이로 재봐야 하는 것들이다.
 
-**석기 시대 전 구간이 조합으로 이어진다** — 1장 도구 넷, 3장 회전 부품 전부(`wooden_bearing`, `stone_cogwheel`, `large_stone_cogwheel`, `primitive_gearbox`와 수직 변환, `primitive_hand_crank`, `primitive_millstone`), 5장 프레스까지 크리에이티브 없이 도달한다. JEI 카테고리는 일곱 개(Sawing / Hammering / Shaping / Applying / Tapping / Coagulating / Drying).
+| 묶음 | 들어간 것 |
+|---|---|
+| 손 가공 | `sawing` / `hammering` / `shaping` / `applying` 네 타입과 도구 넷, `applicator_brush`(적재·회수·블록 적용) |
+| 수액 채취 | `hand_drill`, 구멍 난 통나무 8종, `tapper`, `liquid_resin`, `tapping`·`coagulating` |
+| 원시 제련 | 점토 성형 3종, 노천 가마(`firing`), 숯가마(`charring`), 파운드리 베이슨·뚜껑·수도꼭지·주조대(`melting` / `casting`), 녹은 아연, 열원 3단계 |
+| 회전 | `wooden_shaft`, `stone_cogwheel`, `large_stone_cogwheel`, `primitive_gearbox`와 수직 변환, `primitive_hand_crank`, `primitive_millstone`, `ModKineticLimits`(32 RPM) |
+| 관문 | 넷 전부. 인수한 Create 레시피 14개 (합금 4, 축 1, 케이싱 2, 프레스 1, 아연 제련 6) |
+| 보상 | `apprentice_goggles`(Curios `head`, Create 고글 오버레이에 연결), `gatherers_satchel`(Curios `back`, Alt+N 토글) |
+| 표시 | JEI 카테고리 11종, Jade 3종(채취통 / 가마 / 숯가마), 고글에 32 RPM 한계 표시 |
 
-**원시 제련 라인 완료** — 점토 성형 3종과 소성 레시피, 노천 가마(`firing`), 숯가마(`charring`), 파운드리 베이슨·뚜껑·수도꼭지·주조대(`melting` / `casting`), 녹은 아연, 열원 3단계. Create의 아연 제련·용광로 레시피 6개를 지워 파운드리를 유일한 경로로 만들었다. 파운드리 베이슨·뚜껑·수도꼭지·주조대·믹서는 [Create: Metallurgy](https://github.com/Lucreeper74/Create-Metallurgy)(MIT)에서 이식했다 — [ATTRIBUTION.md](ATTRIBUTION.md) 참고.
+#### 설계상 그렇게 둔 것
 
-**관문 넷 완료** — 레시피를 ID로 지우는 방식(`ModRecipeRemovals` + `RecipeManagerMixin`)과 그 위에 올린 관문 넷 전부. 넘겨받은 Create 레시피는 열네 개(합금 4, 축 1, 케이싱 2, 프레스 1, 아연 제련 6)이고, `andesite_grit`·`wooden_stave`·`andesite_cement`·`stone_die` 네 아이템과 그 가공 레시피, 대체 레시피 전부가 들어가 있다. 1장부터 5장까지 조합으로 이어진다.
+**`create:shaft`는 아무 레시피도 없고, 돌려줄 계획도 없다.** `ModKineticLimits`는 블록 id로 상한을 찾으므로 Create의 축은 무제한이고, 상한은 시대마다 다시 걸린다 — 한 번 열면 그 뒤 사다리가 전부 무너진다. 따라서 Create의 톱니바퀴·기어박스 등 축을 요구하는 것 전부가 조합으로 닿지 않는다. **뒷 시대는 그 시대의 축과 그 시대의 부품으로 짓는다** — Create의 회전 부품 레시피를 시대별로 넘겨받는 일이 브론즈 이후의 과제다.
 
-`create:shaft`는 **아무 레시피도 없고, 돌려줄 계획도 없다.** 상한이 걸리지 않는 부품이기 때문이다. 따라서 Create의 톱니바퀴·기어박스 등 축을 요구하는 것 전부가 조합으로 닿지 않는다. 뒷 시대는 그 시대의 축과 그 시대의 부품으로 짓는다 — Create의 회전 부품 레시피를 시대별로 넘겨받는 일이 브론즈 이후의 과제로 남는다.
+**Tapper는 유체 캐퍼빌리티를 내놓지 않는다.** 석기 시대에는 통에서 유체를 빼낼 수단이 없으므로 굳기를 기다리는 것 외에 길이 없고, 이 제약이 통이 차면 멈추는 규칙을 의미 있게 만든다. 파이프가 생기는 시대에 열면 된다.
 
-**아직 없다** — 시대 보상 2종(`apprentice_goggles`, `gatherers_satchel`). Curios 의존성만 있고 쓰는 코드가 없다.
+**`applying`에는 시험용 레시피가 하나 있다** — 수지를 금 간 석재 벽돌에 발라 메운다. 건조대의 젖은 스펀지와 같은 역할이다.
+
+#### 이 시대에 쓰지 않는다
+
+`drying_rack`, `primitive_sifter`, `foundry_mixer`, 광석 정광·분말 라인, 주석 라인. 블록과 아이템은 있고 레시피가 없다. 전부 브론즈 이후로 미룬다.
 
 **쓰이지 않는 아이템** — `bronze_gearbox_component`. 나무 쪽은 원시 기어박스의 속심으로 자리를 잡았으니, 브론즈 기어박스도 같은 자리에 놓으면 된다.
 
-`applying`에는 시험용 레시피가 하나 있다 — 수지를 금 간 석재 벽돌에 발라 메운다. 건조대의 젖은 스펀지와 같은 역할로, 관문 재료가 생기기 전에 붓을 실제로 굴려 볼 수 있게 하는 것이 목적이다.
+#### 남의 코드를 쓴 곳
 
-Tapper는 유체 캐퍼빌리티를 내놓지 않는다. 석기 시대에는 통에서 유체를 빼낼 수단이 없으므로 굳기를 기다리는 것 외에 길이 없고, 이 제약이 통이 차면 멈추는 규칙을 의미 있게 만든다. 파이프가 생기는 시대에 열면 된다.
-
-**이 시대에 쓰지 않는다** — `drying_rack`, `primitive_sifter`, `foundry_mixer`, 광석 정광·분말 라인, 주석 라인. 전부 브론즈 이후로 미룬다.
+파운드리 베이슨·뚜껑·수도꼭지·주조대·믹서는 [Create: Metallurgy](https://github.com/Lucreeper74/Create-Metallurgy)(MIT)에서 이식했고, 모델과 텍스쳐도 원본 그대로다. 레시피는 가져오지 않았다 — 이 팩이 쓰는 세 개를 직접 썼다. [ATTRIBUTION.md](ATTRIBUTION.md) 참고.
 
 #### 확인이 필요한 것
 
+- **전 구간 플레이.** 조합으로 이어지는 것은 확인했지만, 처음부터 프레스까지 한 번에 굴려 본 적은 없다.
 - 크랭크가 프레스를 실제로 돌릴 수 있는지. 크랭크는 256 SU를 내고 프레스는 8 RPM에서 64 SU를 쓰므로 계산상 가능하지만, 조작감은 재봐야 한다.
 - **시대 분량.** 관문 4개 + 도구 4개 + 원시 제련 한 줄이 몇 시간인지는 재보기 전에는 모른다. 짧으면 스테이션을 늘리는 쪽으로 확장하고, **요구 수량이나 타이머를 늘리는 쪽으로는 확장하지 않는다.**
+- **아연 하나에 걸린 무게.** 원시 제련 전체가 아연 하나를 위해 서 있고, 아연은 안산암 합금 하나를 위해 있다. 라인이 길어진 만큼 그 끝이 가벼우면 허무해질 수 있다 — 브론즈에서 구리·주석이 같은 라인을 쓰게 되면 해소되지만, 그전까지는 재봐야 한다.
