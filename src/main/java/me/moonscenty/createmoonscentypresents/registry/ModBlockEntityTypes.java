@@ -15,6 +15,8 @@ import me.moonscenty.createmoonscentypresents.content.kinetics.ModKineticBlockEn
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModKineticVisual;
 import me.moonscenty.createmoonscentypresents.content.charring.CharcoalPitBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.firing.PitKilnBlockEntity;
+import me.moonscenty.createmoonscentypresents.content.foundry.FoundryBasinBlockEntity;
+import me.moonscenty.createmoonscentypresents.content.foundry.FoundryLidBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.milling.MillstoneBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModRotatingCoreRenderer;
 import me.moonscenty.createmoonscentypresents.content.sifting.SifterBlockEntity;
@@ -66,6 +68,20 @@ public class ModBlockEntityTypes {
             .blockEntity("pit_kiln", PitKilnBlockEntity::new)
             .validBlocks(ModBlocks.PIT_KILN)
             .register();
+
+    // The vessel and the lid that drives it. Both are Create basin machinery, so the
+    // renderers, goggle overlay and belt input come with them.
+    public static final BlockEntityEntry<FoundryBasinBlockEntity> FOUNDRY_BASIN =
+            CreateMoonScentyPresents.REGISTRATE
+                    .blockEntity("foundry_basin", FoundryBasinBlockEntity::new)
+                    .validBlocks(ModBlocks.FOUNDRY_BASIN)
+                    .register();
+
+    public static final BlockEntityEntry<FoundryLidBlockEntity> FOUNDRY_LID =
+            CreateMoonScentyPresents.REGISTRATE
+                    .blockEntity("foundry_lid", FoundryLidBlockEntity::new)
+                    .validBlocks(ModBlocks.FOUNDRY_LID)
+                    .register();
 
     // Holds the wood buried in a charcoal pit while it smoulders.
     public static final BlockEntityEntry<CharcoalPitBlockEntity> CHARCOAL_PIT =

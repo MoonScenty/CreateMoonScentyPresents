@@ -23,5 +23,10 @@ public class ModCapabilities {
                 (blockEntity, context) -> blockEntity.capability);
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntityTypes.SIFTER.get(),
                 (blockEntity, context) -> blockEntity.capability);
+        // The foundry basin holds both, and Create binds neither for us.
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntityTypes.FOUNDRY_BASIN.get(),
+                (blockEntity, context) -> blockEntity.getItemCapability());
+        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntityTypes.FOUNDRY_BASIN.get(),
+                (blockEntity, context) -> blockEntity.getFluidCapability());
     }
 }

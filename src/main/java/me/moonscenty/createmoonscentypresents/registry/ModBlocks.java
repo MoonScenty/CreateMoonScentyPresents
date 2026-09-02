@@ -21,6 +21,8 @@ import me.moonscenty.createmoonscentypresents.content.kinetics.ModHandCrankBlock
 import me.moonscenty.createmoonscentypresents.content.milling.MillstoneBlock;
 import me.moonscenty.createmoonscentypresents.content.charring.CharcoalPitBlock;
 import me.moonscenty.createmoonscentypresents.content.firing.PitKilnBlock;
+import me.moonscenty.createmoonscentypresents.content.foundry.FoundryBasinBlock;
+import me.moonscenty.createmoonscentypresents.content.foundry.FoundryLidBlock;
 import me.moonscenty.createmoonscentypresents.content.processing.BasinShapedBlock;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRackBlock;
 import me.moonscenty.createmoonscentypresents.content.processing.HorizontalCubeBlock;
@@ -174,6 +176,36 @@ public class ModBlocks {
     public static final BlockEntry<ModCogwheelBlock> BRONZE_COGWHEEL =
             cogwheel("bronze_cogwheel", false, () -> Blocks.COPPER_BLOCK, SoundType.COPPER,
                     MapColor.TERRACOTTA_ORANGE, false);
+
+    // Stone Age - the vessel metal is melted in. The foundry basin from Create:
+    // Metallurgy, which is Create's basin with more room and a spout; the melting
+    // itself is driven by the lid on top of it.
+    public static final BlockEntry<FoundryBasinBlock> FOUNDRY_BASIN = CreateMoonScentyPresents.REGISTRATE
+            .block("foundry_basin", FoundryBasinBlock::new)
+            .initialProperties(() -> Blocks.BRICKS)
+            .properties(p -> p.mapColor(MapColor.COLOR_GRAY).noOcclusion())
+            .transform(TagGen.pickaxeOnly())
+            .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
+                    prov.models().getExistingFile(prov.modLoc("block/foundry_basin/block"))))
+            .item()
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(),
+                    prov.modLoc("block/foundry_basin/block")))
+            .build()
+            .register();
+
+    // Stone Age - shuts a foundry basin in so what is in it can melt.
+    public static final BlockEntry<FoundryLidBlock> FOUNDRY_LID = CreateMoonScentyPresents.REGISTRATE
+            .block("foundry_lid", FoundryLidBlock::new)
+            .initialProperties(() -> Blocks.BRICKS)
+            .properties(p -> p.mapColor(MapColor.COLOR_GRAY).noOcclusion())
+            .transform(TagGen.pickaxeOnly())
+            .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(), state -> prov.models()
+                    .getExistingFile(prov.modLoc("block/foundry_lid/" + lidModel(state)))))
+            .item()
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(),
+                    prov.modLoc("block/foundry_lid/block")))
+            .build()
+            .register();
 
     // Stone Age - the vessel metal is melted in. Create's basin shape and render
     // layer, but none of its behaviour: no block entity, no item or fluid handling,
@@ -387,5 +419,13 @@ public class ModBlocks {
     // Called from the mod constructor purely to load this class, which declares
     // the entries above. Registrate handles the actual registry events.
     public static void register() {
+    }
+
+    /** Open or shut, plain or windowed - four models off two boolean states. */
+    private static String lidModel(net.minecraft.world.level.block.state.BlockState state) {
+        boolean window = state.getValue(FoundryLidBlock.WINDOW);
+        if (state.getValue(FoundryLidBlock.OPEN))
+            return window ? "block_open_window" : "block_open";
+        return window ? "block_window" : "block";
     }
 }

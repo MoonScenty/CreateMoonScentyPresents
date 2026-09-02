@@ -6,6 +6,7 @@ import me.moonscenty.createmoonscentypresents.content.applying.ApplyingRecipe;
 import me.moonscenty.createmoonscentypresents.content.hammering.HammeringRecipe;
 import me.moonscenty.createmoonscentypresents.content.shaping.ShapingRecipe;
 import me.moonscenty.createmoonscentypresents.content.charring.CharringRecipe;
+import me.moonscenty.createmoonscentypresents.content.foundry.FoundryRecipe;
 import me.moonscenty.createmoonscentypresents.content.firing.FiringRecipe;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRecipe;
 import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
@@ -88,6 +89,24 @@ public class ModRecipeTypes {
 
     public static final DeferredHolder<RecipeSerializer<?>, CharringRecipe.Serializer> CHARRING_SERIALIZER =
             SERIALIZERS.register("charring", CharringRecipe.Serializer::new);
+
+    // What a foundry basin melts under a closed lid. A basin recipe, so Create's own
+    // heat check applies - and Create already reads a lit campfire as a smouldering
+    // blaze burner, which is what a stone age fire amounts to.
+    public static final ResourceLocation MELTING_ID =
+            ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, "melting");
+
+    public static final DeferredHolder<RecipeType<?>, RecipeType<FoundryRecipe>> MELTING =
+            TYPES.register("melting", () -> RecipeType.simple(MELTING_ID));
+
+    /** Declared before the serializer that names it, so the reference resolves. */
+    public static final ModRecipeTypeInfo MELTING_INFO =
+            new ModRecipeTypeInfo(MELTING_ID, MELTING, () -> ModRecipeTypes.MELTING_SERIALIZER.get());
+
+    public static final DeferredHolder<RecipeSerializer<?>, StandardProcessingRecipe.Serializer<FoundryRecipe>>
+            MELTING_SERIALIZER = SERIALIZERS.register("melting",
+                    () -> new StandardProcessingRecipe.Serializer<>(
+                            params -> new FoundryRecipe(MELTING_INFO, params)));
 
     // What a tapper draws out of a bored log, and what the pool it collects sets into.
     // Two types rather than one: the first is keyed on a block and yields a fluid, the

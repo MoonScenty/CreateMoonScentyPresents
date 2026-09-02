@@ -1,0 +1,16 @@
+{
+  "type": "createmoonscentypresents:melting",
+  "heat_requirement": "heated",
+  "ingredients": [
+    {
+      "tag": "c:ingots/zinc"
+    }
+  ],
+  "processing_time": 200,
+  "results": [
+    {
+      "amount": 90,
+      "id": "createmoonscentypresents:molten_zinc"
+    }
+  ]
+}

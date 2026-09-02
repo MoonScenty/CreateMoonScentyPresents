@@ -9,10 +9,12 @@ import java.util.function.Supplier;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
+import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 
 import me.moonscenty.createmoonscentypresents.content.charring.CharringRecipe;
 import me.moonscenty.createmoonscentypresents.content.firing.FiringRecipe;
+import me.moonscenty.createmoonscentypresents.content.foundry.FoundryRecipe;
 import me.moonscenty.createmoonscentypresents.content.heat.HeatLevel;
 import me.moonscenty.createmoonscentypresents.content.milling.MillingRecipe;
 import com.simibubi.create.AllTags;
@@ -59,6 +61,10 @@ public class ModRecipes {
     private static final int FIRE_BRICKS_PER_CRAFT = 4;
     /** Per log. Slower than a furnace, which is the price of not needing fuel. */
     private static final int CHARRING_TIME = 400;
+    /** One raw ore is one ingot of metal; the nine of a block is nine. */
+    private static final int METAL_PER_RAW_ORE = 90;
+    private static final int METAL_PER_INGOT = 90;
+    private static final int MELTING_TIME = 200;
 
     /** 20 seconds. Balancing comes later, like every other number in this pack. */
     private static final int DRYING_TIME = 400;
@@ -226,6 +232,7 @@ public class ModRecipes {
         registerKinetics();
         registerMilling();
         registerClay();
+        registerMelting();
         registerRewards();
         registerGates();
     }
@@ -405,6 +412,38 @@ public class ModRecipes {
                         .unlockedBy("has_primitive_gearbox", prov.has(ModBlocks.PRIMITIVE_GEARBOX.get()))
                         .save(prov, ResourceLocation.fromNamespaceAndPath(
                                 CreateMoonScentyPresents.MODID, name)));
+    }
+
+    // --- the foundry ----------------------------------------------------------
+
+    /**
+     * What the foundry basin melts under a closed lid.
+     *
+     * <p>Zinc is the metal this age turns on: the alloy needs its nuggets, and Create
+     * ordinarily smelts them in a furnace. Melting asks for a blaze burner rather than a
+     * campfire, which is what keeps the whole foundry line - clay, kiln, charcoal - in
+     * front of it.
+     */
+    private static void registerMelting() {
+        melting("zinc_from_raw", AllTags.commonItemTag("raw_materials/zinc"),
+                () -> new FluidStack(ModFluids.MOLTEN_ZINC.get().getSource(), METAL_PER_RAW_ORE));
+        melting("zinc_from_ingot", AllTags.commonItemTag("ingots/zinc"),
+                () -> new FluidStack(ModFluids.MOLTEN_ZINC.get().getSource(), METAL_PER_INGOT));
+    }
+
+    /** The result is a supplier: fluids are not bound yet when this is called. */
+    private static void melting(String name, TagKey<Item> input, Supplier<FluidStack> result) {
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov -> {
+            ResourceLocation id = ResourceLocation.fromNamespaceAndPath(
+                    CreateMoonScentyPresents.MODID, "melting/" + name);
+            prov.accept(id, new StandardProcessingRecipe.Builder<>(
+                    params -> new FoundryRecipe(ModRecipeTypes.MELTING_INFO, params), id)
+                            .require(input)
+                            .output(result.get())
+                            .requiresHeat(HeatCondition.HEATED)
+                            .duration(MELTING_TIME)
+                            .build(), null);
+        });
     }
 
     // --- age rewards ----------------------------------------------------------
