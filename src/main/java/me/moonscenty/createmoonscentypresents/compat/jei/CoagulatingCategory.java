@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
-import me.moonscenty.createmoonscentypresents.content.processing.DryingRecipe;
+import me.moonscenty.createmoonscentypresents.content.tapping.CoagulatingRecipe;
+import me.moonscenty.createmoonscentypresents.content.tapping.TapperBlockEntity;
 import me.moonscenty.createmoonscentypresents.registry.ModBlocks;
 import me.moonscenty.createmoonscentypresents.registry.ModRecipes;
 
@@ -25,18 +26,21 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.neoforged.neoforge.fluids.FluidStack;
 
-/** The rack recipes, shown as input -> arrow -> output with how long the wait is. */
-public class DryingCategory implements IRecipeCategory<RecipeHolder<DryingRecipe>> {
+/**
+ * The other half of a tapper: a full tank left alone until it sets. Without this page
+ * the tapping one dangles - it would show sap being drawn and never say what the sap
+ * turns into.
+ */
+public class CoagulatingCategory implements IRecipeCategory<RecipeHolder<CoagulatingRecipe>> {
 
-    public static final RecipeType<RecipeHolder<DryingRecipe>> TYPE = RecipeType.createRecipeHolderType(
-            ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, "drying"));
+    public static final RecipeType<RecipeHolder<CoagulatingRecipe>> TYPE = RecipeType.createRecipeHolderType(
+            ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, "coagulating"));
 
     private static final int WIDTH = 116;
     private static final int HEIGHT = 40;
 
-    // Slots are 18 wide. Placed symmetrically, so the gap between them - and every
-    // thing drawn in it - is centred on the category.
     private static final int SLOT_Y = 6;
     private static final int INPUT_X = 8;
     private static final int OUTPUT_X = WIDTH - 8 - 18;
@@ -51,24 +55,21 @@ public class DryingCategory implements IRecipeCategory<RecipeHolder<DryingRecipe
 
     private final IGuiHelper guiHelper;
     private final IDrawable icon;
-
-    // One arrow per distinct duration: the animation runs at the recipe's own speed,
-    // and recipes that take the same time can share.
     private final Map<Integer, IDrawableAnimated> arrows = new HashMap<>();
 
-    public DryingCategory(IGuiHelper guiHelper) {
+    public CoagulatingCategory(IGuiHelper guiHelper) {
         this.guiHelper = guiHelper;
-        this.icon = guiHelper.createDrawableItemStack(new ItemStack(ModBlocks.DRYING_RACK.get()));
+        this.icon = guiHelper.createDrawableItemStack(new ItemStack(ModBlocks.TAPPER.get()));
     }
 
     @Override
-    public RecipeType<RecipeHolder<DryingRecipe>> getRecipeType() {
+    public RecipeType<RecipeHolder<CoagulatingRecipe>> getRecipeType() {
         return TYPE;
     }
 
     @Override
     public Component getTitle() {
-        return Component.translatable(ModRecipes.DRYING_CATEGORY_KEY);
+        return Component.translatable(ModRecipes.COAGULATING_CATEGORY_KEY);
     }
 
     @Override
@@ -87,29 +88,25 @@ public class DryingCategory implements IRecipeCategory<RecipeHolder<DryingRecipe
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<DryingRecipe> holder, IFocusGroup focuses) {
-        DryingRecipe recipe = holder.value();
+    public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<CoagulatingRecipe> holder, IFocusGroup focuses) {
+        CoagulatingRecipe recipe = holder.value();
+        FluidStack pool = recipe.fluid();
         builder.addSlot(RecipeIngredientRole.INPUT, INPUT_X, SLOT_Y)
-                .addIngredients(recipe.input());
+                .setFluidRenderer(TapperBlockEntity.TANK_CAPACITY, false, 16, 16)
+                .addFluidStack(pool.getFluid(), pool.getAmount(), pool.getComponentsPatch());
         builder.addSlot(RecipeIngredientRole.OUTPUT, OUTPUT_X, SLOT_Y)
                 .addItemStack(recipe.result());
     }
 
     @Override
-    public void draw(RecipeHolder<DryingRecipe> holder, IRecipeSlotsView slots, GuiGraphics graphics,
+    public void draw(RecipeHolder<CoagulatingRecipe> holder, IRecipeSlotsView slots, GuiGraphics graphics,
             double mouseX, double mouseY) {
         int ticks = holder.value().processingTime();
         arrows.computeIfAbsent(ticks, guiHelper::createAnimatedRecipeArrow)
                 .draw(graphics, ARROW_X, ARROW_Y);
 
         Font font = Minecraft.getInstance().font;
-        Component time = Component.translatable(ModRecipes.TIME_KEY, seconds(ticks));
+        Component time = Component.translatable(ModRecipes.TIME_KEY, JeiFormat.seconds(ticks));
         graphics.drawString(font, time, GAP_CENTER - font.width(time) / 2, TIME_Y, TIME_COLOUR, false);
-    }
-
-    /** Ticks as seconds, without a trailing ".0" on the whole ones. */
-    private static String seconds(int ticks) {
-        float value = ticks / 20f;
-        return value == Math.round(value) ? String.valueOf(Math.round(value)) : String.format("%.1f", value);
     }
 }

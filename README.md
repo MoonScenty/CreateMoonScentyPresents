@@ -180,17 +180,19 @@ Create의 두 `item_application` 레시피(`from_log` / `from_wood`)는 대체 �
 
 #### 무인 동력원 차단
 
-관문 넷을 다 통과해도 무인 동력은 얻지 못한다. 발전기는 따로 막는다.
+관문 넷을 다 통과해도 무인 동력은 얻지 못한다. **따로 막을 것은 없다** — 관문 2가 `create:shaft`를 닫은 것으로 셋이 다 닫힌다.
 
-| 대상 | 막는 방법 |
-|---|---|
-| `create:water_wheel` | 레시피에 브론즈 재료를 요구시킨다 |
-| `create:large_water_wheel` | 동일 |
-| `create:windmill_bearing` | 동일 |
-| 양털 돛 | 풍차 베어링이 막히면 함께 닫힌다. 태그는 건드리지 않는다 |
-| `create:hand_crank` | **막지 않는다.** 우리 크랭크와 같은 층이다 |
+| 대상 | Create 원본 레시피 | 왜 닫혀 있나 |
+|---|---|---|
+| `create:water_wheel` | 판자 ×8 + `create:shaft` | 축이 없다 |
+| `create:large_water_wheel` | 판자 ×8 + `create:water_wheel` | 작은 수차가 없다 |
+| `create:windmill_bearing` | 나무 반블록 + 돌 + `create:shaft` | 축이 없다 |
+| 양털 돛 | — | 풍차 베어링이 막히면 함께 닫힌다. 태그는 건드리지 않는다 |
+| `create:hand_crank` | — | **막지 않는다.** 우리 크랭크와 같은 층이다 |
 
 양털 8개 + 풍차 베어링이면 512 SU가 나오므로, 이 구멍을 열어 두면 시대 전체가 무의미해진다. 다만 태그에서 양털을 빼는 것은 게이트가 아니라 기능 삭제이므로 하지 않는다. **베어링을 잠그면 돛은 쓸 곳이 없어진다.**
+
+브론즈 시대에 무인 동력을 열 때는 이 셋을 브론즈 축을 쓰는 레시피로 넘겨받는다. 원본을 되살리는 것이 아니라, 다른 Create 부품들과 같은 방식으로 그 시대의 축 위에 다시 얹는다.
 
 레시피로 닫히지 않는 것이 나오면 mixin을 쓴다. 현재 목록에는 없다.
 
@@ -343,7 +345,7 @@ wooden_shaft + 케이싱 + 철 블록 + Die ×2 → create:mechanical_press
 
 `create:shaft`는 **아무 레시피도 없고, 돌려줄 계획도 없다.** 상한이 걸리지 않는 부품이기 때문이다. 따라서 Create의 톱니바퀴·기어박스 등 축을 요구하는 것 전부가 조합으로 닿지 않는다. 뒷 시대는 그 시대의 축과 그 시대의 부품으로 짓는다 — Create의 회전 부품 레시피를 시대별로 넘겨받는 일이 브론즈 이후의 과제로 남는다.
 
-**아직 없다** — 발전기 차단 3개, 보상 2종, 석기 시대 블록의 조합 레시피(`stone_cogwheel`·`large_stone_cogwheel`·`primitive_gearbox`·`primitive_hand_crank`·`primitive_millstone`·`wooden_bearing` 등), Shaping·Applying·Tapping의 JEI 카테고리.
+**아직 없다** — 보상 2종, 석기 시대 블록의 조합 레시피(`stone_cogwheel`·`large_stone_cogwheel`·`primitive_gearbox`·`primitive_hand_crank`·`primitive_millstone`·`wooden_bearing` 등), Shaping·Applying·Tapping의 JEI 카테고리.
 
 `applying`에는 시험용 레시피가 하나 있다 — 수지를 금 간 석재 벽돌에 발라 메운다. 건조대의 젖은 스펀지와 같은 역할로, 관문 재료가 생기기 전에 붓을 실제로 굴려 볼 수 있게 하는 것이 목적이다.
 

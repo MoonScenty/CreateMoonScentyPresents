@@ -89,15 +89,31 @@ public class ModRecipes {
     public static final String DRYING_CATEGORY_KEY =
             "gui." + CreateMoonScentyPresents.MODID + ".category.drying";
 
-    /** How long a drying recipe takes, in seconds. */
-    public static final String DRYING_TIME_KEY =
-            "gui." + CreateMoonScentyPresents.MODID + ".drying.seconds";
+    public static final String SHAPING_CATEGORY_KEY =
+            "gui." + CreateMoonScentyPresents.MODID + ".category.shaping";
+
+    public static final String APPLYING_CATEGORY_KEY =
+            "gui." + CreateMoonScentyPresents.MODID + ".category.applying";
+
+    public static final String TAPPING_CATEGORY_KEY =
+            "gui." + CreateMoonScentyPresents.MODID + ".category.tapping";
+
+    public static final String COAGULATING_CATEGORY_KEY =
+            "gui." + CreateMoonScentyPresents.MODID + ".category.coagulating";
+
+    /** How long a timed recipe takes, in seconds. Shared by every category that waits. */
+    public static final String TIME_KEY =
+            "gui." + CreateMoonScentyPresents.MODID + ".seconds";
 
     public static void register() {
         CreateMoonScentyPresents.REGISTRATE.addRawLang(SAWING_CATEGORY_KEY, "Sawing");
         CreateMoonScentyPresents.REGISTRATE.addRawLang(HAMMERING_CATEGORY_KEY, "Hammering");
         CreateMoonScentyPresents.REGISTRATE.addRawLang(DRYING_CATEGORY_KEY, "Drying");
-        CreateMoonScentyPresents.REGISTRATE.addRawLang(DRYING_TIME_KEY, "%ss");
+        CreateMoonScentyPresents.REGISTRATE.addRawLang(SHAPING_CATEGORY_KEY, "Shaping");
+        CreateMoonScentyPresents.REGISTRATE.addRawLang(APPLYING_CATEGORY_KEY, "Applying");
+        CreateMoonScentyPresents.REGISTRATE.addRawLang(TAPPING_CATEGORY_KEY, "Tapping");
+        CreateMoonScentyPresents.REGISTRATE.addRawLang(COAGULATING_CATEGORY_KEY, "Coagulating");
+        CreateMoonScentyPresents.REGISTRATE.addRawLang(TIME_KEY, "%ss");
         // The only drying recipe so far. It is the plainest case of what the rack is
         // for - a wet thing left out until it is not - and it makes the rack testable
         // before the stone age materials that will really use it exist.
