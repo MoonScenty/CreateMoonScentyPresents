@@ -4,6 +4,8 @@ import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
 import me.moonscenty.createmoonscentypresents.network.ToggleSatchelPayload;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.UnaryOperator;
 import java.util.function.Supplier;
 
 import com.simibubi.create.AllBlocks;
@@ -17,6 +19,7 @@ import me.moonscenty.createmoonscentypresents.content.firing.FiringRecipe;
 import me.moonscenty.createmoonscentypresents.content.foundry.FoundryRecipe;
 import me.moonscenty.createmoonscentypresents.content.heat.HeatLevel;
 import me.moonscenty.createmoonscentypresents.content.milling.MillingRecipe;
+import me.moonscenty.createmoonscentypresents.content.sifting.SiftingRecipe;
 import com.simibubi.create.AllTags;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.ItemEntry;
@@ -62,10 +65,15 @@ public class ModRecipes {
     private static final int FIRE_BRICKS_PER_CRAFT = 4;
     /** Per log. Slower than a furnace, which is the price of not needing fuel. */
     private static final int CHARRING_TIME = 400;
-    /** One raw ore is one ingot of metal; the nine of a block is nine. */
+    /** One raw ore is one ingot of metal; washing it first gets half again. */
     private static final int METAL_PER_RAW_ORE = 90;
+    private static final int METAL_PER_CONCENTRATE = 135;
     private static final int METAL_PER_INGOT = 90;
     private static final int MELTING_TIME = 200;
+    private static final int SIFTING_TIME = 250;
+    /** Dressing without water loses half the ore. */
+    private static final float DRY_DRESSING = 0.5f;
+    private static final float CLAY_FROM_SAND = 0.25f;
     /** Long enough to watch it go dull, short enough not to be a wait. */
     private static final int CASTING_TIME = 120;
 
@@ -140,6 +148,13 @@ public class ModRecipes {
     public static final String CASTING_CATEGORY_KEY =
             "gui." + CreateMoonScentyPresents.MODID + ".category.casting";
 
+    public static final String SIFTING_CATEGORY_KEY =
+            "gui." + CreateMoonScentyPresents.MODID + ".category.sifting";
+
+    /** Whether a sifter has to be standing in water. */
+    public static final String SIFTER_WET_KEY = "gui." + CreateMoonScentyPresents.MODID + ".sifter_wet";
+    public static final String SIFTER_DRY_KEY = "gui." + CreateMoonScentyPresents.MODID + ".sifter_dry";
+
     /** What fire a recipe wants, and what a mould is left as. */
     public static final String NEEDS_HEAT_KEY = "gui." + CreateMoonScentyPresents.MODID + ".needs_heat";
     public static final String ANY_FIRE_KEY = "gui." + CreateMoonScentyPresents.MODID + ".any_fire";
@@ -163,6 +178,9 @@ public class ModRecipes {
         CreateMoonScentyPresents.REGISTRATE.addRawLang(CHARRING_CATEGORY_KEY, "Charring");
         CreateMoonScentyPresents.REGISTRATE.addRawLang(MELTING_CATEGORY_KEY, "Melting");
         CreateMoonScentyPresents.REGISTRATE.addRawLang(CASTING_CATEGORY_KEY, "Casting");
+        CreateMoonScentyPresents.REGISTRATE.addRawLang(SIFTING_CATEGORY_KEY, "Sifting");
+        CreateMoonScentyPresents.REGISTRATE.addRawLang(SIFTER_WET_KEY, "The sifter must stand in water");
+        CreateMoonScentyPresents.REGISTRATE.addRawLang(SIFTER_DRY_KEY, "The sifter must be dry");
         CreateMoonScentyPresents.REGISTRATE.addRawLang(NEEDS_HEAT_KEY, "Needs %s");
         CreateMoonScentyPresents.REGISTRATE.addRawLang(ANY_FIRE_KEY, "a fire");
         CreateMoonScentyPresents.REGISTRATE.addRawLang(MOLD_KEPT_KEY, "The mould is kept");
@@ -261,6 +279,7 @@ public class ModRecipes {
         registerTapping();
         registerKinetics();
         registerMilling();
+        registerSifting();
         registerClay();
         registerFoundry();
         registerMelting();
@@ -345,6 +364,19 @@ public class ModRecipes {
                         .unlockedBy("has_wooden_shaft", prov.has(ModBlocks.WOODEN_SHAFT.get()))
                         .save(prov));
 
+        // Same bones as the millstone with a mesh instead of a stone: a frame, a
+        // bearing under it and something to shake.
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.PRIMITIVE_SIFTER.get())
+                        .pattern("C")
+                        .pattern("B")
+                        .pattern("P")
+                        .define('C', ModBlocks.STONE_COGWHEEL.get())
+                        .define('B', ModItems.WOODEN_BEARING.get())
+                        .define('P', ItemTags.PLANKS)
+                        .unlockedBy("has_stone_cogwheel", prov.has(ModBlocks.STONE_COGWHEEL.get()))
+                        .save(prov));
+
         CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
                 ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.PRIMITIVE_MILLSTONE.get())
                         .pattern("C")
@@ -355,6 +387,58 @@ public class ModRecipes {
                         .define('S', Tags.Items.STONES)
                         .unlockedBy("has_stone_cogwheel", prov.has(ModBlocks.STONE_COGWHEEL.get()))
                         .save(prov));
+    }
+
+    // --- the sifter -----------------------------------------------------------
+
+    /**
+     * What the primitive sifter separates, and why standing it in water matters.
+     *
+     * <p>Washing and dry shaking are different jobs. Water carries the light stuff away
+     * and leaves what is heavy, so a sifter in a stream is how metal is found; shaken
+     * dry it only breaks gravel down into what gravel is made of.
+     *
+     * <p>The wet side gives <em>raw</em> zinc, never nuggets. Nuggets would let a sifter
+     * feed the alloy directly and put the whole foundry out of a job; raw ore still has
+     * to be melted, so the sifter is a second way to find zinc rather than a way around
+     * smelting it.
+     *
+     * <p>Sand into clay is the one that matters most. Every vessel, mould and fire brick
+     * is clay, and clay is a thing you find rather than grow - without this the foundry
+     * line runs out with the nearest lake bed.
+     */
+    private static void registerSifting() {
+        // Washed properly, the whole ore comes through as concentrate.
+        sifting("zinc_concentrate", true, Ingredient.of(AllTags.commonItemTag("raw_materials/zinc")),
+                builder -> builder.output(ModItems.ZINC_CONCENTRATE.get()));
+
+        // Shaken dry, half of it goes over the side as dust.
+        sifting("zinc_concentrate_dry", false, Ingredient.of(AllTags.commonItemTag("raw_materials/zinc")),
+                builder -> builder.output(DRY_DRESSING, ModItems.ZINC_CONCENTRATE.get()));
+
+        // Not ore dressing, but the same washing: sand gives up the clay in it, which is
+        // what keeps a foundry in crucibles once the nearest lake bed is dug out.
+        sifting("clay_from_sand", true, Ingredient.of(ItemTags.SAND),
+                builder -> builder.output(CLAY_FROM_SAND, Items.CLAY_BALL));
+    }
+
+    /**
+     * @param wet whether the sifter has to be standing in water for this
+     */
+    private static void sifting(String name, boolean wet, Ingredient input,
+            UnaryOperator<StandardProcessingRecipe.Builder<SiftingRecipe>> outputs) {
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov -> {
+            ResourceLocation id = ResourceLocation.fromNamespaceAndPath(
+                    CreateMoonScentyPresents.MODID, "sifting/" + name);
+            StandardProcessingRecipe.Builder<SiftingRecipe> builder =
+                    new StandardProcessingRecipe.Builder<>(SiftingRecipe::new, id)
+                            .withItemIngredients(input)
+                            .duration(SIFTING_TIME);
+            // The water condition is ours, so the recipe is rebuilt around the params
+            // Create's builder produces rather than being set on the builder itself.
+            SiftingRecipe base = outputs.apply(builder).build();
+            prov.accept(id, new SiftingRecipe(base.getParams(), Optional.of(wet)), null);
+        });
     }
 
     // --- clay and the kiln ----------------------------------------------------
@@ -462,6 +546,10 @@ public class ModRecipes {
     private static void registerMelting() {
         melting("zinc_from_raw", AllTags.commonItemTag("raw_materials/zinc"),
                 () -> new FluidStack(ModFluids.MOLTEN_ZINC.get().getSource(), METAL_PER_RAW_ORE));
+        // Half again as much for having washed it first. That is what a sifter is for -
+        // not finding ore, but getting more out of the ore already dug.
+        melting("zinc_from_concentrate", ModTags.ZINC_CONCENTRATES,
+                () -> new FluidStack(ModFluids.MOLTEN_ZINC.get().getSource(), METAL_PER_CONCENTRATE));
         melting("zinc_from_ingot", AllTags.commonItemTag("ingots/zinc"),
                 () -> new FluidStack(ModFluids.MOLTEN_ZINC.get().getSource(), METAL_PER_INGOT));
     }

@@ -151,6 +151,10 @@ public class ModItems {
             concentrate("copper_concentrate", ModTags.COPPER_CONCENTRATES);
     public static final ItemEntry<Item> TIN_CONCENTRATE =
             concentrate("tin_concentrate", ModTags.TIN_CONCENTRATES);
+    // The one the stone age actually uses: washed zinc ore, worth more in the foundry
+    // than the ore it came from.
+    public static final ItemEntry<Item> ZINC_CONCENTRATE =
+            concentrate("zinc_concentrate", ModTags.ZINC_CONCENTRATES);
 
     // Millstone output: the meltable powder fed to the crucible furnace.
     public static final ItemEntry<Item> COPPER_DUST = dust("copper_dust", ModTags.COPPER_DUSTS);

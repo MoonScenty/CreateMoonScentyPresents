@@ -1,0 +1,16 @@
+{
+  "type": "createmoonscentypresents:sifting",
+  "ingredients": [
+    {
+      "tag": "c:raw_materials/zinc"
+    }
+  ],
+  "processing_time": 250,
+  "results": [
+    {
+      "chance": 0.5,
+      "id": "createmoonscentypresents:zinc_concentrate"
+    }
+  ],
+  "waterlogged": false
+}

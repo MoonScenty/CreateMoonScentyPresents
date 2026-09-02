@@ -99,7 +99,8 @@ Liquid Resin은 버킷과 월드 배치가 있는 보통 유체다. 석기 시�
                                         ↓
 내화벽돌 + 철  →  뚜껑 · 수도꼭지 · 주조대                     (조합)
                                         ↓
-아연 원석  →  [베이슨 + 뚜껑, 아래에 불]  →  녹은 아연
+아연 원석  →  [선광기, 물에 잠김]  →  아연 정광            (선택. 금속이 1.5배)
+           →  [베이슨 + 뚜껑, 아래에 불]  →  녹은 아연
            →  [수도꼭지]  →  [주조대 위 거푸집]  →  아연 주괴
                                         ↓
         안산암 부스러기 ×2 + 아연 조각 ×2  →  create:andesite_alloy
@@ -131,11 +132,16 @@ Create의 베이슨은 `create:passive_boiler_heaters` 태그를 약한 열로 �
 | 파운드리 뚜껑 | 베이슨 위에 얹혀 녹인다. 열면 멈추고, 열었을 때만 손으로 넣을 수 있다 | 베이슨 위 |
 | 수도꼭지 | 붙은 탱크를 아래로 흘린다. 받을 곳이 없으면 열리지 않는다 | 유체를 가진 블록에 부착 |
 | 주조대 | 틀을 올려 두고 금속을 받아 굳힌다 | 위에서 부어짐 |
+| 원시 선광기 | 원석을 씻어 정광으로. 마른 채로는 절반만 남는다 | 32 RPM + 물에 잠김 |
 | 파운드리 믹서 | 합금. **이 시대에는 쓰지 않는다** | 회전 동력 |
 
 가마와 숯가마는 한 번에 한 개씩 처리한다. 여덟 개를 넣으면 여덟 배가 걸리고, 먼저 된 것부터 꺼낼 수 있다. **묶어 넣는 이유는 시간을 아끼는 것이 아니라 돌아오지 않아도 되는 것이다.**
 
 주조대의 틀은 레시피가 지정하고, 소모 여부도 레시피가 정한다. 지금 쓰는 거푸집은 구운 점토라 부서지지 않으므로 몇 번이고 다시 쓴다.
+
+**선광기는 광석을 찾는 기계가 아니라 캔 광석에서 더 뽑아내는 기계다.** 자갈을 걸러 광물이 나오게 하는 것은 이 팩이 하려는 일이 아니다 — 광석은 캐서 얻고, 선광기는 그것을 씻어 정광으로 만든다. 원석 그대로 녹이면 주괴 하나, 씻어서 녹이면 하나 반이다. 물이 조건인 이유도 여기 있다: 가벼운 것을 흘려보내는 것이 세광이고, 마른 채 흔들면 절반이 같이 날아간다.
+
+모래를 씻어 점토를 얻는 것만은 광물이 아니다. 도가니·거푸집·내화벽돌이 전부 점토인데 점토는 호숫가에서 파오는 유한한 자원이라, 이것이 없으면 파운드리 라인이 근처 호수 바닥과 함께 말라붙는다.
 
 ---
 
@@ -281,9 +287,10 @@ Wooden Saw + 판자 → Wooden Stave
 Stave + Twine → wooden_shaft → stone_cogwheel / large_stone_cogwheel
         (create:shaft 는 열리지 않는다. 32 RPM 천장을 지키기 위해서다)
 ↓
-Primitive Hand Crank + Primitive Millstone 조립
+Primitive Hand Crank + Primitive Millstone + Primitive Sifter 조립
 ↓
 크랭크로 맷돌을 돌려 Grit 생산이 2배가 된다
+선광기를 물에 담그고 아연 원석을 씻으면 정광이 되어 금속이 1.5배가 된다
 
 [4장] 케이싱 — Applying
 합금 + Resin → Andesite Cement
@@ -373,6 +380,7 @@ wooden_shaft + 케이싱 + 철 블록 + Die ×2 → create:mechanical_press
 | 원시 수직 기어박스 | `primitive_vertical_gearbox` | 수평·수직 축 전환 | Primitive Gearbox 상호 변환 |
 | 손 크랭크 | `primitive_hand_crank` | 사람이 돌리는 유일한 동력원. 1대만 구동 | Planks ×3 + Wooden Shaft |
 | 원시 맷돌 | `primitive_millstone` | Andesite → Grit ×2 | Stone Cogwheel + Wooden Bearing + 돌 |
+| 원시 선광기 | `primitive_sifter` | 원석을 씻어 정광으로. **물에 잠겨야 온전히 나온다** | Stone Cogwheel + Wooden Bearing + 판자 |
 | 노천 가마 | `pit_kiln` | 점토 성형품을 굽는다. 8개까지, 한 개씩 | 점토 벽돌 |
 | 숯가마 | `charcoal_pit` | 원목 → 숯. 덮여 있어야 한다 | 점토 벽돌 |
 | 파운드리 베이슨 | `foundry_basin` | 금속을 녹여 담는다 | Firing: 미소성 도가니 |
@@ -419,10 +427,10 @@ wooden_shaft + 케이싱 + 철 블록 + Die ×2 → create:mechanical_press
 | 손 가공 | `sawing` / `hammering` / `shaping` / `applying` 네 타입과 도구 넷, `applicator_brush`(적재·회수·블록 적용) |
 | 수액 채취 | `hand_drill`, 구멍 난 통나무 8종, `tapper`, `liquid_resin`, `tapping`·`coagulating` |
 | 원시 제련 | 점토 성형 3종, 노천 가마(`firing`), 숯가마(`charring`), 파운드리 베이슨·뚜껑·수도꼭지·주조대(`melting` / `casting`), 녹은 아연, 열원 3단계 |
-| 회전 | `wooden_shaft`, `stone_cogwheel`, `large_stone_cogwheel`, `primitive_gearbox`와 수직 변환, `primitive_hand_crank`, `primitive_millstone`, `ModKineticLimits`(32 RPM) |
+| 회전 | `wooden_shaft`, `stone_cogwheel`, `large_stone_cogwheel`, `primitive_gearbox`와 수직 변환, `primitive_hand_crank`, `primitive_millstone`, `primitive_sifter`, `ModKineticLimits`(32 RPM) |
 | 관문 | 넷 전부. 인수한 Create 레시피 14개 (합금 4, 축 1, 케이싱 2, 프레스 1, 아연 제련 6) |
 | 보상 | `apprentice_goggles`(Curios `head`, Create 고글 오버레이에 연결), `gatherers_satchel`(Curios `back`, Alt+N 토글) |
-| 표시 | JEI 카테고리 11종, Jade 3종(채취통 / 가마 / 숯가마), 고글에 32 RPM 한계 표시 |
+| 표시 | JEI 카테고리 12종, Jade 3종(채취통 / 가마 / 숯가마), 고글에 32 RPM 한계 표시 |
 
 #### 설계상 그렇게 둔 것
 
@@ -434,7 +442,7 @@ wooden_shaft + 케이싱 + 철 블록 + Die ×2 → create:mechanical_press
 
 #### 이 시대에 쓰지 않는다
 
-`drying_rack`, `primitive_sifter`, `foundry_mixer`, 광석 정광·분말 라인, 주석 라인. 블록과 아이템은 있고 레시피가 없다. 전부 브론즈 이후로 미룬다.
+`drying_rack`, `foundry_mixer`, 분말 라인, 구리·주석 정광, 주석 라인. 블록과 아이템은 있고 레시피가 없다. 전부 브론즈 이후로 미룬다.
 
 **쓰이지 않는 아이템** — `bronze_gearbox_component`. 나무 쪽은 원시 기어박스의 속심으로 자리를 잡았으니, 브론즈 기어박스도 같은 자리에 놓으면 된다.
 
@@ -448,3 +456,4 @@ wooden_shaft + 케이싱 + 철 블록 + Die ×2 → create:mechanical_press
 - 크랭크가 프레스를 실제로 돌릴 수 있는지. 크랭크는 256 SU를 내고 프레스는 8 RPM에서 64 SU를 쓰므로 계산상 가능하지만, 조작감은 재봐야 한다.
 - **시대 분량.** 관문 4개 + 도구 4개 + 원시 제련 한 줄이 몇 시간인지는 재보기 전에는 모른다. 짧으면 스테이션을 늘리는 쪽으로 확장하고, **요구 수량이나 타이머를 늘리는 쪽으로는 확장하지 않는다.**
 - **아연 하나에 걸린 무게.** 원시 제련 전체가 아연 하나를 위해 서 있고, 아연은 안산암 합금 하나를 위해 있다. 라인이 길어진 만큼 그 끝이 가벼우면 허무해질 수 있다 — 브론즈에서 구리·주석이 같은 라인을 쓰게 되면 해소되지만, 그전까지는 재봐야 한다.
+- **선광이 값을 하는가.** 원석을 씻으면 금속이 1.5배가 되지만, 선광기를 짓고 크랭크를 돌리는 값이 그 절반의 이득보다 싼지는 재봐야 안다. 싸지 않다면 배율이 아니라 선광기가 여는 것을 늘리는 쪽으로 고친다.

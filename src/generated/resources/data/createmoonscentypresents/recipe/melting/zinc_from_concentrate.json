@@ -1,0 +1,15 @@
+{
+  "type": "createmoonscentypresents:melting",
+  "ingredients": [
+    {
+      "tag": "c:concentrates/zinc"
+    }
+  ],
+  "processing_time": 200,
+  "results": [
+    {
+      "amount": 135,
+      "id": "createmoonscentypresents:molten_zinc"
+    }
+  ]
+}

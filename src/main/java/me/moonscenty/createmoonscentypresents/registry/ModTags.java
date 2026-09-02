@@ -20,6 +20,7 @@ public class ModTags {
     public static final TagKey<Item> CONCENTRATES = item("concentrates");
     public static final TagKey<Item> COPPER_CONCENTRATES = item("concentrates/copper");
     public static final TagKey<Item> TIN_CONCENTRATES = item("concentrates/tin");
+    public static final TagKey<Item> ZINC_CONCENTRATES = item("concentrates/zinc");
 
     // c:dusts itself is a NeoForge tag (Tags.Items.DUSTS); only the per-metal
     // subtags need declaring, since CommonMetal does not cover dusts.

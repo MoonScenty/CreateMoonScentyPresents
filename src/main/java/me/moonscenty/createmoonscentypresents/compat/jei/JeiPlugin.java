@@ -53,7 +53,8 @@ public class JeiPlugin implements IModPlugin {
                 new ShapingCategory(guiHelper), new ApplyingCategory(guiHelper),
                 new TappingCategory(guiHelper), new CoagulatingCategory(guiHelper),
                 new DryingCategory(guiHelper), firing(guiHelper), charring(guiHelper),
-                new MeltingCategory(guiHelper), new CastingCategory(guiHelper));
+                new MeltingCategory(guiHelper), new CastingCategory(guiHelper),
+                new SiftingCategory(guiHelper));
     }
 
     /** The kiln and the charcoal pit share a page shape; only their lists differ. */
@@ -92,6 +93,7 @@ public class JeiPlugin implements IModPlugin {
         registration.addRecipes(CHARRING, recipes.getAllRecipesFor(ModRecipeTypes.CHARRING.get()));
         registration.addRecipes(MeltingCategory.TYPE, recipes.getAllRecipesFor(ModRecipeTypes.MELTING.get()));
         registration.addRecipes(CastingCategory.TYPE, recipes.getAllRecipesFor(ModRecipeTypes.CASTING.get()));
+        registration.addRecipes(SiftingCategory.TYPE, recipes.getAllRecipesFor(ModRecipeTypes.SIFTING.get()));
     }
 
     @Override
@@ -110,6 +112,7 @@ public class JeiPlugin implements IModPlugin {
         registration.addRecipeCatalyst(ModBlocks.FOUNDRY_BASIN.get(), MeltingCategory.TYPE);
         registration.addRecipeCatalyst(ModBlocks.FOUNDRY_LID.get(), MeltingCategory.TYPE);
         registration.addRecipeCatalyst(ModBlocks.CASTING_TABLE.get(), CastingCategory.TYPE);
+        registration.addRecipeCatalyst(ModBlocks.PRIMITIVE_SIFTER.get(), SiftingCategory.TYPE);
         registration.addRecipeCatalyst(ModBlocks.DRYING_RACK.get(), DryingCategory.TYPE);
     }
 }
