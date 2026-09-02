@@ -28,6 +28,7 @@
   "block.createmoonscentypresents.tin_ore": "Tin Ore",
   "block.createmoonscentypresents.wooden_powered_shaft": "Wooden Powered Shaft",
   "block.createmoonscentypresents.wooden_shaft": "Wooden Shaft",
+  "config.jade.plugin_createmoonscentypresents.tapper": "Tapper",
   "fluid.createmoonscentypresents.liquid_resin": "Liquid Resin",
   "gui.createmoonscentypresents.category.drying": "Drying",
   "gui.createmoonscentypresents.category.hammering": "Hammering",

@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 
+import me.moonscenty.createmoonscentypresents.compat.jade.JadeLang;
 import me.moonscenty.createmoonscentypresents.registry.ModBlockEntityTypes;
 import me.moonscenty.createmoonscentypresents.registry.ModBlocks;
 import me.moonscenty.createmoonscentypresents.registry.ModCreativeTabs;
@@ -46,5 +47,6 @@ public class CreateMoonScentyPresents {
         ModRecipeTypes.register(modEventBus);
         ModDataComponents.register(modEventBus);
         ModRecipes.register();
+        JadeLang.register();
     }
 }
