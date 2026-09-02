@@ -128,6 +128,25 @@ public class ModRecipes {
     public static final String COAGULATING_CATEGORY_KEY =
             "gui." + CreateMoonScentyPresents.MODID + ".category.coagulating";
 
+    public static final String FIRING_CATEGORY_KEY =
+            "gui." + CreateMoonScentyPresents.MODID + ".category.firing";
+
+    public static final String CHARRING_CATEGORY_KEY =
+            "gui." + CreateMoonScentyPresents.MODID + ".category.charring";
+
+    public static final String MELTING_CATEGORY_KEY =
+            "gui." + CreateMoonScentyPresents.MODID + ".category.melting";
+
+    public static final String CASTING_CATEGORY_KEY =
+            "gui." + CreateMoonScentyPresents.MODID + ".category.casting";
+
+    /** What fire a recipe wants, and what a mould is left as. */
+    public static final String NEEDS_HEAT_KEY = "gui." + CreateMoonScentyPresents.MODID + ".needs_heat";
+    public static final String ANY_FIRE_KEY = "gui." + CreateMoonScentyPresents.MODID + ".any_fire";
+    public static final String MOLD_KEPT_KEY = "gui." + CreateMoonScentyPresents.MODID + ".mold_kept";
+    public static final String MOLD_CONSUMED_KEY =
+            "gui." + CreateMoonScentyPresents.MODID + ".mold_consumed";
+
     /** How long a timed recipe takes, in seconds. Shared by every category that waits. */
     public static final String TIME_KEY =
             "gui." + CreateMoonScentyPresents.MODID + ".seconds";
@@ -140,6 +159,14 @@ public class ModRecipes {
         CreateMoonScentyPresents.REGISTRATE.addRawLang(APPLYING_CATEGORY_KEY, "Applying");
         CreateMoonScentyPresents.REGISTRATE.addRawLang(TAPPING_CATEGORY_KEY, "Tapping");
         CreateMoonScentyPresents.REGISTRATE.addRawLang(COAGULATING_CATEGORY_KEY, "Coagulating");
+        CreateMoonScentyPresents.REGISTRATE.addRawLang(FIRING_CATEGORY_KEY, "Firing");
+        CreateMoonScentyPresents.REGISTRATE.addRawLang(CHARRING_CATEGORY_KEY, "Charring");
+        CreateMoonScentyPresents.REGISTRATE.addRawLang(MELTING_CATEGORY_KEY, "Melting");
+        CreateMoonScentyPresents.REGISTRATE.addRawLang(CASTING_CATEGORY_KEY, "Casting");
+        CreateMoonScentyPresents.REGISTRATE.addRawLang(NEEDS_HEAT_KEY, "Needs %s");
+        CreateMoonScentyPresents.REGISTRATE.addRawLang(ANY_FIRE_KEY, "a fire");
+        CreateMoonScentyPresents.REGISTRATE.addRawLang(MOLD_KEPT_KEY, "The mould is kept");
+        CreateMoonScentyPresents.REGISTRATE.addRawLang(MOLD_CONSUMED_KEY, "The mould is broken");
         CreateMoonScentyPresents.REGISTRATE.addRawLang(TIME_KEY, "%ss");
         CreateMoonScentyPresents.REGISTRATE.addRawLang(ToggleSatchelPayload.KEY_CATEGORY, "Create: MoonScenty Presents");
         CreateMoonScentyPresents.REGISTRATE.addRawLang(ToggleSatchelPayload.KEY_NAME,
