@@ -5,6 +5,7 @@ import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
 import me.moonscenty.createmoonscentypresents.content.applying.ApplyingRecipe;
 import me.moonscenty.createmoonscentypresents.content.hammering.HammeringRecipe;
 import me.moonscenty.createmoonscentypresents.content.shaping.ShapingRecipe;
+import me.moonscenty.createmoonscentypresents.content.charring.CharringRecipe;
 import me.moonscenty.createmoonscentypresents.content.firing.FiringRecipe;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRecipe;
 import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
@@ -78,6 +79,15 @@ public class ModRecipeTypes {
 
     public static final DeferredHolder<RecipeSerializer<?>, FiringRecipe.Serializer> FIRING_SERIALIZER =
             SERIALIZERS.register("firing", FiringRecipe.Serializer::new);
+
+    // What a charcoal pit turns wood into. Apart from firing so that logs cannot be
+    // burnt in the open kiln instead, which would make the pit's cover pointless.
+    public static final DeferredHolder<RecipeType<?>, RecipeType<CharringRecipe>> CHARRING =
+            TYPES.register("charring", () -> RecipeType.simple(
+                    ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, "charring")));
+
+    public static final DeferredHolder<RecipeSerializer<?>, CharringRecipe.Serializer> CHARRING_SERIALIZER =
+            SERIALIZERS.register("charring", CharringRecipe.Serializer::new);
 
     // What a tapper draws out of a bored log, and what the pool it collects sets into.
     // Two types rather than one: the first is keyed on a block and yields a fluid, the

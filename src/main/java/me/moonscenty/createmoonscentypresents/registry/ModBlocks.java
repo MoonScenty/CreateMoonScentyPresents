@@ -19,6 +19,7 @@ import me.moonscenty.createmoonscentypresents.content.kinetics.ModCogwheelBlock;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModGearboxBlock;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModHandCrankBlock;
 import me.moonscenty.createmoonscentypresents.content.milling.MillstoneBlock;
+import me.moonscenty.createmoonscentypresents.content.charring.CharcoalPitBlock;
 import me.moonscenty.createmoonscentypresents.content.firing.PitKilnBlock;
 import me.moonscenty.createmoonscentypresents.content.processing.BasinShapedBlock;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRackBlock;
@@ -60,11 +61,10 @@ public class ModBlocks {
             .simpleItem()
             .register();
 
-    // Stone Age - wood into charcoal. Model and textures only, no behaviour yet:
-    // vanilla's blast furnace shape, with its plain stone body replaced by the bricks
+    // Stone Age - wood into charcoal. vanilla's blast furnace shape, with its plain stone body replaced by the bricks
     // texture pulled towards grey. The furnace's own face and base are left alone.
-    public static final BlockEntry<HorizontalCubeBlock> CHARCOAL_PIT = CreateMoonScentyPresents.REGISTRATE
-            .block("charcoal_pit", HorizontalCubeBlock::new)
+    public static final BlockEntry<CharcoalPitBlock> CHARCOAL_PIT = CreateMoonScentyPresents.REGISTRATE
+            .block("charcoal_pit", CharcoalPitBlock::new)
             .initialProperties(() -> Blocks.BRICKS)
             .properties(p -> p.mapColor(MapColor.STONE))
             .transform(TagGen.pickaxeOnly())

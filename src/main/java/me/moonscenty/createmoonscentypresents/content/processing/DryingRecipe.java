@@ -34,7 +34,7 @@ import net.minecraft.world.level.Level;
  * @param processingTime how long the item hangs there, in ticks
  */
 public record DryingRecipe(Ingredient input, ItemStack result, int processingTime)
-        implements Recipe<SingleRecipeInput> {
+        implements Recipe<SingleRecipeInput>, TimedItemRecipe {
 
     /** The recipe for what is hanging on the rack, if anything dries it. */
     public static Optional<RecipeHolder<DryingRecipe>> find(Level level, ItemStack stack) {

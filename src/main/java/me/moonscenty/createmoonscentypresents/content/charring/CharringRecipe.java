@@ -1,4 +1,4 @@
-package me.moonscenty.createmoonscentypresents.content.firing;
+package me.moonscenty.createmoonscentypresents.content.charring;
 
 import java.util.Optional;
 
@@ -24,27 +24,23 @@ import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 
 /**
- * Something packed into a pit kiln and burnt hard, becoming one other thing.
+ * Wood smothered under a cover and left to smoulder, becoming charcoal.
  *
- * <p>The furnace is not this. A furnace is a box that anyone can light and walk away
- * from; a pit kiln is filled, sealed, lit once and finished when it burns out - it
- * takes a whole load at a time and gives nothing back until it is done. That is why
- * this is its own type rather than a smelting recipe.
+ * <p>Its own type rather than a firing recipe, because a charcoal pit is not a kiln
+ * with different contents: it has to be buried to work, and letting logs be charred in
+ * the open kiln would make the cover pointless.
  *
- * <p>Both sides are a single item and neither carries a count; the kiln fires whatever
- * stack is in it, one item's worth per item.
- *
- * @param processingTime how long the load burns, in ticks
+ * @param processingTime how long one piece smoulders, in ticks
  */
-public record FiringRecipe(Ingredient input, ItemStack result, int processingTime)
+public record CharringRecipe(Ingredient input, ItemStack result, int processingTime)
         implements Recipe<SingleRecipeInput>, TimedItemRecipe {
 
-    /** The recipe for what is in the kiln, if the fire changes it into anything. */
-    public static Optional<RecipeHolder<FiringRecipe>> find(Level level, ItemStack stack) {
+    /** The recipe for what is packed in, if smouldering turns it into anything. */
+    public static Optional<RecipeHolder<CharringRecipe>> find(Level level, ItemStack stack) {
         if (stack.isEmpty())
             return Optional.empty();
         return level.getRecipeManager()
-                .getRecipeFor(ModRecipeTypes.FIRING.get(), new SingleRecipeInput(stack), level);
+                .getRecipeFor(ModRecipeTypes.CHARRING.get(), new SingleRecipeInput(stack), level);
     }
 
     @Override
@@ -74,36 +70,36 @@ public record FiringRecipe(Ingredient input, ItemStack result, int processingTim
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipeTypes.FIRING_SERIALIZER.get();
+        return ModRecipeTypes.CHARRING_SERIALIZER.get();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return ModRecipeTypes.FIRING.get();
+        return ModRecipeTypes.CHARRING.get();
     }
 
-    public static class Serializer implements RecipeSerializer<FiringRecipe> {
-        private static final MapCodec<FiringRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
-                .group(Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(FiringRecipe::input),
-                        ItemStack.STRICT_SINGLE_ITEM_CODEC.fieldOf("result").forGetter(FiringRecipe::result),
+    public static class Serializer implements RecipeSerializer<CharringRecipe> {
+        private static final MapCodec<CharringRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
+                .group(Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(CharringRecipe::input),
+                        ItemStack.STRICT_SINGLE_ITEM_CODEC.fieldOf("result").forGetter(CharringRecipe::result),
                         ExtraCodecs.POSITIVE_INT.fieldOf("processing_time")
-                                .forGetter(FiringRecipe::processingTime))
-                .apply(instance, FiringRecipe::new));
+                                .forGetter(CharringRecipe::processingTime))
+                .apply(instance, CharringRecipe::new));
 
-        private static final StreamCodec<RegistryFriendlyByteBuf, FiringRecipe> STREAM_CODEC =
+        private static final StreamCodec<RegistryFriendlyByteBuf, CharringRecipe> STREAM_CODEC =
                 StreamCodec.composite(
-                        Ingredient.CONTENTS_STREAM_CODEC, FiringRecipe::input,
-                        ItemStack.STREAM_CODEC, FiringRecipe::result,
-                        ByteBufCodecs.VAR_INT, FiringRecipe::processingTime,
-                        FiringRecipe::new);
+                        Ingredient.CONTENTS_STREAM_CODEC, CharringRecipe::input,
+                        ItemStack.STREAM_CODEC, CharringRecipe::result,
+                        ByteBufCodecs.VAR_INT, CharringRecipe::processingTime,
+                        CharringRecipe::new);
 
         @Override
-        public MapCodec<FiringRecipe> codec() {
+        public MapCodec<CharringRecipe> codec() {
             return CODEC;
         }
 
         @Override
-        public StreamCodec<RegistryFriendlyByteBuf, FiringRecipe> streamCodec() {
+        public StreamCodec<RegistryFriendlyByteBuf, CharringRecipe> streamCodec() {
             return STREAM_CODEC;
         }
     }

@@ -10,25 +10,26 @@ import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
 public class JadeLang {
 
     public static final String TAPPER = "tapper";
-    public static final String PIT_KILN = "pit_kiln";
+    /** One provider for every station that packs a load and waits over a fire. */
+    public static final String KILN = "kiln";
 
     private static final String PREFIX = "jade." + CreateMoonScentyPresents.MODID + ".";
 
     public static final String KILN_EMPTY_KEY = PREFIX + "kiln.empty";
     public static final String KILN_NOTHING_TO_FIRE_KEY = PREFIX + "kiln.nothing_to_fire";
-    public static final String KILN_FIRING_KEY = PREFIX + "kiln.firing";
-    public static final String KILN_COLD_KEY = PREFIX + "kiln.cold";
+    public static final String KILN_WORKING_KEY = PREFIX + "kiln.working";
+    public static final String KILN_STOPPED_KEY = PREFIX + "kiln.stopped";
     public static final String KILN_WAITING_KEY = PREFIX + "kiln.waiting";
     public static final String KILN_DONE_KEY = PREFIX + "kiln.done";
 
     public static void register() {
         addProviderLang(TAPPER, "Tapper");
-        addProviderLang(PIT_KILN, "Pit Kiln");
+        addProviderLang(KILN, "Kiln");
 
         addLang(KILN_EMPTY_KEY, "Empty");
         addLang(KILN_NOTHING_TO_FIRE_KEY, "The fire does nothing to this");
-        addLang(KILN_FIRING_KEY, "Firing: %s%%");
-        addLang(KILN_COLD_KEY, "No fire below: %s%%");
+        addLang(KILN_WORKING_KEY, "Firing: %s%%");
+        addLang(KILN_STOPPED_KEY, "Stopped: %s%%");
         addLang(KILN_WAITING_KEY, "%s x%s waiting");
         addLang(KILN_DONE_KEY, "%s x%s done");
     }

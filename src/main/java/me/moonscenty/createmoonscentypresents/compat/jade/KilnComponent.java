@@ -1,14 +1,13 @@
 package me.moonscenty.createmoonscentypresents.compat.jade;
 
 import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
-import me.moonscenty.createmoonscentypresents.content.firing.PitKilnBlockEntity;
+import me.moonscenty.createmoonscentypresents.content.firing.KilnBlockEntity;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
 
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
@@ -19,18 +18,18 @@ import snownee.jade.api.ui.BoxStyle;
 import snownee.jade.api.ui.IElementHelper;
 
 /**
- * What is in a pit kiln and how far along it is.
+ * What is in a kiln or a charcoal pit and how far along it is.
  *
- * <p>The kiln is closed on top, so there is nothing to look at - without this the only
- * way to know whether a load is done is to break the fire and reach in, which throws
- * away the point of leaving it alone. Progress is asked for from the server rather than
- * synced to every client, since it only matters to whoever is standing in front of it.
+ * <p>Both are closed, so there is nothing to look at - without this the only way to
+ * know whether a load is done is to reach in, which throws away the point of leaving it
+ * alone. Progress is asked for from the server rather than synced to every client,
+ * since it only matters to whoever is standing in front of it.
  */
-public enum PitKilnComponent implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
+public enum KilnComponent implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
     INSTANCE;
 
     public static final ResourceLocation UID =
-            ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, JadeLang.PIT_KILN);
+            ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, JadeLang.KILN);
 
     /** Jade's bar defaults to black text, which is unreadable over a filled bar. */
     private static final int TEXT_COLOUR = 0xFFFFFFFF;
@@ -42,8 +41,7 @@ public enum PitKilnComponent implements IBlockComponentProvider, IServerDataProv
 
     @Override
     public void appendServerData(CompoundTag data, BlockAccessor accessor) {
-        BlockEntity blockEntity = accessor.getBlockEntity();
-        if (!(blockEntity instanceof PitKilnBlockEntity kiln))
+        if (!(accessor.getBlockEntity() instanceof KilnBlockEntity<?> kiln))
             return;
         data.putInt(TICKS, kiln.getFiringTicks());
         data.putInt(DURATION, kiln.getFiringDuration());
@@ -51,7 +49,7 @@ public enum PitKilnComponent implements IBlockComponentProvider, IServerDataProv
 
     @Override
     public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
-        if (!(accessor.getBlockEntity() instanceof PitKilnBlockEntity kiln))
+        if (!(accessor.getBlockEntity() instanceof KilnBlockEntity<?> kiln))
             return;
 
         if (kiln.isEmpty()) {
@@ -80,9 +78,11 @@ public enum PitKilnComponent implements IBlockComponentProvider, IServerDataProv
 
         int ticks = Math.min(data.getInt(TICKS), duration);
         float ratio = ticks / (float) duration;
-        Component text = kiln.isHeated()
-                ? Component.translatable(JadeLang.KILN_FIRING_KEY, Math.round(ratio * 100))
-                : Component.translatable(JadeLang.KILN_COLD_KEY, Math.round(ratio * 100));
+        // Stopped covers both halves of what a station needs: no fire under a kiln, and
+        // for a charcoal pit no cover over it either.
+        Component text = Component.translatable(
+                kiln.isRunning() ? JadeLang.KILN_WORKING_KEY : JadeLang.KILN_STOPPED_KEY,
+                Math.round(ratio * 100));
         tooltip.add(helper.progress(ratio, text,
                 helper.progressStyle().color(BAR_COLOUR).textColor(TEXT_COLOUR),
                 BoxStyle.getNestedBox(), true));

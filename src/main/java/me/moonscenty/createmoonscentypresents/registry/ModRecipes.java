@@ -11,6 +11,7 @@ import com.simibubi.create.AllItems;
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
 import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 
+import me.moonscenty.createmoonscentypresents.content.charring.CharringRecipe;
 import me.moonscenty.createmoonscentypresents.content.firing.FiringRecipe;
 import me.moonscenty.createmoonscentypresents.content.milling.MillingRecipe;
 import com.simibubi.create.AllTags;
@@ -55,6 +56,8 @@ public class ModRecipes {
     /** Per item in the load, not per load: eight pieces take eight times as long. */
     private static final int FIRING_TIME = 600;
     private static final int FIRE_BRICKS_PER_CRAFT = 4;
+    /** Per log. Slower than a furnace, which is the price of not needing fuel. */
+    private static final int CHARRING_TIME = 400;
 
     /** 20 seconds. Balancing comes later, like every other number in this pack. */
     private static final int DRYING_TIME = 400;
@@ -348,6 +351,14 @@ public class ModRecipes {
                         .define('C', Items.CLAY_BALL)
                         .unlockedBy("has_clay_ball", prov.has(Items.CLAY_BALL))
                         .save(prov));
+
+        // Wood is charred rather than fired, so it needs the buried pit and cannot be
+        // shortcut through the open kiln. One log, one piece of charcoal.
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov -> prov.accept(
+                ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, "charring/charcoal"),
+                new CharringRecipe(Ingredient.of(ItemTags.LOGS_THAT_BURN),
+                        new ItemStack(Items.CHARCOAL), CHARRING_TIME),
+                null));
 
         firing("fired_crucible", ModItems.UNFIRED_CRUCIBLE, () -> new ItemStack(ModBlocks.FIRED_CRUCIBLE.get()));
         firing("ingot_mold", ModItems.UNFIRED_INGOT_MOLD, () -> new ItemStack(ModItems.INGOT_MOLD.get()));
