@@ -5,15 +5,11 @@ import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 /**
  * The hand work shared by the stations that only wait: pack it, and reach in.
@@ -25,13 +21,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
  * @param <T> the block entity this block carries
  */
 public interface KilnBlock<T extends KilnBlockEntity<?>> extends IBE<T> {
-
-    /** Whether a station here is being heated: a lit campfire directly below. */
-    static boolean isHeated(BlockGetter level, BlockPos pos) {
-        BlockState below = level.getBlockState(pos.below());
-        return below.is(BlockTags.CAMPFIRES) && below.hasProperty(BlockStateProperties.LIT)
-                && below.getValue(BlockStateProperties.LIT);
-    }
 
     /** Loading it is done by hand, whether the fire under it is going or not. */
     default ItemInteractionResult load(ItemStack stack, Level level, BlockPos pos, Player player) {

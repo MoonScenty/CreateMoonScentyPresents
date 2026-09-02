@@ -8,6 +8,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.moonscenty.createmoonscentypresents.content.processing.TimedItemRecipe;
 import me.moonscenty.createmoonscentypresents.registry.ModRecipeTypes;
 
+import me.moonscenty.createmoonscentypresents.content.heat.HeatLevel;
+
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -36,7 +38,7 @@ import net.minecraft.world.level.Level;
  *
  * @param processingTime how long the load burns, in ticks
  */
-public record FiringRecipe(Ingredient input, ItemStack result, int processingTime)
+public record FiringRecipe(Ingredient input, ItemStack result, int processingTime, HeatLevel heat)
         implements Recipe<SingleRecipeInput>, TimedItemRecipe {
 
     /** The recipe for what is in the kiln, if the fire changes it into anything. */
@@ -87,7 +89,9 @@ public record FiringRecipe(Ingredient input, ItemStack result, int processingTim
                 .group(Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(FiringRecipe::input),
                         ItemStack.STRICT_SINGLE_ITEM_CODEC.fieldOf("result").forGetter(FiringRecipe::result),
                         ExtraCodecs.POSITIVE_INT.fieldOf("processing_time")
-                                .forGetter(FiringRecipe::processingTime))
+                                .forGetter(FiringRecipe::processingTime),
+                        HeatLevel.CODEC.optionalFieldOf("heat", HeatLevel.WARM)
+                                .forGetter(FiringRecipe::heat))
                 .apply(instance, FiringRecipe::new));
 
         private static final StreamCodec<RegistryFriendlyByteBuf, FiringRecipe> STREAM_CODEC =
@@ -95,6 +99,7 @@ public record FiringRecipe(Ingredient input, ItemStack result, int processingTim
                         Ingredient.CONTENTS_STREAM_CODEC, FiringRecipe::input,
                         ItemStack.STREAM_CODEC, FiringRecipe::result,
                         ByteBufCodecs.VAR_INT, FiringRecipe::processingTime,
+                        HeatLevel.STREAM_CODEC, FiringRecipe::heat,
                         FiringRecipe::new);
 
         @Override

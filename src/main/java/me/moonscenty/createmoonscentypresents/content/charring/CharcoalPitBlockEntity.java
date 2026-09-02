@@ -29,8 +29,8 @@ public class CharcoalPitBlockEntity extends KilnBlockEntity<CharringRecipe> {
     }
 
     @Override
-    public boolean isRunning() {
-        return super.isRunning() && CharcoalPitBlock.isCovered(level, worldPosition);
+    protected boolean isAssembled() {
+        return CharcoalPitBlock.isCovered(level, worldPosition);
     }
 
     /** Smothered wood, not an open fire. */

@@ -8,6 +8,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.moonscenty.createmoonscentypresents.content.processing.TimedItemRecipe;
 import me.moonscenty.createmoonscentypresents.registry.ModRecipeTypes;
 
+import me.moonscenty.createmoonscentypresents.content.heat.HeatLevel;
+
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -32,7 +34,7 @@ import net.minecraft.world.level.Level;
  *
  * @param processingTime how long one piece smoulders, in ticks
  */
-public record CharringRecipe(Ingredient input, ItemStack result, int processingTime)
+public record CharringRecipe(Ingredient input, ItemStack result, int processingTime, HeatLevel heat)
         implements Recipe<SingleRecipeInput>, TimedItemRecipe {
 
     /** The recipe for what is packed in, if smouldering turns it into anything. */
@@ -83,7 +85,9 @@ public record CharringRecipe(Ingredient input, ItemStack result, int processingT
                 .group(Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(CharringRecipe::input),
                         ItemStack.STRICT_SINGLE_ITEM_CODEC.fieldOf("result").forGetter(CharringRecipe::result),
                         ExtraCodecs.POSITIVE_INT.fieldOf("processing_time")
-                                .forGetter(CharringRecipe::processingTime))
+                                .forGetter(CharringRecipe::processingTime),
+                        HeatLevel.CODEC.optionalFieldOf("heat", HeatLevel.WARM)
+                                .forGetter(CharringRecipe::heat))
                 .apply(instance, CharringRecipe::new));
 
         private static final StreamCodec<RegistryFriendlyByteBuf, CharringRecipe> STREAM_CODEC =
@@ -91,6 +95,7 @@ public record CharringRecipe(Ingredient input, ItemStack result, int processingT
                         Ingredient.CONTENTS_STREAM_CODEC, CharringRecipe::input,
                         ItemStack.STREAM_CODEC, CharringRecipe::result,
                         ByteBufCodecs.VAR_INT, CharringRecipe::processingTime,
+                        HeatLevel.STREAM_CODEC, CharringRecipe::heat,
                         CharringRecipe::new);
 
         @Override

@@ -1,5 +1,7 @@
 package me.moonscenty.createmoonscentypresents.content.processing;
 
+import me.moonscenty.createmoonscentypresents.content.heat.HeatLevel;
+
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 
@@ -19,4 +21,9 @@ public interface TimedItemRecipe {
 
     /** How long one piece takes, in ticks. */
     int processingTime();
+
+    /** The fire this needs. Stations that only wait out time need none. */
+    default HeatLevel heat() {
+        return HeatLevel.NONE;
+    }
 }

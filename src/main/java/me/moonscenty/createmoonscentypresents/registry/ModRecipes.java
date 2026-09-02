@@ -13,6 +13,7 @@ import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 
 import me.moonscenty.createmoonscentypresents.content.charring.CharringRecipe;
 import me.moonscenty.createmoonscentypresents.content.firing.FiringRecipe;
+import me.moonscenty.createmoonscentypresents.content.heat.HeatLevel;
 import me.moonscenty.createmoonscentypresents.content.milling.MillingRecipe;
 import com.simibubi.create.AllTags;
 import com.tterrag.registrate.providers.ProviderType;
@@ -357,7 +358,7 @@ public class ModRecipes {
         CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov -> prov.accept(
                 ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, "charring/charcoal"),
                 new CharringRecipe(Ingredient.of(ItemTags.LOGS_THAT_BURN),
-                        new ItemStack(Items.CHARCOAL), CHARRING_TIME),
+                        new ItemStack(Items.CHARCOAL), CHARRING_TIME, HeatLevel.WARM),
                 null));
 
         firing("fired_crucible", ModItems.UNFIRED_CRUCIBLE, () -> new ItemStack(ModBlocks.FIRED_CRUCIBLE.get()));
@@ -369,7 +370,7 @@ public class ModRecipes {
     private static void firing(String name, ItemEntry<?> input, Supplier<ItemStack> result) {
         CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov -> prov.accept(
                 ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, "firing/" + name),
-                new FiringRecipe(Ingredient.of(input.get()), result.get(), FIRING_TIME),
+                new FiringRecipe(Ingredient.of(input.get()), result.get(), FIRING_TIME, HeatLevel.WARM),
                 null));
     }
 

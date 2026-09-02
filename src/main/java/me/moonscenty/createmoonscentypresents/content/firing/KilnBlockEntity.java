@@ -5,6 +5,8 @@ import java.util.List;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
+import me.moonscenty.createmoonscentypresents.content.heat.HeatLevel;
+import me.moonscenty.createmoonscentypresents.content.heat.HeatSources;
 import me.moonscenty.createmoonscentypresents.content.processing.TimedItemRecipe;
 
 import net.minecraft.core.BlockPos;
@@ -23,8 +25,10 @@ import net.minecraft.world.level.block.state.BlockState;
  * Something packed by hand, left over a fire and emptied by hand.
  *
  * <p>There is no fuel slot and no hopper face, because the stone age has no way to
- * automate either. The heat is not held here either - it is whatever is under the
- * block, so letting the fire go out only pauses the burn rather than spoiling the load.
+ * automate either. The heat is not held here either - it is whatever fire is under the
+ * block, so letting it go out only pauses the burn rather than spoiling the load. Each
+ * recipe names the rung of {@link HeatLevel} it needs, so the same station can take a
+ * campfire now and a blaze burner later without being rebuilt.
  *
  * <p>It works through the load <em>one piece at a time</em> and sets each finished
  * piece aside, so a batch is a queue rather than a lump: eight pieces take eight times
@@ -60,9 +64,26 @@ public abstract class KilnBlockEntity<R extends Recipe<SingleRecipeInput> & Time
     /** The list this station reads. */
     protected abstract RecipeType<R> recipeType();
 
-    /** Whether it is working right now: heat, and whatever else the station needs. */
+    /** The fire under it right now. */
+    public HeatLevel availableHeat() {
+        return HeatSources.below(level, worldPosition);
+    }
+
+    /** What the piece being worked asks for, or none if there is nothing to work. */
+    public HeatLevel requiredHeat() {
+        RecipeHolder<R> holder = recipe();
+        return holder == null ? HeatLevel.NONE : holder.value().heat();
+    }
+
+    /** Whether it is working right now: fire enough, and whatever else it needs. */
     public boolean isRunning() {
-        return level != null && KilnBlock.isHeated(level, worldPosition);
+        RecipeHolder<R> holder = recipe();
+        return holder != null && availableHeat().isAtLeast(holder.value().heat()) && isAssembled();
+    }
+
+    /** Anything the station needs beyond a fire - a charcoal pit needs a cover. */
+    protected boolean isAssembled() {
+        return true;
     }
 
     /** The smoke it gives off while working. */

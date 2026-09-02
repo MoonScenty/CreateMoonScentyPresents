@@ -2,6 +2,7 @@ package me.moonscenty.createmoonscentypresents.compat.jade;
 
 import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
 import me.moonscenty.createmoonscentypresents.content.firing.KilnBlockEntity;
+import me.moonscenty.createmoonscentypresents.content.heat.HeatLevel;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -76,10 +77,17 @@ public enum KilnComponent implements IBlockComponentProvider, IServerDataProvide
             return;
         }
 
+        // Say what fire it wants before saying it is stopped: a cold kiln and one that
+        // wants a blaze burner look the same on the bar otherwise.
+        HeatLevel required = kiln.requiredHeat();
+        if (!kiln.availableHeat().isAtLeast(required))
+            tooltip.add(Component.translatable(JadeLang.KILN_NEEDS_HEAT_KEY,
+                    Component.translatable(required.getTranslationKey())).withStyle(ChatFormatting.GRAY));
+
         int ticks = Math.min(data.getInt(TICKS), duration);
         float ratio = ticks / (float) duration;
-        // Stopped covers both halves of what a station needs: no fire under a kiln, and
-        // for a charcoal pit no cover over it either.
+        // Stopped covers both halves of what a station needs: not hot enough, and for a
+        // charcoal pit no cover over it either.
         Component text = Component.translatable(
                 kiln.isRunning() ? JadeLang.KILN_WORKING_KEY : JadeLang.KILN_STOPPED_KEY,
                 Math.round(ratio * 100));

@@ -1,6 +1,7 @@
 package me.moonscenty.createmoonscentypresents.compat.jade;
 
 import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
+import me.moonscenty.createmoonscentypresents.content.heat.HeatLevel;
 
 /**
  * Jade asserts that every provider it loads has a name for its config screen, so the
@@ -21,6 +22,7 @@ public class JadeLang {
     public static final String KILN_STOPPED_KEY = PREFIX + "kiln.stopped";
     public static final String KILN_WAITING_KEY = PREFIX + "kiln.waiting";
     public static final String KILN_DONE_KEY = PREFIX + "kiln.done";
+    public static final String KILN_NEEDS_HEAT_KEY = PREFIX + "kiln.needs_heat";
 
     public static void register() {
         addProviderLang(TAPPER, "Tapper");
@@ -32,6 +34,11 @@ public class JadeLang {
         addLang(KILN_STOPPED_KEY, "Stopped: %s%%");
         addLang(KILN_WAITING_KEY, "%s x%s waiting");
         addLang(KILN_DONE_KEY, "%s x%s done");
+        addLang(KILN_NEEDS_HEAT_KEY, "Needs %s");
+
+        addLang(HeatLevel.WARM.getTranslationKey(), "a fire");
+        addLang(HeatLevel.HEATED.getTranslationKey(), "a blaze burner");
+        addLang(HeatLevel.SUPERHEATED.getTranslationKey(), "a blaze burner on blaze cake");
     }
 
     private static void addProviderLang(String provider, String name) {
