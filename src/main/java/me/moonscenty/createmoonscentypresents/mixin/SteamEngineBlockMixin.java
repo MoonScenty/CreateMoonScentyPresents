@@ -24,8 +24,8 @@ import net.minecraft.world.level.block.state.BlockState;
  * {@code BlockEntry.has()} is an equality check, so subclassing {@code ShaftBlock} is
  * not enough to get through it.
  *
- * <p>One check covers both engines in this pack: Petrochem's diesel engine extends
- * {@code SteamEngineBlock} and calls the same static.
+ * <p>Any other mod's engine that extends {@code SteamEngineBlock} calls the same
+ * static, so one check here covers those too.
  */
 @Mixin(SteamEngineBlock.class)
 public class SteamEngineBlockMixin {

@@ -96,20 +96,13 @@ requiredMods=["create"]
     ordering="AFTER"
     side="BOTH"
 
-# Create: Petrochem
-[[dependencies.${mod_id}]]
-    modId="petrochem"
-    type="required"
-    versionRange="[1.3.2,)"
-    ordering="NONE"
-    side="BOTH"
 
-# Create: Vintage Improvements - SSW Edition
+# Curios - required. Provides the accessory slots the per-age rewards go in.
 [[dependencies.${mod_id}]]
-    modId="vintageimprovements"
+    modId="curios"
     type="required"
-    versionRange="[1.21.1-0.0.0.7,)"
-    ordering="NONE"
+    versionRange="[9.5.1,)"
+    ordering="AFTER"
     side="BOTH"
 
 # JEI - optional, only used for recipe display integration
