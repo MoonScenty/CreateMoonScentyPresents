@@ -10,6 +10,8 @@ import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
 import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
+
+import me.moonscenty.createmoonscentypresents.content.milling.MillingRecipe;
 import com.simibubi.create.AllTags;
 import com.tterrag.registrate.providers.ProviderType;
 
@@ -44,6 +46,10 @@ public class ModRecipes {
     private static final int PLANKS_PER_BAMBOO_BLOCK = 2;
     private static final int STAVES_PER_PLANK = 2;
     private static final int FIBER_PER_TWINE = 3;
+    /** Twice what the hammer gives, which is what the millstone is for. */
+    private static final int GRIT_PER_MILLING = 2;
+    /** Matches Create's own andesite milling, so the pace reads as familiar. */
+    private static final int MILLING_TIME = 200;
 
     /** 20 seconds. Balancing comes later, like every other number in this pack. */
     private static final int DRYING_TIME = 400;
@@ -209,6 +215,7 @@ public class ModRecipes {
 
         registerTapping();
         registerKinetics();
+        registerMilling();
         registerRewards();
         registerGates();
     }
@@ -222,13 +229,19 @@ public class ModRecipes {
      * wooden bearing where it uses andesite casing.
      */
     private static void registerKinetics() {
+        // The one part of the age that takes metal. A bearing is where a machine wears
+        // out, so it is where the alloy belongs - and putting it here is what keeps the
+        // hammering worth doing: shafts and cogwheels stay cheap, but every gearbox and
+        // every millstone goes through a bearing, and so through the alloy line.
         CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
                 ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.WOODEN_BEARING.get())
-                        .pattern("PT")
-                        .pattern("TP")
+                        .pattern(" T ")
+                        .pattern("PAP")
+                        .pattern(" T ")
                         .define('P', ItemTags.PLANKS)
                         .define('T', ModItems.TWINE.get())
-                        .unlockedBy("has_twine", prov.has(ModItems.TWINE.get()))
+                        .define('A', AllItems.ANDESITE_ALLOY.get())
+                        .unlockedBy("has_andesite_alloy", prov.has(AllItems.ANDESITE_ALLOY.get()))
                         .save(prov));
 
         CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
@@ -293,6 +306,29 @@ public class ModRecipes {
                         .define('S', Tags.Items.STONES)
                         .unlockedBy("has_stone_cogwheel", prov.has(ModBlocks.STONE_COGWHEEL.get()))
                         .save(prov));
+    }
+
+    /**
+     * What the primitive millstone grinds. The one recipe the age needs: the same
+     * andesite the hammer breaks up, for twice as much - which is the whole reason to
+     * build the crank and the millstone rather than keep swinging.
+     */
+    private static void registerMilling() {
+        milling("andesite_grit", Ingredient.of(Blocks.ANDESITE),
+                () -> new ItemStack(ModItems.ANDESITE_GRIT.get(), GRIT_PER_MILLING), MILLING_TIME);
+    }
+
+    /** The result is a supplier: items are not bound yet when this is called. */
+    private static void milling(String name, Ingredient input, Supplier<ItemStack> result, int duration) {
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov -> {
+            ResourceLocation id = ResourceLocation.fromNamespaceAndPath(
+                    CreateMoonScentyPresents.MODID, "milling/" + name);
+            prov.accept(id, new StandardProcessingRecipe.Builder<>(MillingRecipe::new, id)
+                    .withItemIngredients(input)
+                    .withSingleItemOutput(result.get())
+                    .duration(duration)
+                    .build(), null);
+        });
     }
 
     private static void gearboxConversion(String name, Supplier<? extends ItemLike> result,

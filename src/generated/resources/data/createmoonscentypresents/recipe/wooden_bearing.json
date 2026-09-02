@@ -2,6 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
+    "A": {
+      "item": "create:andesite_alloy"
+    },
     "P": {
       "tag": "minecraft:planks"
     },
@@ -10,8 +13,9 @@
     }
   },
   "pattern": [
-    "PT",
-    "TP"
+    " T ",
+    "PAP",
+    " T "
   ],
   "result": {
     "count": 1,

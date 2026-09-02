@@ -1,0 +1,15 @@
+{
+  "type": "createmoonscentypresents:milling",
+  "ingredients": [
+    {
+      "item": "minecraft:andesite"
+    }
+  ],
+  "processing_time": 200,
+  "results": [
+    {
+      "count": 2,
+      "id": "createmoonscentypresents:andesite_grit"
+    }
+  ]
+}
