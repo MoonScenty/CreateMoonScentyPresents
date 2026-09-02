@@ -235,6 +235,7 @@ public class ModRecipes {
         registerKinetics();
         registerMilling();
         registerClay();
+        registerFoundry();
         registerMelting();
         registerCasting();
         registerRewards();
@@ -450,6 +451,59 @@ public class ModRecipes {
                             .duration(MELTING_TIME)
                             .build(), null);
         });
+    }
+
+    /**
+     * The foundry itself, built out of fired clay and iron.
+     *
+     * <p>All of it has to be reachable before any metal is: the foundry is what makes
+     * the first zinc, so nothing here can ask for zinc or for the alloy. Fire brick is
+     * what it is made of, which is what fire brick is for - until now the kiln fired it
+     * and nothing wanted it.
+     *
+     * <p>The basin is not here: an unfired crucible fires into one, so the clay line
+     * reaches it without a bench recipe.
+     */
+    private static void registerFoundry() {
+        // A heavy flat cap with an iron hinge, to shut the heat in.
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.FOUNDRY_LID.get())
+                        .pattern("FFF")
+                        .pattern("FIF")
+                        .define('F', ModItems.FIRE_BRICK.get())
+                        .define('I', Items.IRON_INGOT)
+                        .unlockedBy("has_fire_brick", prov.has(ModItems.FIRE_BRICK.get()))
+                        .save(prov));
+
+        // A short lined spout on an iron neck.
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.FAUCET.get())
+                        .pattern(" F")
+                        .pattern("II")
+                        .define('F', ModItems.FIRE_BRICK.get())
+                        .define('I', Items.IRON_INGOT)
+                        .unlockedBy("has_fire_brick", prov.has(ModItems.FIRE_BRICK.get()))
+                        .save(prov));
+
+        // A lined top on iron legs.
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.CASTING_TABLE.get())
+                        .pattern("FFF")
+                        .pattern("I I")
+                        .define('F', ModItems.FIRE_BRICK.get())
+                        .define('I', Items.IRON_INGOT)
+                        .unlockedBy("has_fire_brick", prov.has(ModItems.FIRE_BRICK.get()))
+                        .save(prov));
+
+        // Not for this age - a mixer needs a kinetic network first. Lining Create's own
+        // mixer rather than building another says what it is: the same machine, made to
+        // stand over a fire.
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModBlocks.FOUNDRY_MIXER.get())
+                        .requires(AllBlocks.MECHANICAL_MIXER.get())
+                        .requires(ModItems.FIRE_BRICK.get(), 2)
+                        .unlockedBy("has_mechanical_mixer", prov.has(AllBlocks.MECHANICAL_MIXER.get()))
+                        .save(prov));
     }
 
     // --- casting ---------------------------------------------------------------

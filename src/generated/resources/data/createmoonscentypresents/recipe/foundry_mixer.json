@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "create:mechanical_mixer"
+    },
+    {
+      "item": "createmoonscentypresents:fire_brick"
+    },
+    {
+      "item": "createmoonscentypresents:fire_brick"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "createmoonscentypresents:foundry_mixer"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "F": {
+      "item": "createmoonscentypresents:fire_brick"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    "FFF",
+    "I I"
+  ],
+  "result": {
+    "count": 1,
+    "id": "createmoonscentypresents:casting_table"
+  }
+}
