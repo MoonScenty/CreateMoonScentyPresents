@@ -5,6 +5,7 @@ import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
 import me.moonscenty.createmoonscentypresents.content.applying.ApplyingRecipe;
 import me.moonscenty.createmoonscentypresents.content.hammering.HammeringRecipe;
 import me.moonscenty.createmoonscentypresents.content.shaping.ShapingRecipe;
+import me.moonscenty.createmoonscentypresents.content.firing.FiringRecipe;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRecipe;
 import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 
@@ -68,6 +69,15 @@ public class ModRecipeTypes {
 
     public static final DeferredHolder<RecipeSerializer<?>, DryingRecipe.Serializer> DRYING_SERIALIZER =
             SERIALIZERS.register("drying", DryingRecipe.Serializer::new);
+
+    // What a pit kiln turns a packed load into. Its own type rather than smelting: a
+    // kiln takes one batch, is lit once and gives nothing back until it burns out.
+    public static final DeferredHolder<RecipeType<?>, RecipeType<FiringRecipe>> FIRING =
+            TYPES.register("firing", () -> RecipeType.simple(
+                    ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, "firing")));
+
+    public static final DeferredHolder<RecipeSerializer<?>, FiringRecipe.Serializer> FIRING_SERIALIZER =
+            SERIALIZERS.register("firing", FiringRecipe.Serializer::new);
 
     // What a tapper draws out of a bored log, and what the pool it collects sets into.
     // Two types rather than one: the first is keyed on a block and yields a fluid, the

@@ -1,0 +1,10 @@
+{
+  "type": "createmoonscentypresents:firing",
+  "ingredient": {
+    "item": "createmoonscentypresents:unfired_fire_brick"
+  },
+  "processing_time": 600,
+  "result": {
+    "id": "createmoonscentypresents:fire_brick"
+  }
+}

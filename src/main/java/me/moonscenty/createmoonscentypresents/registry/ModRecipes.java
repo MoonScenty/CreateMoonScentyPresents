@@ -11,9 +11,11 @@ import com.simibubi.create.AllItems;
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
 import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 
+import me.moonscenty.createmoonscentypresents.content.firing.FiringRecipe;
 import me.moonscenty.createmoonscentypresents.content.milling.MillingRecipe;
 import com.simibubi.create.AllTags;
 import com.tterrag.registrate.providers.ProviderType;
+import com.tterrag.registrate.util.entry.ItemEntry;
 
 import me.moonscenty.createmoonscentypresents.content.applying.ApplyingRecipe;
 import me.moonscenty.createmoonscentypresents.content.hammering.HammeringRecipe;
@@ -50,6 +52,9 @@ public class ModRecipes {
     private static final int GRIT_PER_MILLING = 2;
     /** Matches Create's own andesite milling, so the pace reads as familiar. */
     private static final int MILLING_TIME = 200;
+    /** Per item in the load, not per load: eight pieces take eight times as long. */
+    private static final int FIRING_TIME = 600;
+    private static final int FIRE_BRICKS_PER_CRAFT = 4;
 
     /** 20 seconds. Balancing comes later, like every other number in this pack. */
     private static final int DRYING_TIME = 400;
@@ -216,6 +221,7 @@ public class ModRecipes {
         registerTapping();
         registerKinetics();
         registerMilling();
+        registerClay();
         registerRewards();
         registerGates();
     }
@@ -306,6 +312,54 @@ public class ModRecipes {
                         .define('S', Tags.Items.STONES)
                         .unlockedBy("has_stone_cogwheel", prov.has(ModBlocks.STONE_COGWHEEL.get()))
                         .save(prov));
+    }
+
+    // --- clay and the kiln ----------------------------------------------------
+
+    /**
+     * The clay line: shaped wet by hand, then packed into a pit kiln and burnt hard.
+     *
+     * <p>Every vessel the age melts metal in comes from here, which is what gives the
+     * kiln something to do before the crucible exists.
+     */
+    private static void registerClay() {
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.UNFIRED_CRUCIBLE.get())
+                        .pattern("C C")
+                        .pattern("C C")
+                        .pattern("CCC")
+                        .define('C', Items.CLAY_BALL)
+                        .unlockedBy("has_clay_ball", prov.has(Items.CLAY_BALL))
+                        .save(prov));
+
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.UNFIRED_INGOT_MOLD.get())
+                        .pattern("C C")
+                        .pattern("CCC")
+                        .define('C', Items.CLAY_BALL)
+                        .unlockedBy("has_clay_ball", prov.has(Items.CLAY_BALL))
+                        .save(prov));
+
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.UNFIRED_FIRE_BRICK.get(),
+                                FIRE_BRICKS_PER_CRAFT)
+                        .pattern("CC")
+                        .pattern("CC")
+                        .define('C', Items.CLAY_BALL)
+                        .unlockedBy("has_clay_ball", prov.has(Items.CLAY_BALL))
+                        .save(prov));
+
+        firing("fired_crucible", ModItems.UNFIRED_CRUCIBLE, () -> new ItemStack(ModBlocks.FIRED_CRUCIBLE.get()));
+        firing("ingot_mold", ModItems.UNFIRED_INGOT_MOLD, () -> new ItemStack(ModItems.INGOT_MOLD.get()));
+        firing("fire_brick", ModItems.UNFIRED_FIRE_BRICK, () -> new ItemStack(ModItems.FIRE_BRICK.get()));
+    }
+
+    /** The result is a supplier: items are not bound yet when this is called. */
+    private static void firing(String name, ItemEntry<?> input, Supplier<ItemStack> result) {
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov -> prov.accept(
+                ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, "firing/" + name),
+                new FiringRecipe(Ingredient.of(input.get()), result.get(), FIRING_TIME),
+                null));
     }
 
     /**

@@ -13,6 +13,7 @@ import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModGearboxBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModKineticBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModKineticVisual;
+import me.moonscenty.createmoonscentypresents.content.firing.PitKilnBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.milling.MillstoneBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModRotatingCoreRenderer;
 import me.moonscenty.createmoonscentypresents.content.sifting.SifterBlockEntity;
@@ -56,6 +57,13 @@ public class ModBlockEntityTypes {
             .visual(() -> ModKineticVisual::rotatingCore, true)
             .validBlocks(ModBlocks.PRIMITIVE_MILLSTONE)
             .renderer(() -> ModRotatingCoreRenderer::new)
+            .register();
+
+    // Holds the load packed into a pit kiln while it burns. No renderer: the kiln is
+    // closed on top, so nothing of what is inside would be visible anyway.
+    public static final BlockEntityEntry<PitKilnBlockEntity> PIT_KILN = CreateMoonScentyPresents.REGISTRATE
+            .blockEntity("pit_kiln", PitKilnBlockEntity::new)
+            .validBlocks(ModBlocks.PIT_KILN)
             .register();
 
     // Holds the one item hung on a drying rack, and draws it.

@@ -19,6 +19,7 @@ import me.moonscenty.createmoonscentypresents.content.kinetics.ModCogwheelBlock;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModGearboxBlock;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModHandCrankBlock;
 import me.moonscenty.createmoonscentypresents.content.milling.MillstoneBlock;
+import me.moonscenty.createmoonscentypresents.content.firing.PitKilnBlock;
 import me.moonscenty.createmoonscentypresents.content.processing.BasinShapedBlock;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRackBlock;
 import me.moonscenty.createmoonscentypresents.content.processing.HorizontalCubeBlock;
@@ -49,8 +50,8 @@ public class ModBlocks {
     // Stone Age - low temperature firing. The model is Create's basin with the lid
     // merged in on top, so the item shows the same shape as the placed block;
     // see assets/.../models/block/pit_kiln.json.
-    public static final BlockEntry<Block> PIT_KILN = CreateMoonScentyPresents.REGISTRATE
-            .block("pit_kiln", Block::new)
+    public static final BlockEntry<PitKilnBlock> PIT_KILN = CreateMoonScentyPresents.REGISTRATE
+            .block("pit_kiln", PitKilnBlock::new)
             .initialProperties(() -> Blocks.BRICKS)
             .properties(p -> p.noOcclusion())
             .transform(TagGen.pickaxeOnly())

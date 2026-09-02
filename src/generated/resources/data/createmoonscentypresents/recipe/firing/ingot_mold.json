@@ -1,0 +1,10 @@
+{
+  "type": "createmoonscentypresents:firing",
+  "ingredient": {
+    "item": "createmoonscentypresents:unfired_ingot_mold"
+  },
+  "processing_time": 600,
+  "result": {
+    "id": "createmoonscentypresents:ingot_mold"
+  }
+}

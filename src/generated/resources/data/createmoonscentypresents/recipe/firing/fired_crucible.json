@@ -1,0 +1,10 @@
+{
+  "type": "createmoonscentypresents:firing",
+  "ingredient": {
+    "item": "createmoonscentypresents:unfired_crucible"
+  },
+  "processing_time": 600,
+  "result": {
+    "id": "createmoonscentypresents:fired_crucible"
+  }
+}
