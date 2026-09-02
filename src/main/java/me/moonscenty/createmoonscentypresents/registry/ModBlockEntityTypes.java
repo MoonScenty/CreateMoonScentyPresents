@@ -13,10 +13,10 @@ import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModGearboxBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModKineticBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModKineticVisual;
-import me.moonscenty.createmoonscentypresents.content.kinetics.ModMillstoneBlockEntity;
-import me.moonscenty.createmoonscentypresents.content.kinetics.ModMillstoneRenderer;
+import me.moonscenty.createmoonscentypresents.content.milling.MillstoneBlockEntity;
+import me.moonscenty.createmoonscentypresents.content.kinetics.ModRotatingCoreRenderer;
+import me.moonscenty.createmoonscentypresents.content.sifting.SifterBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModHandCrankBlockEntity;
-import me.moonscenty.createmoonscentypresents.content.kinetics.ModSifterBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModPoweredShaftBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRackBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRackRenderer;
@@ -46,14 +46,16 @@ public class ModBlockEntityTypes {
             .renderer(() -> GearboxRenderer::new)
             .register();
 
-    // Create's millstone block entity and renderer, with this mod's turning cog.
-    public static final BlockEntityEntry<ModMillstoneBlockEntity> MILLSTONE = CreateMoonScentyPresents.REGISTRATE
-            .blockEntity("millstone", ModMillstoneBlockEntity::new)
+    // Its own block entity: the primitive millstone is slower, reads its own list and
+    // must not hand out Create's advancement. Only the drawing is shared with the
+    // sifter, since both are a housing with one turning part inside.
+    public static final BlockEntityEntry<MillstoneBlockEntity> MILLSTONE = CreateMoonScentyPresents.REGISTRATE
+            .blockEntity("millstone", MillstoneBlockEntity::new)
             // true: the housing still draws as a normal block model, and only the cog
             // inside is handed to Flywheel.
-            .visual(() -> ModKineticVisual::millstone, true)
+            .visual(() -> ModKineticVisual::rotatingCore, true)
             .validBlocks(ModBlocks.PRIMITIVE_MILLSTONE)
-            .renderer(() -> ModMillstoneRenderer::new)
+            .renderer(() -> ModRotatingCoreRenderer::new)
             .register();
 
     // Holds the one item hung on a drying rack, and draws it.
@@ -79,13 +81,14 @@ public class ModBlockEntityTypes {
             .renderer(() -> KineticBlockEntityRenderer::new)
             .register();
 
-    // Shares the millstone's renderer and visual: both draw a housing plus one turning
-    // cog, and each looks its model up by block.
-    public static final BlockEntityEntry<ModSifterBlockEntity> SIFTER = CreateMoonScentyPresents.REGISTRATE
-            .blockEntity("sifter", ModSifterBlockEntity::new)
-            .visual(() -> ModKineticVisual::millstone, true)
+    // Its own block entity rather than the millstone's: a sifter reads a different
+    // recipe list and cares whether it is standing in water. Only the drawing is
+    // shared, since both are a housing with one turning part inside.
+    public static final BlockEntityEntry<SifterBlockEntity> SIFTER = CreateMoonScentyPresents.REGISTRATE
+            .blockEntity("sifter", SifterBlockEntity::new)
+            .visual(() -> ModKineticVisual::rotatingCore, true)
             .validBlocks(ModBlocks.PRIMITIVE_SIFTER)
-            .renderer(() -> ModMillstoneRenderer::new)
+            .renderer(() -> ModRotatingCoreRenderer::new)
             .register();
 
     // Create's renderer and visual are reused; both were pointed at this mod's models

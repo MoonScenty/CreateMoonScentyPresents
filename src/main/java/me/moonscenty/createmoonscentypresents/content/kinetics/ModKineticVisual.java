@@ -2,10 +2,10 @@ package me.moonscenty.createmoonscentypresents.content.kinetics;
 
 import java.util.function.Consumer;
 
+import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.content.kinetics.base.RotatingInstance;
 import com.simibubi.create.content.kinetics.base.SingleAxisRotatingVisual;
-import com.simibubi.create.content.kinetics.millstone.MillstoneBlockEntity;
 import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockEntity;
 import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockEntityRenderer;
 import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
@@ -43,9 +43,9 @@ public class ModKineticVisual {
                 Models.partial(ModPartialModels.rotating(blockEntity.getBlockState().getBlock())));
     }
 
-    /** Only the cog inside a millstone turns; the housing is drawn by the block model. */
-    public static BlockEntityVisual<MillstoneBlockEntity> millstone(VisualizationContext context,
-            MillstoneBlockEntity blockEntity, float partialTick) {
+    /** For machines where only the part inside turns; the housing is the block model. */
+    public static <T extends KineticBlockEntity> BlockEntityVisual<T> rotatingCore(
+            VisualizationContext context, T blockEntity, float partialTick) {
         return new SingleAxisRotatingVisual<>(context, blockEntity, partialTick,
                 Models.partial(ModPartialModels.rotating(blockEntity.getBlockState().getBlock())));
     }

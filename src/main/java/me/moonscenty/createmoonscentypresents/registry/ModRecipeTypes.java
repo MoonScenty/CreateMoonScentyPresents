@@ -8,13 +8,15 @@ import me.moonscenty.createmoonscentypresents.content.shaping.ShapingRecipe;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRecipe;
 import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 
-import me.moonscenty.createmoonscentypresents.content.kinetics.PrimitiveMillingRecipe;
-import me.moonscenty.createmoonscentypresents.content.kinetics.PrimitiveSiftingRecipe;
+import me.moonscenty.createmoonscentypresents.content.kinetics.ModRecipeTypeInfo;
+import me.moonscenty.createmoonscentypresents.content.milling.MillingRecipe;
+import me.moonscenty.createmoonscentypresents.content.sifting.SiftingRecipe;
 import me.moonscenty.createmoonscentypresents.content.sawing.SawingRecipe;
 import me.moonscenty.createmoonscentypresents.content.tapping.CoagulatingRecipe;
 import me.moonscenty.createmoonscentypresents.content.tapping.TappingRecipe;
 
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.bus.api.IEventBus;
@@ -89,23 +91,34 @@ public class ModRecipeTypes {
 
     // Kept apart from create:milling so the primitive millstone and Create's own
     // grind different things; see PrimitiveMillingRecipe.
-    public static final DeferredHolder<RecipeType<?>, RecipeType<PrimitiveMillingRecipe>> PRIMITIVE_MILLING =
-            TYPES.register("primitive_milling", () -> RecipeType.simple(
-                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(
-                            CreateMoonScentyPresents.MODID, "primitive_milling")));
+    public static final ResourceLocation MILLING_ID =
+            ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, "milling");
 
-    public static final DeferredHolder<RecipeSerializer<?>, StandardProcessingRecipe.Serializer<PrimitiveMillingRecipe>>
-            PRIMITIVE_MILLING_SERIALIZER = SERIALIZERS.register("primitive_milling",
-                    () -> new StandardProcessingRecipe.Serializer<>(PrimitiveMillingRecipe::new));
+    public static final DeferredHolder<RecipeType<?>, RecipeType<MillingRecipe>> MILLING =
+            TYPES.register("milling", () -> RecipeType.simple(MILLING_ID));
 
-    public static final DeferredHolder<RecipeType<?>, RecipeType<PrimitiveSiftingRecipe>> PRIMITIVE_SIFTING =
-            TYPES.register("primitive_sifting", () -> RecipeType.simple(
-                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(
-                            CreateMoonScentyPresents.MODID, "primitive_sifting")));
+    public static final DeferredHolder<RecipeSerializer<?>, StandardProcessingRecipe.Serializer<MillingRecipe>>
+            MILLING_SERIALIZER = SERIALIZERS.register("milling",
+                    () -> new StandardProcessingRecipe.Serializer<>(MillingRecipe::new));
 
-    public static final DeferredHolder<RecipeSerializer<?>, StandardProcessingRecipe.Serializer<PrimitiveSiftingRecipe>>
-            PRIMITIVE_SIFTING_SERIALIZER = SERIALIZERS.register("primitive_sifting",
-                    () -> new StandardProcessingRecipe.Serializer<>(PrimitiveSiftingRecipe::new));
+    /** What Create's processing recipe base needs to find this type again. */
+    public static final ModRecipeTypeInfo MILLING_INFO =
+            new ModRecipeTypeInfo(MILLING_ID, MILLING, MILLING_SERIALIZER);
+
+    public static final ResourceLocation SIFTING_ID =
+            ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, "sifting");
+
+    public static final DeferredHolder<RecipeType<?>, RecipeType<SiftingRecipe>> SIFTING =
+            TYPES.register("sifting", () -> RecipeType.simple(SIFTING_ID));
+
+    // Its own serializer rather than Create's: the sifting recipe carries a field
+    // Create's processing format does not have.
+    public static final DeferredHolder<RecipeSerializer<?>, SiftingRecipe.Serializer> SIFTING_SERIALIZER =
+            SERIALIZERS.register("sifting", SiftingRecipe.Serializer::new);
+
+    /** What Create's processing recipe base needs to find this type again. */
+    public static final ModRecipeTypeInfo SIFTING_INFO =
+            new ModRecipeTypeInfo(SIFTING_ID, SIFTING, SIFTING_SERIALIZER);
 
     public static void register(IEventBus modEventBus) {
         TYPES.register(modEventBus);

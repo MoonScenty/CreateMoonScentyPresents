@@ -18,14 +18,14 @@ import java.util.Map;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModCogwheelBlock;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModGearboxBlock;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModHandCrankBlock;
-import me.moonscenty.createmoonscentypresents.content.kinetics.ModMillstoneBlock;
+import me.moonscenty.createmoonscentypresents.content.milling.MillstoneBlock;
 import me.moonscenty.createmoonscentypresents.content.processing.BasinShapedBlock;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRackBlock;
 import me.moonscenty.createmoonscentypresents.content.processing.HorizontalCubeBlock;
 import me.moonscenty.createmoonscentypresents.content.tapping.TapperBlock;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModPoweredShaftBlock;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModShaftBlock;
-import me.moonscenty.createmoonscentypresents.content.kinetics.ModSifterBlock;
+import me.moonscenty.createmoonscentypresents.content.sifting.SifterBlock;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -98,8 +98,8 @@ public class ModBlocks {
     //
     // No noOcclusion, matching Create: the millstone's own shape is not a full cube, so
     // light already reaches the cell the turning cog is drawn in.
-    public static final BlockEntry<ModMillstoneBlock> PRIMITIVE_MILLSTONE = CreateMoonScentyPresents.REGISTRATE
-            .block("primitive_millstone", ModMillstoneBlock::new)
+    public static final BlockEntry<MillstoneBlock> PRIMITIVE_MILLSTONE = CreateMoonScentyPresents.REGISTRATE
+            .block("primitive_millstone", MillstoneBlock::new)
             .initialProperties(() -> Blocks.STONE)
             .properties(p -> p.mapColor(MapColor.METAL))
             .transform(TagGen.pickaxeOnly())
@@ -130,10 +130,11 @@ public class ModBlocks {
             .build()
             .register();
 
-    // Built on Create's millstone: one input worked over time by rotation. A wooden
-    // frame rather than a stone one, which is also what tells it apart in the world.
-    public static final BlockEntry<ModSifterBlock> PRIMITIVE_SIFTER = CreateMoonScentyPresents.REGISTRATE
-            .block("primitive_sifter", ModSifterBlock::new)
+    // Its own machine, not a millstone with another recipe list: it holds water and
+    // its recipes can require that. A wooden frame rather than a stone one, which is
+    // also what tells it apart in the world.
+    public static final BlockEntry<SifterBlock> PRIMITIVE_SIFTER = CreateMoonScentyPresents.REGISTRATE
+            .block("primitive_sifter", SifterBlock::new)
             .initialProperties(() -> Blocks.OAK_PLANKS)
             .properties(p -> p.mapColor(MapColor.WOOD).sound(SoundType.WOOD))
             .transform(TagGen.axeOrPickaxe())
