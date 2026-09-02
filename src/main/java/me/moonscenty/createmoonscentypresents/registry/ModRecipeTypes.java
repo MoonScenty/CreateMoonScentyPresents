@@ -5,6 +5,7 @@ import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
 import me.moonscenty.createmoonscentypresents.content.applying.ApplyingRecipe;
 import me.moonscenty.createmoonscentypresents.content.hammering.HammeringRecipe;
 import me.moonscenty.createmoonscentypresents.content.shaping.ShapingRecipe;
+import me.moonscenty.createmoonscentypresents.content.casting.CastingRecipe;
 import me.moonscenty.createmoonscentypresents.content.charring.CharringRecipe;
 import me.moonscenty.createmoonscentypresents.content.foundry.FoundryRecipe;
 import me.moonscenty.createmoonscentypresents.content.firing.FiringRecipe;
@@ -158,6 +159,16 @@ public class ModRecipeTypes {
     /** What Create's processing recipe base needs to find this type again. */
     public static final ModRecipeTypeInfo SIFTING_INFO =
             new ModRecipeTypeInfo(SIFTING_ID, SIFTING, SIFTING_SERIALIZER);
+
+    // Molten metal poured into a mould on a casting table and left to set. Not a
+    // processing recipe: it is keyed on a fluid and a mould rather than on inputs, and
+    // the table matches it itself.
+    public static final DeferredHolder<RecipeType<?>, RecipeType<CastingRecipe>> CASTING =
+            TYPES.register("casting", () -> RecipeType.simple(
+                    ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, "casting")));
+
+    public static final DeferredHolder<RecipeSerializer<?>, CastingRecipe.Serializer> CASTING_SERIALIZER =
+            SERIALIZERS.register("casting", CastingRecipe.Serializer::new);
 
     public static void register(IEventBus modEventBus) {
         TYPES.register(modEventBus);

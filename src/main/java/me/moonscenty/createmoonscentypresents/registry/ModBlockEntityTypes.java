@@ -13,6 +13,7 @@ import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModGearboxBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModKineticBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModKineticVisual;
+import me.moonscenty.createmoonscentypresents.content.casting.CastingTableBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.charring.CharcoalPitBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.firing.PitKilnBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.foundry.FaucetBlockEntity;
@@ -82,6 +83,13 @@ public class ModBlockEntityTypes {
             CreateMoonScentyPresents.REGISTRATE
                     .blockEntity("foundry_lid", FoundryLidBlockEntity::new)
                     .validBlocks(ModBlocks.FOUNDRY_LID)
+                    .register();
+
+    // Holds the mould, the pour and the casting that comes out of it.
+    public static final BlockEntityEntry<CastingTableBlockEntity> CASTING_TABLE =
+            CreateMoonScentyPresents.REGISTRATE
+                    .blockEntity("casting_table", CastingTableBlockEntity::new)
+                    .validBlocks(ModBlocks.CASTING_TABLE)
                     .register();
 
     // Drains whatever it is stuck to into whatever is under it.

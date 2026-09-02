@@ -19,6 +19,7 @@ import me.moonscenty.createmoonscentypresents.content.kinetics.ModCogwheelBlock;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModGearboxBlock;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModHandCrankBlock;
 import me.moonscenty.createmoonscentypresents.content.milling.MillstoneBlock;
+import me.moonscenty.createmoonscentypresents.content.casting.CastingTableBlock;
 import me.moonscenty.createmoonscentypresents.content.charring.CharcoalPitBlock;
 import me.moonscenty.createmoonscentypresents.content.firing.PitKilnBlock;
 import me.moonscenty.createmoonscentypresents.content.foundry.FaucetBlock;
@@ -177,6 +178,21 @@ public class ModBlocks {
     public static final BlockEntry<ModCogwheelBlock> BRONZE_COGWHEEL =
             cogwheel("bronze_cogwheel", false, () -> Blocks.COPPER_BLOCK, SoundType.COPPER,
                     MapColor.TERRACOTTA_ORANGE, false);
+
+    // Stone Age - where molten metal is given a shape. A mould goes on top and the
+    // metal is poured onto it.
+    public static final BlockEntry<CastingTableBlock> CASTING_TABLE = CreateMoonScentyPresents.REGISTRATE
+            .block("casting_table", CastingTableBlock::new)
+            .initialProperties(() -> Blocks.BRICKS)
+            .properties(p -> p.mapColor(MapColor.COLOR_GRAY).noOcclusion())
+            .transform(TagGen.pickaxeOnly())
+            .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(),
+                    prov.models().getExistingFile(prov.modLoc("block/casting_table/block"))))
+            .item()
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(),
+                    prov.modLoc("block/casting_table/block")))
+            .build()
+            .register();
 
     // Stone Age - the only way to move a fluid before pipes: a tap on the side of
     // something that holds one.

@@ -28,5 +28,8 @@ public class ModCapabilities {
                 (blockEntity, context) -> blockEntity.getItemCapability());
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntityTypes.FOUNDRY_BASIN.get(),
                 (blockEntity, context) -> blockEntity.getFluidCapability());
+        // What a faucet pours into. Items are handled by hand, so no item handler here.
+        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntityTypes.CASTING_TABLE.get(),
+                (blockEntity, context) -> blockEntity.getFluidTank());
     }
 }

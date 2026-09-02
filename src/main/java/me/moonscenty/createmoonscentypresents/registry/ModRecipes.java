@@ -12,6 +12,7 @@ import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 
+import me.moonscenty.createmoonscentypresents.content.casting.CastingRecipe;
 import me.moonscenty.createmoonscentypresents.content.charring.CharringRecipe;
 import me.moonscenty.createmoonscentypresents.content.firing.FiringRecipe;
 import me.moonscenty.createmoonscentypresents.content.foundry.FoundryRecipe;
@@ -43,6 +44,7 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 public class ModRecipes {
     // Sawing by hand is deliberately no better than the vanilla yield: the stone age is
@@ -65,6 +67,8 @@ public class ModRecipes {
     private static final int METAL_PER_RAW_ORE = 90;
     private static final int METAL_PER_INGOT = 90;
     private static final int MELTING_TIME = 200;
+    /** Long enough to watch it go dull, short enough not to be a wait. */
+    private static final int CASTING_TIME = 120;
 
     /** 20 seconds. Balancing comes later, like every other number in this pack. */
     private static final int DRYING_TIME = 400;
@@ -233,6 +237,7 @@ public class ModRecipes {
         registerMilling();
         registerClay();
         registerMelting();
+        registerCasting();
         registerRewards();
         registerGates();
     }
@@ -444,6 +449,25 @@ public class ModRecipes {
                             .duration(MELTING_TIME)
                             .build(), null);
         });
+    }
+
+    // --- casting ---------------------------------------------------------------
+
+    /**
+     * What the moulds on a casting table are worth.
+     *
+     * <p>The ingot mould is fired clay and survives being knocked out, so it is not
+     * consumed - one mould casts as many ingots as you can pour into it.
+     */
+    private static void registerCasting() {
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov -> prov.accept(
+                ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, "casting/zinc_ingot"),
+                new CastingRecipe(
+                        SizedFluidIngredient.of(ModFluids.MOLTEN_ZINC.get().getSource(), METAL_PER_INGOT),
+                        Ingredient.of(ModItems.INGOT_MOLD.get()),
+                        new ItemStack(AllItems.ZINC_INGOT.get()),
+                        CASTING_TIME, false),
+                null));
     }
 
     // --- age rewards ----------------------------------------------------------
