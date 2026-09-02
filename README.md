@@ -1,7 +1,7 @@
 # Create: MoonScenty Presents
 
 - Create Addon
-- Create 여러가지 부분들을 해석하여 MoonScenty가 원하는 컨텐츠로 만들어내는 모드입니다.
+- 바닐라는 그대로 두고 Create 자체의 진행을 Expert 하게 조이며, 시대마다 그 시대의 재료로 도구와 Curios 악세사리를 직접 만들게 하는 모드입니다.
 - Create 말고도 일부 모드에 의존성이 있을 수 있습니다.
 - 석기, 브론즈, 스틸, 스테인리스 스틸, 티타늄 시대로 나뉩니다.
 - 현재는 석기 컨텐츠 내용만 포함되어 있습니다.
@@ -9,431 +9,272 @@
 
 ## 석기 시대
 
-### 시대 개요
+### 개념
 
-석기 시대는 금속 기반 산업에 진입하기 전 단계로, 돌·목재·점토·섬유 등의 원시 재료를 이용하여 기본 도구와 저속 회전 기계, 광물 선광 및 원시 제련 기술을 확보하는 시대이다.
+**석기 시대에는 무인 동력이 없다.** 수차도 풍차도 없고, 사람이 자리를 뜨면 도는 것은 아무것도 없다.
 
-이 시대에서는 별도의 `chopping_block`, `crushing_table` 같은 수동 작업 블록을 사용하지 않는다. 대신 **도구와 가공 대상 아이템을 양손에 들고 서로 비비는 방식의 수동 아이템 프로세싱**을 기본 가공 방식으로 사용한다.
+가공 수단은 둘뿐이다.
 
-이 방식은 Create의 Polishing과 유사한 구조로 동작하며, 석기 시대의 주요 수동 가공 시스템으로 사용한다.
+- **손 가공** — 도구를 한 손에, 재료를 다른 손에 들고 지속 우클릭한다. Create의 Sand Paper Polishing이 원형이다.
+- **손 크랭크** — 원시 기계를 사람이 직접 돌린다. 손을 떼면 멈춘다.
 
-석기 시대의 최종 목표는 다음과 같다.
+Create의 안산암 계층은 **네 개의 관문**으로 나뉜다. 관문마다 요구하는 도구가 다르므로, 시대의 길이는 한 동작을 반복하는 데서 나오지 않고 서로 다른 도구를 갖춰 나가는 데서 나온다.
 
-- 기본 석기 및 목재 가공 도구 확보
-- 식물 섬유 → 끈 → 밧줄 가공
-- 점토 기반 도가니 및 주형 제작
-- 숯 생산
-- 32 RPM 회전망 구축
-- Copper / Tin 광석 처리
-- 원시 제련
-- Bronze 생산
-- Bronze 회전 부품 제작
-- 64 RPM 달성
-- 브론즈 시대 진입
+무인 동력을 손에 넣는 것이 이 시대의 졸업 조건이며, 그것이 브론즈 시대의 첫 보상이다.
 
-석기 시대 회전 부품의 최대 속도는 기본적으로 **32 RPM**으로 제한한다.
+바닐라는 건드리지 않는다. **Create는 필요한 만큼 건드린다** — 레시피를 바꾸고, 블록에 제약을 걸고, 컨셉에 맞는 기계가 필요하면 Create 풍으로 새로 만든다.
 
-### 석기 시대 핵심 진행 순서
+---
 
-```text
-나무 / 돌 / 부싯돌 채집
-↓
-Flint Knife / Stone Hammer / Stone Chisel / Wooden Saw 제작
-↓
-Plant Fiber 확보
-↓
-Twine
-↓
-Rope
-↓
-점토 채집
-↓
-Unfired Crucible / Unfired Ingot Mold 제작
-↓
-Pit Kiln
-↓
-Fired Crucible / Ingot Mold 제작
-↓
-Charcoal 생산
-↓
-Primitive Hand Crank
-↓
-Primitive Millstone
-↓
-Primitive Water Wheel
-↓
-32 RPM 회전망 구축
-↓
-Copper / Tin 광석 채굴
-↓
-Stone Hammer 수동 가공
-↓
-Create 기존 Crushed Ore
-↓
-Primitive Sifter
-↓
-Ore Concentrate
-↓
-Primitive Millstone
-↓
-Metal Dust
-↓
-Fired Crucible + Charcoal + Bellows
-↓
-Copper / Tin 생산
-↓
-Copper + Tin
-↓
-Bronze
-↓
-Bronze Cogwheel / Bronze Bearing / Bronze Gearbox Component 제작
-↓
-64 RPM 회전망 구축
-↓
-브론즈 시대
-```
+### 손 가공
 
-### 수동 아이템 프로세싱
+도구를 들고 지속 우클릭하면 일정 시간 뒤 아이템이 바뀐다. 각 방식은 자체 레시피 타입과 전용 도구를 갖는다.
 
-석기 시대의 일부 가공은 별도의 작업 블록 없이 플레이어가 직접 수행한다.
+| 방식 | 도구 | 레시피 타입 | 동작 | 상태 |
+|---|---|---|---|---|
+| Polishing | Sand Paper (Create) | `create:sandpaper_polishing` | — | Create 것을 그대로 둔다 |
+| Sawing | `wooden_saw` | `sawing` | 32틱, 앞뒤 왕복 | **구현 완료** |
+| Hammering | `stone_hammer` | `hammering` | 40틱, 10틱마다 타격 | **구현 완료** |
+| Shaping | `stone_chisel` | `shaping` | 48틱, 짧고 느린 긁기 | **구현 완료** |
+| Applying | `resin_dipped_brush` | `applying` | 56틱, 바닐라 brushing 모션 | **구현 완료** |
 
-플레이어가 가공 도구와 가공 대상 아이템을 양손에 들고 상호작용하면 일정 시간 동안 아이템 프로세싱이 진행된다.
+#### Applying은 브러시가 도구다
+
+물질을 직접 도구로 만들지 않는다. **바닐라 브러시에 물질을 묻혀 쓰고, 한 번 쓰면 물질만 소모되어 일반 브러시로 돌아온다.**
 
 ```text
-Main Hand : 가공 대상
-Off Hand  : 가공 도구
-
-또는
-
-Main Hand : 가공 도구
-Off Hand  : 가공 대상
-
-↓
-지속 상호작용
-↓
-가공 진행
-↓
-입력 아이템 소비
-↓
-결과 아이템 생성
+minecraft:brush + resin  →  resin_dipped_brush   (무형 조합)
+                                  ↓ Applying 1회
+                            minecraft:brush
 ```
 
-도구는 레시피에 따라 내구도를 소모할 수 있다.
+브러시는 재사용하는 인프라이고 담근 물질이 소모품이다. 그래서 `resin`은 도구가 아니라 **평범한 재료**로 남고, 이후 시대에 타르·기름·밀랍이 생겨도 **조합 레시피 한 줄**이면 된다. 새 클래스도 새 레시피 타입도 필요 없다.
 
-| 도구 | 입력 | 출력 | 기능 |
-|---|---|---|---|
-| Wooden Saw | Log | Planks | 목재 기본 제재 |
-| Stone Hammer | Raw Ore | Create Crushed Ore | 광석 수동 파쇄 |
-| Stone Hammer | Stone | Gravel / Stone Dust | 석재 파쇄 |
-| Stone Chisel | Stone / Wooden Part | 가공 부품 | 형상 가공 |
-| Flint Knife | Plant / Leather | Plant Fiber / Leather Strip | 절단 가공 |
+`applying` 레시피는 어떤 브러시를 썼는지를 함께 지정하므로, **같은 재료라도 수지를 바르면 A, 타르를 바르면 B**가 나올 수 있다.
 
-### 목재 가공
+가공 도중 손을 떼면 재료는 돌려주고 물질은 남는다. 완료했을 때만 소모된다.
 
-석기 시대의 목재 가공은 `wooden_saw`를 사용한다.
+---
 
-별도의 Chopping Block은 사용하지 않는다.
+### Create 게이팅
+
+#### 네 개의 관문
+
+관문마다 **다른 도구, 다른 방식**을 요구한다.
+
+| # | Create 대상 | 요구하는 원시 부품 | 만드는 방식 | 변경할 파일 |
+|---:|---|---|---|---|
+| 1 | `create:andesite_alloy` | `andesite_grit` | Hammering | `crafting/materials/andesite_alloy.json` 외 3개 |
+| 2 | `create:shaft` | `wooden_stave` | Sawing | `crafting/kinetics/shaft.json` |
+| 3 | `create:andesite_casing` | `andesite_cement` | Applying | `item_application/andesite_casing_from_log.json` 외 1개 |
+| 4 | `create:mechanical_press` | `stone_die` | Shaping | `crafting/kinetics/mechanical_press.json` |
+
+#### 각 관문의 강제 방식
+
+**1. 합금 — 재료 치환**
+
+`andesite_alloy`는 2×2 `"BA"/"AB"`로 네 칸이 다 차 있다. 재료를 더할 자리가 없으므로 **키 `A`의 값만 바꾼다**: `minecraft:andesite` → `andesite_grit`. 패턴도 칸 수도 JEI 표시도 그대로다.
+
+아연 우회와 Mixer 우회가 있으므로 네 파일을 전부 바꾼다.
 
 ```text
-Wooden Saw + Log
-→ Planks
+crafting/materials/andesite_alloy.json
+crafting/materials/andesite_alloy_from_zinc.json
+mixing/andesite_alloy.json
+mixing/andesite_alloy_from_zinc.json
 ```
 
-필요한 회전 부품은 별도의 `wooden_plate`, `wooden_gear_blank` 같은 중간 아이템을 만들지 않고 기존 재료에서 직접 제작한다.
+**2. 축 — 재료 추가**
 
-예시:
+`shaft`는 세로 2칸 `"A"/"A"`(합금 ×2 → 축 ×8)이다. 아래 칸을 `wooden_stave`로 바꾼다.
+
+`cogwheel`(축 + 판자)과 `large_cogwheel`(축 + 판자 ×2)은 **둘 다 축을 요구하므로 자동으로 뒤에 선다.** 따로 건드리지 않는다.
+
+**3. 케이싱 — 적용 아이템 치환**
+
+`andesite_casing`은 껍질 벗긴 원목에 합금을 우클릭하는 `item_application`이다. **우클릭 대상 블록은 건드리지 않고 손에 든 아이템만** 바꾼다: `create:andesite_alloy` → `andesite_cement`.
+
+블록 쪽을 모드 블록으로 바꾸면 `ItemApplicationRecipe`가 그것을 어떻게 해석하는지에 의존하게 되고, 실패하면 케이싱이 조용히 제작 불가가 된다. 아이템만 바꾸면 그 위험이 없다.
+
+**4. 프레스 — 재료 추가**
+
+`mechanical_press`는 세로 3칸 `"S"/"C"/"I"`(축·케이싱·철 블록)이다. 5칸 유형으로 넓혀 `stone_die` 2개를 양옆에 넣는다.
 
 ```text
-Planks
-+ Stone
-+ Stone Chisel
-→ Stone Cogwheel
+ S        →     " S "
+ C              "DCD"     D = stone_die
+ I              " I "
 ```
+
+프레스가 케이싱만으로 도달하는 것을 막는다. **이것이 시대의 종결 조건이다.**
+
+#### 무인 동력원 차단
+
+관문 넷을 다 통과해도 무인 동력은 얻지 못한다. 발전기는 따로 막는다.
+
+| 대상 | 막는 방법 |
+|---|---|
+| `create:water_wheel` | 레시피에 브론즈 재료를 요구시킨다 |
+| `create:large_water_wheel` | 동일 |
+| `create:windmill_bearing` | 동일 |
+| 양털 돛 | 풍차 베어링이 막히면 함께 닫힌다. 태그는 건드리지 않는다 |
+| `create:hand_crank` | **막지 않는다.** 우리 크랭크와 같은 층이다 |
+
+양털 8개 + 풍차 베어링이면 512 SU가 나오므로, 이 구멍을 열어 두면 시대 전체가 무의미해진다. 다만 태그에서 양털을 빼는 것은 게이트가 아니라 기능 삭제이므로 하지 않는다. **베어링을 잠그면 돛은 쓸 곳이 없어진다.**
+
+레시피로 닫히지 않는 것이 나오면 mixin을 쓴다. 현재 목록에는 없다.
+
+---
+
+### 진행 순서
+
+다섯 장으로 나뉘고, 각 장은 Create 해금 하나로 끝난다.
 
 ```text
-Planks / Stripped Log
-+ Wooden Saw
-→ Wooden Shaft
+[1장] 맨손
+덩굴 / 풀 / 묘목 → Plant Fiber → Twine
+↓
+Wooden Saw / Stone Hammer / Stone Chisel 제작
+↓
+원목에서 Resin 채취 → brush + resin → Resin Dipped Brush
+        (도구 넷이 갖춰진다. 아직 Create는 아무것도 열리지 않았다)
+
+[2장] 첫 관문 — Hammering
+Stone Hammer + Andesite → Andesite Grit
+↓
+create:andesite_alloy   ← 첫 Create 아이템
+
+[3장] 회전 부품 — Sawing
+Wooden Saw + 껍질 벗긴 원목 → Wooden Stave
+↓
+합금 + Stave → create:shaft → cogwheel / large_cogwheel
+↓
+Primitive Hand Crank + Primitive Millstone 조립
+↓
+크랭크로 맷돌을 돌려 Grit 생산이 2배가 된다
+
+[4장] 케이싱 — Applying
+Resin Dipped Brush + 합금 → Andesite Cement
+↓
+껍질 벗긴 원목에 Cement 우클릭 → create:andesite_casing
+
+[5장] 졸업 — Shaping
+Stone Chisel + 돌 → Stone Die
+↓
+축 + 케이싱 + 철 블록 + Die ×2 → create:mechanical_press
+↓
+크랭크로 프레스를 돌려 첫 create:iron_sheet
+↓
+브론즈 시대 (= 무인 동력 해금)
 ```
 
-브론즈 시대 이후에는 Mechanical Saw를 이용해 동일한 목재 가공을 더 빠르고 높은 효율로 자동화할 수 있도록 한다.
+크랭크로 프레스를 돌리는 것은 **일부러 불편하게 둔다.** 한 장 찍을 때마다 사람이 돌려야 하므로, 수차가 왜 보상인지가 그 자리에서 설명된다.
 
-### 광석 가공
+---
 
-광석은 바닐라 Furnace에 직접 넣어 Ingot으로 만들 수 없도록 한다.
+### 손 크랭크와 스테이션
 
-광석 파쇄 결과물은 별도의 `crushed_*_ore` 아이템을 추가하지 않고 **Create 모드에 이미 존재하는 Crushed Ore 계열 아이템을 그대로 사용한다.**
+크랭크는 **정확히 1대**의 기계만 돌린다. 2대를 돌리려면 크랭크를 2대 놓고 번갈아 돌려야 하며, 그 불편함이 이 시대가 임시라는 것을 알려 준다.
 
-Bronze 합금에 필요한 Tin은 바닐라와 Create 어느 쪽에도 없으므로 이 모드가 직접 추가하며, **`tin_ore`와 `deepslate_tin_ore`를 월드 생성으로 배치한다.** Copper는 바닐라 광석을 그대로 사용한다.
+| 손 가공 | 크랭크 스테이션 | 이득 |
+|---|---|---|
+| Hammering | `primitive_millstone` | Andesite → Grit ×2 (손은 ×1) |
+| Sawing | — | 이 시대에는 없다 |
+| Shaping | — | 이 시대에는 없다 |
+| Applying | — | 이 시대에는 없다 |
 
-기본 광석 처리 흐름은 다음과 같다.
+**손 경로는 어떤 관문에서도 막히지 않는다.** 스테이션은 처리량으로만 이기므로 아무도 진행이 멈추지 않고, 모두가 자발적으로 옮겨 간다.
 
-```text
-Raw Ore
-↓
-Stone Hammer
-↓
-Create Crushed Ore
-↓
-Primitive Sifter
-↓
-Ore Concentrate
-↓
-Primitive Millstone
-↓
-Metal Dust
-↓
-Fired Crucible
-↓
-Molten Metal
-↓
-Ingot Mold
-↓
-Metal Ingot
-```
+나머지 셋에 스테이션을 주지 않는 것은 의도다. 시대가 길어져야 하면 여기가 첫 번째 확장 지점이고, 그때까지는 **"기계는 하나뿐"**이 이 시대의 인상을 만든다.
 
-### Primitive Sifter
+#### 32 RPM 제한
 
-`primitive_sifter`는 석기 시대의 자동 선광 블록이다.
+석기 시대 부품은 32 RPM을 넘기면 과속이 처음 닿은 부품 하나가 부서지고 회전망이 끊긴다. 부서진 부품은 드롭되므로 손실은 없다. (`ModKineticLimits`, 구현 완료)
 
-Create의 Crushed Ore를 입력받아 Ore Concentrate 및 부산물로 분리한다.
+| 블록 | 최대 RPM |
+|---|---:|
+| `wooden_shaft` / `wooden_powered_shaft` | 32 |
+| `stone_cogwheel` / `large_stone_cogwheel` | 32 |
+| `primitive_gearbox` / `primitive_vertical_gearbox` | 32 |
+| `primitive_millstone` | 32 |
 
-`primitive_sieve`는 독립적인 가공 도구가 아니라 **Primitive Sifter 제작에 사용하는 내부 체망 중간 부품**으로 사용한다.
+제한은 이 모드의 부품에만 걸린다. Create 축으로 갈아타면 해소되지만, 그 시점에는 이미 3장을 통과한 뒤다.
 
-```text
-Stick / Plank
-+ Twine
-→ Primitive Sieve
-```
-
-```text
-Primitive Sieve
-+ Planks
-+ Rope
-+ Wooden Components
-→ Primitive Sifter
-```
-
-Primitive Sifter는 최대 32 RPM에서 동작한다.
-
-### 건조 가공
-
-`drying_rack`은 회전 동력을 사용하지 않는 시간 기반 가공 블록이다.
-
-초기 가죽, 섬유, 젖은 재료 등을 자연 건조하는 용도로 사용한다.
-
-예시:
-
-```text
-Wet Hide
-↓
-Drying Rack
-↓
-Leather
-```
-
-```text
-Wet Plant Material
-↓
-Drying Rack
-↓
-Dried Material
-```
-
-후속 시대에서는 동일한 가공을 더 빠른 기계 공정으로 대체할 수 있다.
-
-### 원시 제련
-
-석기 시대의 금속은 일반 Furnace에서 직접 제련하지 않는다.
-
-Copper와 Tin은 광석 처리 후 Dust 상태로 만든 뒤 Fired Crucible에서 용융한다.
-
-```text
-Metal Dust
-+
-Fired Crucible
-+
-Charcoal
-+
-Bellows
-↓
-Molten Metal
-↓
-Ingot Mold
-↓
-Metal Ingot
-```
-
-Bronze는 Copper와 Tin을 도가니 내부에서 합금하여 생산한다.
-
-```text
-Copper ×3
-+
-Tin ×1
-↓
-Fired Crucible
-↓
-Molten Bronze
-↓
-Ingot Mold
-↓
-Bronze Ingot
-```
-
-Iron은 석기 시대에 광석 처리 및 Dust 생산까지는 가능하지만, 현재 시대의 열원으로는 제련할 수 없도록 제한한다.
-
-### 회전 동력
-
-석기 시대는 목재와 석재 기반의 저속 회전 부품을 사용한다.
-
-기본 최대 속도는 **32 RPM**이다.
-
-```text
-Primitive Hand Crank
-→ 초기 수동 동력
-
-Primitive Water Wheel
-→ 석기 시대 자동 동력
-```
-
-회전 전달에는 다음 블록을 사용한다.
-
-```text
-Wooden Shaft
-Stone Cogwheel
-Large Stone Cogwheel
-Primitive Gearbox
-Primitive Vertical Gearbox
-```
-
-32 RPM을 초과하면 다음 중 하나의 방식으로 제한한다.
-
-- 회전 전달 중단
-- Overspeed 상태 발생
-- 일정 시간 후 파손
-- 즉시 파손
-
-브론즈 시대 부품을 확보하면 64 RPM 회전망을 구축할 수 있다.
+---
 
 ### 아이템
 
 | 아이템 이름 | registry_id | 기능 내용 | 제작 방법 |
 |---|---|---|---|
-| 식물 섬유 | `plant_fiber` | 끈과 밧줄 제작에 사용하는 기초 섬유 재료 | 잔디 또는 식물을 Flint Knife로 가공 |
-| 끈 | `twine` | 도구 결속 및 원시 부품 제작용 | Plant Fiber ×3 |
-| 밧줄 | `rope` | 수차, 기계 구조물, 각종 결속 부품 제작용 | Twine ×3 |
-| 나무 수지 | `resin` | 목재 부품 접착 및 밀봉용 | 원목 가공 또는 수지 생산 수종에서 획득 |
-| 가죽 스트립 | `leather_strip` | 풀무 및 기계 부품 제작용 | Leather + Flint Knife |
-| 숯 가루 | `charcoal_dust` | 탄소계 가공 재료 | Charcoal → Primitive Millstone |
-| 재 | `ash` | 숯 생산 부산물, 후속 화학/비료 재료 | Charcoal Pit 부산물 |
-| 미가공 도가니 | `unfired_crucible` | Fired Crucible 제작 전 점토 성형물 | Clay Ball ×5 |
-| 미가공 주괴 주형 | `unfired_ingot_mold` | 주괴 주형의 굽기 전 상태 | Clay Ball ×4 |
-| 주괴 주형 | `ingot_mold` | 용융 금속을 주괴 형태로 성형 | Unfired Ingot Mold → Pit Kiln |
-| 미가공 내화 벽돌 | `unfired_fire_brick` | 고온 설비 제작용 벽돌의 굽기 전 상태 | Clay + Sand |
-| 내화 벽돌 | `fire_brick` | 도가니 및 고온 설비 제작 재료 | Unfired Fire Brick → Pit Kiln |
-| 부싯돌 칼 | `flint_knife` | 식물, 가죽, 섬유 절단용 도구 | Flint + Stick + Twine |
-| 돌 망치 | `stone_hammer` | 광석 및 석재를 수동 파쇄 | Stone Hammer Head + Stick + Twine |
-| 돌 망치머리 | `stone_hammer_head` | Stone Hammer 제작용 중간 부품 | Stone 가공 |
-| 돌 끌 | `stone_chisel` | 석재 및 목재 부품 형상 가공 | Flint 또는 Stone + Stick + Twine |
-| 나무 톱 | `wooden_saw` | Log 및 목재 재료의 수동 가공 | Plank + Flint + Twine |
-| 나무 집게 | `wooden_tongs` | 뜨거운 도가니 및 주조 작업 보조 | Stick ×2 + Twine |
-| 원시 체 | `primitive_sieve` | Primitive Sifter 제작용 내부 체망 부품 | Stick/Plank + Twine |
-| 나무 베어링 | `wooden_bearing` | 회전체를 지지하는 원시 부품. 수차, 맷돌, 풀무에 사용 | Plank + Resin + Stone |
-| 나무 기어박스 부품 | `wooden_gearbox_component` | Primitive Gearbox / Vertical Gearbox 제작용 중간 부품 | Plank + Stone Cogwheel + Wooden Shaft |
-| 주석 원석 | `raw_tin` | 주석 광석에서 채굴한 원석 | Tin Ore 채굴 |
-| 주석 주괴 | `tin_ingot` | Bronze 합금용 금속. 바닐라와 Create에 없어 이 모드가 추가 | Tin Dust → Fired Crucible → Ingot Mold |
-| 구리 정광 | `copper_concentrate` | 선광된 구리 제련 원료 | Create Crushed Copper → Primitive Sifter |
-| 주석 정광 | `tin_concentrate` | 선광된 주석 제련 원료 | Create Crushed Tin → Primitive Sifter |
-| 구리 분말 | `copper_dust` | Fired Crucible 제련용 구리 원료 | Copper Concentrate → Primitive Millstone |
-| 주석 분말 | `tin_dust` | Fired Crucible 제련용 주석 원료 | Tin Concentrate → Primitive Millstone |
-| 철 분말 | `iron_dust` | 후속 시대 제련용 철 원료 | Iron Concentrate → Primitive Millstone |
-| 석회석 분말 | `limestone_dust` | Flux 및 후속 제련 공정 재료 | Limestone → Primitive Millstone |
-| 구리 조각 | `copper_fragment` | 선광 공정 부산물 | Copper 선광 부산물 |
-| 주석 조각 | `tin_fragment` | 선광 공정 부산물 | Tin 선광 부산물 |
-| 청동 주괴 | `bronze_ingot` | 석기 시대 최종 핵심 재료 | Copper ×3 + Tin ×1 → Fired Crucible → Ingot Mold |
-| 청동 너겟 | `bronze_nugget` | 소형 브론즈 부품 제작용 | Bronze Ingot 분해 |
-| 청동 판재 | `bronze_plate` | 브론즈 기계 및 회전 부품 제작용 | Bronze Ingot 수동 가공 또는 주조 |
-| 청동 베어링 | `bronze_bearing` | 64 RPM 회전체 제작용 핵심 부품 | Bronze + Wooden Bearing |
-| 청동 기어박스 부품 | `bronze_gearbox_component` | 브론즈 시대 Gearbox / Vertical Gearbox 제작용 핵심 중간 부품 | Bronze Plate + Bronze Bearing + Bronze Cogwheel 계열 재료 |
+| 식물 섬유 | `plant_fiber` | 끈의 재료 | 덩굴·풀·묘목 (무형, 도구 불필요) |
+| 끈 | `twine` | 네 도구의 공통 결속재 | Plant Fiber ×3 |
+| 나무 수지 | `resin` | 브러시에 묻히는 물질 | 원목에서 채취 |
+| 수지 브러시 | `resin_dipped_brush` | **Applying 도구.** 1회용, 쓰면 일반 브러시로 돌아온다 | `minecraft:brush` + Resin |
+| 나무 톱 | `wooden_saw` | **Sawing 도구** | Planks ×2 + Flint ×1 + Twine ×1 |
+| 돌 망치 | `stone_hammer` | **Hammering 도구.** 3×3 범위 채굴도 한다 | 안산암 ×2 + Stick ×2 + Twine ×1 |
+| 돌 끌 | `stone_chisel` | **Shaping 도구** | Flint ×1 + Stick ×1 + Twine ×1 |
+| 안산암 분말 | `andesite_grit` | 관문 1. 합금의 재료 | Hammering: 안산암 |
+| 나무 살대 | `wooden_stave` | 관문 2. Create 축의 재료 | Sawing: 껍질 벗긴 원목 |
+| 안산암 시멘트 | `andesite_cement` | 관문 3. 케이싱을 만드는 도포재 | Applying: 합금 |
+| 돌 거푸집 | `stone_die` | 관문 4. 프레스의 성형 부품 | Shaping: 돌 |
+| 나무 베어링 | `wooden_bearing` | 회전체 지지 부품 | Planks ×2 + Twine ×2 |
 
 ### 블록
 
 | 블록 이름 | registry_id | 기능 내용 | 제작 방법 |
 |---|---|---|---|
-| 건조대 | `drying_rack` | 가죽, 섬유, 젖은 재료 등을 시간 기반으로 건조 | Stick + Twine/Rope |
-| 구덩이 가마 | `pit_kiln` | Unfired Crucible, Ingot Mold, Fire Brick 등을 소성 | Clay + Stone 계열 재료 또는 월드 구조 방식 |
-| 숯가마 | `charcoal_pit` | Log를 Charcoal과 Ash로 변환 | Log 밀폐 구조 또는 전용 블록 방식 |
-| 원시 맷돌 | `primitive_millstone` | 8~32 RPM에서 광물 정광, 숯, 곡물 등을 분쇄 | Stone + Wooden Shaft + Wooden Bearing + Plank |
-| 원시 선광기 | `primitive_sifter` | Create Crushed Ore를 Ore Concentrate 및 부산물로 분리 | Primitive Sieve + Plank + Rope + Wooden Components |
-| 손 크랭크 | `primitive_hand_crank` | 플레이어가 직접 저속 회전력을 공급 | Stick + Wooden Shaft + Stone Cogwheel |
-| 원시 수차 | `primitive_water_wheel` | 물을 이용해 최대 32 RPM 회전력을 생성 | Plank + Wooden Bearing + Rope + Wooden Shaft |
-| 원시 기어박스 | `primitive_gearbox` | 수평 회전 방향 변경 및 동력 분배, 최대 32 RPM | Plank + Stone Cogwheel + Wooden Shaft |
-| 원시 수직 기어박스 | `primitive_vertical_gearbox` | 수평 회전축과 수직 회전축 사이에서 회전 방향을 90° 전환, 최대 32 RPM | Plank + Stone Cogwheel + Wooden Shaft |
-| 나무 축 | `wooden_shaft` | 석기 시대 저속 회전력 전달, 최대 32 RPM | Plank / Stripped Log + Wooden Saw |
-| 돌 톱니바퀴 | `stone_cogwheel` | 저속 회전 전달 및 기어비 구성, 최대 32 RPM | Plank + Stone + Stone Chisel |
-| 대형 돌 톱니바퀴 | `large_stone_cogwheel` | 2:1 기어비 구성용 대형 기어, 최대 32 RPM | Stone Cogwheel + Plank + Rope |
-| 수동 풀무 | `bellows` | 플레이어가 직접 조작하여 Fired Crucible의 온도 상승 | Plank + Leather Strip + Rope |
-| 기계식 풀무 | `mechanical_bellows` | 8~32 RPM에서 자동 송풍 | Bellows + Wooden Shaft + Stone Cogwheel + Wooden Bearing |
-| 도가니 | `fired_crucible` | Copper, Tin, Bronze 등의 금속 용융 및 합금 | Unfired Crucible → Pit Kiln |
-| 주조대 | `casting_table` | 용융 금속을 Ingot Mold 또는 주형에 부어 성형 | Stone/Slab + Plank + Ingot Mold |
-| 원시 저장통 | `wooden_bin` | 광물, 분말, 숯 등의 고체 아이템 저장 | Plank |
-| 원시 액체통 | `wooden_tank` | 물과 기타 저온 액체 저장 | Plank + Rope + Resin |
-| 나무 수로 | `wooden_channel` | Primitive Sifter 등에 물 공급 | Plank + Resin |
-| 광석 세척통 | `washing_trough` | Ore Pan보다 빠른 반수동 광석 세척 | Plank + 물 공급 구조 |
-| 내화 벽돌 블록 | `fire_bricks` | 고온 설비 및 후속 시대 화로 구조 재료 | Fire Brick ×4 |
-| 원시 화로 | `primitive_furnace` | 음식, 유리, 일반 가열용. 금속 광석 직접 제련 불가 | Stone / Cobblestone |
-| 원시 모루 | `primitive_anvil` | Copper / Bronze를 Plate 및 간단한 부품으로 가공 | Stone Block + Smooth Stone |
-| 주석 광석 | `tin_ore` | 주석 원석을 채굴할 수 있는 광석 | 월드 생성 |
-| 심층암 주석 광석 | `deepslate_tin_ore` | 심층암 지대의 주석 광석 | 월드 생성 |
-| 주석 원석 블록 | `raw_tin_block` | 주석 원석 보관용 압축 블록 | Raw Tin ×9 |
-| 주석 블록 | `tin_block` | 주석 주괴 보관용 압축 블록 | Tin Ingot ×9 |
-| 청동 축 | `bronze_shaft` | 64 RPM 회전망의 회전력 전달용 브론즈 회전축 | Bronze 계열 재료 가공 |
-| 청동 톱니바퀴 | `bronze_cogwheel` | 64 RPM 회전망의 기어비 구성용 브론즈 회전 블록 | Bronze 계열 재료 + Stone Cogwheel 또는 직접 주조 |
+| 나무 축 | `wooden_shaft` | 회전 전달, 최대 32 RPM | Wooden Stave + Twine |
+| 돌 톱니바퀴 | `stone_cogwheel` | 기어비 구성, 최대 32 RPM | Wooden Shaft + 돌 |
+| 대형 돌 톱니바퀴 | `large_stone_cogwheel` | 2:1 증감속, 최대 32 RPM | Wooden Shaft + 돌 ×2 |
+| 원시 기어박스 | `primitive_gearbox` | 방향 전환, 최대 32 RPM | Stone Cogwheel ×4 + Wooden Bearing |
+| 원시 수직 기어박스 | `primitive_vertical_gearbox` | 수평·수직 축 전환 | Primitive Gearbox 상호 변환 |
+| 손 크랭크 | `primitive_hand_crank` | 사람이 돌리는 유일한 동력원. 1대만 구동 | Planks ×3 + Wooden Shaft |
+| 원시 맷돌 | `primitive_millstone` | Andesite → Grit ×2 | Stone Cogwheel + Wooden Bearing + 돌 |
 
-### 석기 시대 회전 부품 제한
+---
 
-| 블록 | 최대 RPM | 역할 |
-|---|---:|---|
-| `wooden_shaft` | 32 RPM | 기본 회전축 |
-| `stone_cogwheel` | 32 RPM | 기어비 변경 |
-| `large_stone_cogwheel` | 32 RPM | 2:1 증속 / 감속 |
-| `primitive_gearbox` | 32 RPM | 수평 방향 변경 및 동력 분배 |
-| `primitive_vertical_gearbox` | 32 RPM | 수평 / 수직 축 방향 전환 |
-| `primitive_millstone` | 32 RPM | 원시 자동 분쇄 |
-| `primitive_sifter` | 32 RPM | 원시 자동 선광 |
-| `mechanical_bellows` | 32 RPM | 자동 송풍 |
+### 시대 보상
+
+보상은 주지 않는다. **이 시대에서 모은 재료로 직접 만든다.**
+
+| 아이템 이름 | registry_id | 기능 내용 | 제작 방법 |
+|---|---|---|---|
+| 돌 망치 | `stone_hammer` | 곡괭이 대상 3×3 범위 채굴. 채굴 속도는 바닐라보다 느리고 등급도 올려주지 않는다 — **면적으로만 이긴다** | 안산암 ×2 + Stick ×2 + Twine ×1 |
+| 견습생 고글 | `apprentice_goggles` | Curios `head`. 원시 부품의 현재 RPM과 32 한계를 표시한다 | Glass ×2 + Andesite Grit ×2 + Twine ×2 |
+| 채집 가방 | `gatherers_satchel` | Curios `back`. 반경 4블록 드롭 아이템 자동 회수 | Twine ×4 + Leather ×2 + Andesite Grit ×1 |
+
+돌 망치는 **1장에서** 만들 수 있어야 하므로 분말을 요구하지 않는다. 분말을 요구하면 "분말을 갈려면 망치가 필요한데 망치를 만들려면 분말이 필요한" 잠금이 생긴다.
+
+고글은 **첫 증속 이전에** 만들 수 있다. 회전 부품을 하나도 요구하지 않으므로, 과속 파손이 일어나기 전에 경고 도구가 손에 들어온다.
+
+---
 
 ### 브론즈 시대 진입 조건
 
-석기 시대의 최종 목표는 Bronze를 생산하고 **64 RPM 회전망을 구축하는 것**이다.
+> **손 크랭크로 `create:mechanical_press`를 돌려 첫 `create:iron_sheet`를 만든다.**
 
-핵심 진행 요소는 다음과 같다.
+`create:iron_sheet`는 Create 레시피 1,884개 중 `pressing/iron_ingot.json` 하나만 생산한다(확인함). 이것이 나오면 Mixer·Encased Fan·Saw·Blaze Burner가 한꺼번에 열리므로 브론즈 시대의 출발선으로 그대로 쓴다.
 
-```text
-bronze_ingot
-bronze_plate
-bronze_shaft
-bronze_bearing
-bronze_cogwheel
-bronze_gearbox_component
-```
+철은 바닐라 화로에서 그대로 제련한다. **바닐라 제련을 금지하지 않는다.**
 
-Bronze 계열 회전 부품을 사용하면 석기 시대의 32 RPM 한계를 넘어설 수 있다.
+브론즈 시대의 첫 보상은 **수차**다. 즉 무인 동력이다.
 
-```text
-Primitive Water Wheel
-↓
-32 RPM
-↓
-Bronze Cogwheel / Bronze Gearbox 계열
-↓
-2:1 증속
-↓
-64 RPM
-↓
-브론즈 시대 진입
-```
+---
 
-석기 시대에서 직접 제련 가능한 금속은 Copper, Tin, Bronze 정도로 제한한다.
+### 구현 현황
 
-Iron 및 그 이상의 금속은 브론즈 시대 이후의 고온 제련 설비를 요구하도록 구성한다.
+**동작까지 완료** — 손 가공 4종(`sawing` / `hammering` / `shaping` / `applying`)의 레시피 타입·도구·데이터 컴포넌트, `resin_dipped_brush`와 그 조합 레시피, `ModKineticLimits`(32 RPM), `primitive_hand_crank`, `primitive_millstone`, `wooden_shaft`, `stone_cogwheel`, `large_stone_cogwheel`, `primitive_gearbox`.
+
+**아직 없다** — 관문 아이템 4종(`andesite_grit`, `wooden_stave`, `andesite_cement`, `stone_die`), 손 가공 레시피 전부, Create 레시피 덮어쓰기 8개 파일, 발전기 차단 3개, 보상 2종과 Curios 의존성, `stone_hammer`의 3×3 범위 채굴, Shaping·Applying의 JEI 카테고리.
+
+**이 시대에 쓰지 않는다** — `drying_rack`, `pit_kiln`, `charcoal_pit`, `fired_crucible`, `primitive_sifter`, 점토 가공 라인, 광석 정광·분말 라인, 주석 라인. 전부 브론즈 이후로 미룬다.
+
+#### 알려진 결함
+
+`ModHandCrankBlockEntity`가 `getStressConfigKey()`를 재정의하지 않아, Create의 구현이 `AllBlocks.HAND_CRANK.has(state)` 검사에서 탈락해 **`copper_valve_handle`의 용량을 읽는다.** 등록한 값이 죽어 있고 크랭크 소리도 나지 않는다. 두 줄로 고친다.
+
+#### 확인이 필요한 것
+
+- **Create 레시피를 모드 리소스로 덮어쓰는 것이 런타임에 실제로 우선하는지.** 이 설계의 관문 전부가 여기 걸려 있다. 안 되면 내장 데이터팩 → `neoforge:conditions` 순으로 시도한다.
+- 크랭크가 프레스를 실제로 돌릴 수 있는지. 크랭크는 256 SU를 내고 프레스는 8 RPM에서 64 SU를 쓰므로 계산상 가능하지만, 조작감은 재봐야 한다.
+- **시대 분량.** 관문 4개 + 도구 4개 + 스테이션 1개가 몇 시간인지는 재보기 전에는 모른다. 짧으면 스테이션을 늘리는 쪽으로 확장하고, **요구 수량이나 타이머를 늘리는 쪽으로는 확장하지 않는다.**

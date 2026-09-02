@@ -6,6 +6,7 @@ import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
 import me.moonscenty.createmoonscentypresents.registry.ModBlocks;
 import me.moonscenty.createmoonscentypresents.registry.ModItems;
 import me.moonscenty.createmoonscentypresents.registry.ModRecipeTypes;
+import me.moonscenty.createmoonscentypresents.content.hammering.HammeringRecipe;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRecipe;
 import me.moonscenty.createmoonscentypresents.content.sawing.SawingRecipe;
 
@@ -32,7 +33,8 @@ public class JeiPlugin implements IModPlugin {
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
         IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
-        registration.addRecipeCategories(new SawingCategory(guiHelper), new DryingCategory(guiHelper));
+        registration.addRecipeCategories(new SawingCategory(guiHelper), new HammeringCategory(guiHelper),
+                new DryingCategory(guiHelper));
     }
 
     @Override
@@ -43,6 +45,8 @@ public class JeiPlugin implements IModPlugin {
         RecipeManager recipes = level.getRecipeManager();
         List<RecipeHolder<SawingRecipe>> sawing = recipes.getAllRecipesFor(ModRecipeTypes.SAWING.get());
         registration.addRecipes(SawingCategory.TYPE, sawing);
+        List<RecipeHolder<HammeringRecipe>> hammering = recipes.getAllRecipesFor(ModRecipeTypes.HAMMERING.get());
+        registration.addRecipes(HammeringCategory.TYPE, hammering);
         List<RecipeHolder<DryingRecipe>> drying = recipes.getAllRecipesFor(ModRecipeTypes.DRYING.get());
         registration.addRecipes(DryingCategory.TYPE, drying);
     }
@@ -51,6 +55,7 @@ public class JeiPlugin implements IModPlugin {
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         // Lets players click the saw and land on these recipes.
         registration.addRecipeCatalyst(ModItems.WOODEN_SAW.get(), SawingCategory.TYPE);
+        registration.addRecipeCatalyst(ModItems.STONE_HAMMER.get(), HammeringCategory.TYPE);
         registration.addRecipeCatalyst(ModBlocks.DRYING_RACK.get(), DryingCategory.TYPE);
     }
 }

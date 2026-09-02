@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    {
+      "item": "minecraft:brush"
+    },
+    {
+      "item": "createmoonscentypresents:resin"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "createmoonscentypresents:resin_dipped_brush"
+  }
+}

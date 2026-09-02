@@ -2,6 +2,9 @@ package me.moonscenty.createmoonscentypresents.registry;
 
 import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
 
+import me.moonscenty.createmoonscentypresents.content.applying.ApplyingRecipe;
+import me.moonscenty.createmoonscentypresents.content.hammering.HammeringRecipe;
+import me.moonscenty.createmoonscentypresents.content.shaping.ShapingRecipe;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRecipe;
 import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 
@@ -29,6 +32,30 @@ public class ModRecipeTypes {
 
     public static final DeferredHolder<RecipeSerializer<?>, SawingRecipe.Serializer> SAWING_SERIALIZER =
             SERIALIZERS.register("sawing", SawingRecipe.Serializer::new);
+
+    public static final DeferredHolder<RecipeType<?>, RecipeType<HammeringRecipe>> HAMMERING =
+            TYPES.register("hammering", () -> RecipeType.simple(
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(
+                            CreateMoonScentyPresents.MODID, "hammering")));
+
+    public static final DeferredHolder<RecipeSerializer<?>, HammeringRecipe.Serializer> HAMMERING_SERIALIZER =
+            SERIALIZERS.register("hammering", HammeringRecipe.Serializer::new);
+
+    public static final DeferredHolder<RecipeType<?>, RecipeType<ApplyingRecipe>> APPLYING =
+            TYPES.register("applying", () -> RecipeType.simple(
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(
+                            CreateMoonScentyPresents.MODID, "applying")));
+
+    public static final DeferredHolder<RecipeSerializer<?>, ApplyingRecipe.Serializer> APPLYING_SERIALIZER =
+            SERIALIZERS.register("applying", ApplyingRecipe.Serializer::new);
+
+    public static final DeferredHolder<RecipeType<?>, RecipeType<ShapingRecipe>> SHAPING =
+            TYPES.register("shaping", () -> RecipeType.simple(
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(
+                            CreateMoonScentyPresents.MODID, "shaping")));
+
+    public static final DeferredHolder<RecipeSerializer<?>, ShapingRecipe.Serializer> SHAPING_SERIALIZER =
+            SERIALIZERS.register("shaping", ShapingRecipe.Serializer::new);
 
     public static final DeferredHolder<RecipeType<?>, RecipeType<DryingRecipe>> DRYING =
             TYPES.register("drying", () -> RecipeType.simple(

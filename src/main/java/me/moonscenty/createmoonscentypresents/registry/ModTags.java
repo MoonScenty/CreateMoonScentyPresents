@@ -31,6 +31,13 @@ public class ModTags {
 
     // Bronze is not one of Create's CommonMetal entries, so its tags live here.
     public static final TagKey<Item> BRONZE_NUGGETS = item("nuggets/bronze");
+    public static final TagKey<Item> BRONZE_INGOTS = item("ingots/bronze");
+
+    // Create names the item a sheet but tags it under plates, which is the cross-mod
+    // convention. Both are followed: the id reads like Create's, the tag matches
+    // everyone else's.
+    public static final TagKey<Item> PLATES = item("plates");
+    public static final TagKey<Item> BRONZE_PLATES = item("plates/bronze");
 
     private static TagKey<Item> item(String path) {
         return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", path));

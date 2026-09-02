@@ -6,6 +6,9 @@ import com.simibubi.create.foundation.data.recipe.CommonMetal;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModVerticalGearboxItem;
+import me.moonscenty.createmoonscentypresents.content.applying.DippedBrushItem;
+import me.moonscenty.createmoonscentypresents.content.hammering.StoneHammerItem;
+import me.moonscenty.createmoonscentypresents.content.shaping.StoneChiselItem;
 import me.moonscenty.createmoonscentypresents.content.sawing.WoodenSawItem;
 
 import net.minecraft.tags.TagKey;
@@ -21,6 +24,12 @@ public class ModItems {
 
     // Stone Age - binding and sealing materials
     public static final ItemEntry<Item> RESIN = simple("resin");
+
+    // A vanilla brush loaded with resin. One application spends the load and gives the
+    // plain brush back; more substances mean more dipped brushes, not more mechanics.
+    public static final ItemEntry<DippedBrushItem> RESIN_DIPPED_BRUSH = CreateMoonScentyPresents.REGISTRATE
+            .item("resin_dipped_brush", DippedBrushItem::new)
+            .register();
     public static final ItemEntry<Item> LEATHER_STRIP = simple("leather_strip");
 
     // Stone Age - charcoal pit products
@@ -40,9 +49,20 @@ public class ModItems {
 
     // Stone Age - tools
     public static final ItemEntry<Item> FLINT_KNIFE = simple("flint_knife");
-    public static final ItemEntry<Item> STONE_HAMMER = simple("stone_hammer");
+    // Held against a material to break it down by hand - the hammering counterpart of
+    // the wooden saw. handheld is the right parent for a tool.
+    public static final ItemEntry<StoneHammerItem> STONE_HAMMER = CreateMoonScentyPresents.REGISTRATE
+            .item("stone_hammer", StoneHammerItem::new)
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.mcLoc("item/handheld"))
+                    .texture("layer0", prov.modLoc("item/" + ctx.getName())))
+            .register();
     public static final ItemEntry<Item> STONE_HAMMER_HEAD = simple("stone_hammer_head");
-    public static final ItemEntry<Item> STONE_CHISEL = simple("stone_chisel");
+    // Shapes stone and wood into machine parts by hand.
+    public static final ItemEntry<StoneChiselItem> STONE_CHISEL = CreateMoonScentyPresents.REGISTRATE
+            .item("stone_chisel", StoneChiselItem::new)
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.mcLoc("item/handheld"))
+                    .texture("layer0", prov.modLoc("item/" + ctx.getName())))
+            .register();
     // item/generated only defines right-hand transforms, so the off hand falls back to
     // them plus vanilla's mirror - and for this sprite the mirrored side is the one
     // that points the teeth forward. Both hands are pinned here so they match: the main
@@ -64,9 +84,9 @@ public class ModItems {
     public static final ItemEntry<Item> WOODEN_TONGS = simple("wooden_tongs");
     public static final ItemEntry<Item> PRIMITIVE_SIEVE = simple("primitive_sieve");
 
-    // Tin is not a vanilla metal and nothing in this pack provides the ore line, so
-    // it lives here. The nugget stays Petrochem's; these follow its colour and share
-    // the common tags, which is what lets both mods' tin be used interchangeably.
+    // Tin is not a vanilla metal and nothing else provides it, so the whole line is
+    // ours. The common tags are still used, so any other mod's tin stays
+    // interchangeable with it. Bronze age content; not used in the stone age.
     public static final ItemEntry<Item> RAW_TIN = CreateMoonScentyPresents.REGISTRATE
             .item("raw_tin", Item::new)
             .tag(CommonMetal.TIN.rawOres, Tags.Items.RAW_MATERIALS)
@@ -100,11 +120,22 @@ public class ModItems {
     public static final ItemEntry<Item> COPPER_FRAGMENT = fragment("copper_fragment", ModTags.COPPER_FRAGMENTS);
     public static final ItemEntry<Item> TIN_FRAGMENT = fragment("tin_fragment", ModTags.TIN_FRAGMENTS);
 
-    // The ingot and plate come from Petrochem and Vintage Improvements; only the
-    // nugget is missing from the pack.
+    // Bronze age content. Nothing else in the pack provides bronze, so the whole line
+    // is ours. The textures follow the bronze already used by the cogwheel and bearing.
     public static final ItemEntry<Item> BRONZE_NUGGET = CreateMoonScentyPresents.REGISTRATE
             .item("bronze_nugget", Item::new)
             .tag(Tags.Items.NUGGETS, ModTags.BRONZE_NUGGETS)
+            .register();
+
+    public static final ItemEntry<Item> BRONZE_INGOT = CreateMoonScentyPresents.REGISTRATE
+            .item("bronze_ingot", Item::new)
+            .tag(Tags.Items.INGOTS, ModTags.BRONZE_INGOTS)
+            .register();
+
+    // Named like Create's sheets, tagged like everyone else's plates.
+    public static final ItemEntry<Item> BRONZE_SHEET = CreateMoonScentyPresents.REGISTRATE
+            .item("bronze_sheet", Item::new)
+            .tag(ModTags.PLATES, ModTags.BRONZE_PLATES)
             .register();
 
     public static final ItemEntry<Item> BRONZE_BEARING = simple("bronze_bearing");

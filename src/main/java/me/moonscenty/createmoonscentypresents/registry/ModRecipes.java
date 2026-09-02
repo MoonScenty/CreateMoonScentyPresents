@@ -16,6 +16,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.world.level.ItemLike;
 
 public class ModRecipes {
@@ -52,6 +54,9 @@ public class ModRecipes {
     public static final String SAWING_CATEGORY_KEY =
             "gui." + CreateMoonScentyPresents.MODID + ".category.sawing";
 
+    public static final String HAMMERING_CATEGORY_KEY =
+            "gui." + CreateMoonScentyPresents.MODID + ".category.hammering";
+
     public static final String DRYING_CATEGORY_KEY =
             "gui." + CreateMoonScentyPresents.MODID + ".category.drying";
 
@@ -61,6 +66,7 @@ public class ModRecipes {
 
     public static void register() {
         CreateMoonScentyPresents.REGISTRATE.addRawLang(SAWING_CATEGORY_KEY, "Sawing");
+        CreateMoonScentyPresents.REGISTRATE.addRawLang(HAMMERING_CATEGORY_KEY, "Hammering");
         CreateMoonScentyPresents.REGISTRATE.addRawLang(DRYING_CATEGORY_KEY, "Drying");
         CreateMoonScentyPresents.REGISTRATE.addRawLang(DRYING_TIME_KEY, "%ss");
         // The only drying recipe so far. It is the plainest case of what the rack is
@@ -70,6 +76,14 @@ public class ModRecipes {
                 ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, "drying/sponge"),
                 new DryingRecipe(Ingredient.of(Items.WET_SPONGE), new ItemStack(Items.SPONGE), DRYING_TIME),
                 null));
+        // Loading a brush with resin. The brush survives; the resin does not.
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, ModItems.RESIN_DIPPED_BRUSH.get())
+                        .requires(Items.BRUSH)
+                        .requires(ModItems.RESIN.get())
+                        .unlockedBy("has_resin", prov.has(ModItems.RESIN.get()))
+                        .save(prov));
+
         CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov -> {
             for (Wood wood : WOODS)
                 prov.accept(ResourceLocation.fromNamespaceAndPath(
