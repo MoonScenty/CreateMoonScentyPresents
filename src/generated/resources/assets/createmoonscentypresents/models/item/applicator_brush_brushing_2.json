@@ -1,0 +1,54 @@
+{
+  "parent": "minecraft:item/generated",
+  "display": {
+    "firstperson_lefthand": {
+      "rotation": [
+        55,
+        -85,
+        0
+      ],
+      "translation": [
+        8,
+        0.5,
+        -5.5
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        0,
+        0,
+        -90
+      ],
+      "scale": [
+        0.9,
+        0.9,
+        0.9
+      ],
+      "translation": [
+        4,
+        2,
+        0
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        0,
+        0,
+        90
+      ],
+      "scale": [
+        0.9,
+        0.9,
+        0.9
+      ],
+      "translation": [
+        -4,
+        2,
+        0
+      ]
+    }
+  },
+  "textures": {
+    "layer0": "createmoonscentypresents:item/applicator_brush"
+  }
+}

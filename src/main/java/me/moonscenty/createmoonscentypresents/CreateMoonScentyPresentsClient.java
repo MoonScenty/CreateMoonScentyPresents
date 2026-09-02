@@ -1,6 +1,10 @@
 package me.moonscenty.createmoonscentypresents;
 
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModPartialModels;
+import me.moonscenty.createmoonscentypresents.registry.ModItems;
+
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.resources.ResourceLocation;
 
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -22,5 +26,15 @@ public class CreateMoonScentyPresentsClient {
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
         // Client-only registration (renderers, screens, Ponder scenes) goes here.
+
+        // What picks between the four brush models while it is in use, copied from the
+        // vanilla brush: a quarter turn of the cycle every ten ticks. The model overrides
+        // that read it are generated in ModItems. ItemProperties is not thread safe, so
+        // this has to be queued rather than run on the loading thread.
+        event.enqueueWork(() -> ItemProperties.register(ModItems.APPLICATOR_BRUSH.get(),
+                ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, "brushing"),
+                (stack, level, entity, seed) -> entity != null && entity.getUseItem() == stack
+                        ? (entity.getUseItemRemainingTicks() % 10) / 10.0F
+                        : 0.0F));
     }
 }

@@ -12,6 +12,7 @@ import com.simibubi.create.content.kinetics.simpleRelays.CogwheelBlockItem;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
+import java.util.List;
 import java.util.Map;
 
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModCogwheelBlock;
@@ -21,12 +22,17 @@ import me.moonscenty.createmoonscentypresents.content.kinetics.ModMillstoneBlock
 import me.moonscenty.createmoonscentypresents.content.processing.BasinShapedBlock;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRackBlock;
 import me.moonscenty.createmoonscentypresents.content.processing.HorizontalCubeBlock;
+import me.moonscenty.createmoonscentypresents.content.tapping.TapperBlock;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModPoweredShaftBlock;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModShaftBlock;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModSifterBlock;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.item.Items;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -202,6 +208,70 @@ public class ModBlocks {
             .blockstate(BlockStateGen.axisBlockProvider(false))
             .loot((lt, block) -> lt.dropOther(block, WOODEN_SHAFT.get()))
             .register();
+
+    // Stone Age - the only thing in the age that works while nobody is watching. Stands
+    // in the cell beside a bored log with its spout in the wood; see TapperBlock for why
+    // FACING points at the log rather than away from it.
+    public static final BlockEntry<TapperBlock> TAPPER = CreateMoonScentyPresents.REGISTRATE
+            .block("tapper", TapperBlock::new)
+            .initialProperties(() -> Blocks.OAK_PLANKS)
+            .properties(p -> p.sound(SoundType.WOOD).mapColor(MapColor.WOOD).noOcclusion())
+            .transform(TagGen.axeOrPickaxe())
+            // 0, not the default 180: that default assumes a model drawn with its front
+            // on the north face, and the spout is drawn on the south one. Left at 180 the
+            // tapper would point its spout away from the log it is standing on.
+            .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(),
+                    prov.models().getExistingFile(prov.modLoc("block/tapper")), 0))
+            .simpleItem()
+            .register();
+
+    /** One bored log, the wood it came from, and the planks a saw gets back out of it. */
+    public record HoledLog(String wood, Block log, ItemLike planks, BlockEntry<RotatedPillarBlock> block) {
+    }
+
+    /**
+     * The eight overworld logs. Nether stems are fungus and have no sap in them, and a
+     * stripped log has had the bark taken off - which is where the sap runs.
+     */
+    public static final List<HoledLog> HOLED_LOGS = List.of(
+            holedLog("oak", Blocks.OAK_LOG, Items.OAK_PLANKS),
+            holedLog("spruce", Blocks.SPRUCE_LOG, Items.SPRUCE_PLANKS),
+            holedLog("birch", Blocks.BIRCH_LOG, Items.BIRCH_PLANKS),
+            holedLog("jungle", Blocks.JUNGLE_LOG, Items.JUNGLE_PLANKS),
+            holedLog("acacia", Blocks.ACACIA_LOG, Items.ACACIA_PLANKS),
+            holedLog("dark_oak", Blocks.DARK_OAK_LOG, Items.DARK_OAK_PLANKS),
+            holedLog("mangrove", Blocks.MANGROVE_LOG, Items.MANGROVE_PLANKS),
+            holedLog("cherry", Blocks.CHERRY_LOG, Items.CHERRY_PLANKS));
+
+    /**
+     * What a drill turns this log into, or null if it is not a log the drill knows.
+     *
+     * <p>Walked rather than kept in a map: the entries cannot be resolved while this
+     * class is still loading, and eight comparisons on a right click is nothing.
+     */
+    public static Block holedVariantOf(Block log) {
+        for (HoledLog holed : HOLED_LOGS)
+            if (holed.log() == log)
+                return holed.block().get();
+        return null;
+    }
+
+    private static HoledLog holedLog(String wood, Block log, ItemLike planks) {
+        BlockEntry<RotatedPillarBlock> entry = CreateMoonScentyPresents.REGISTRATE
+                .block("holed_" + wood + "_log", RotatedPillarBlock::new)
+                .initialProperties(() -> log)
+                .transform(TagGen.axeOnly())
+                // The ends are the vanilla log ends; only the bark was redrawn.
+                .blockstate((ctx, prov) -> prov.axisBlock(ctx.getEntry(),
+                        prov.modLoc("block/" + ctx.getName()),
+                        ResourceLocation.withDefaultNamespace("block/" + wood + "_log_top")))
+                .tag(ModTags.HOLED_LOG_BLOCKS)
+                .item()
+                .tag(ModTags.HOLED_LOGS)
+                .build()
+                .register();
+        return new HoledLog(wood, log, planks, entry);
+    }
 
     /** @param wooden whether an axe should work on it too - the stone cogwheels have a wooden axle. */
     private static BlockEntry<ModCogwheelBlock> cogwheel(String name, boolean large,

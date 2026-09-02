@@ -1,0 +1,10 @@
+{
+  "type": "createmoonscentypresents:sawing",
+  "ingredient": {
+    "item": "createmoonscentypresents:holed_jungle_log"
+  },
+  "result": {
+    "count": 4,
+    "id": "minecraft:jungle_planks"
+  }
+}

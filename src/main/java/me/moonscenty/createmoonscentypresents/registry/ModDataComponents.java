@@ -4,7 +4,8 @@ import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
 
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
-import me.moonscenty.createmoonscentypresents.content.applying.ApplyingItemComponent;
+import net.minecraft.network.codec.ByteBufCodecs;
+import me.moonscenty.createmoonscentypresents.content.applying.BrushContents;
 import me.moonscenty.createmoonscentypresents.content.hammering.HammeringItemComponent;
 import me.moonscenty.createmoonscentypresents.content.shaping.ShapingItemComponent;
 import me.moonscenty.createmoonscentypresents.content.sawing.SawingItemComponent;
@@ -23,11 +24,25 @@ public class ModDataComponents {
                     .networkSynchronized(SawingItemComponent.STREAM_CODEC)
                     .build());
 
-    /** The same, for a substance being rubbed in. */
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<ApplyingItemComponent>> APPLYING =
-            TYPES.register("applying", () -> DataComponentType.<ApplyingItemComponent>builder()
-                    .persistent(ApplyingItemComponent.CODEC)
-                    .networkSynchronized(ApplyingItemComponent.STREAM_CODEC)
+    /**
+     * What an applicator brush is loaded with. Unlike the three above this is not
+     * progress through one action - it is the brush's contents, and it persists between
+     * uses until the last of it has been applied.
+     */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<BrushContents>> BRUSH_CONTENTS =
+            TYPES.register("brush_contents", () -> DataComponentType.<BrushContents>builder()
+                    .persistent(BrushContents.CODEC)
+                    .networkSynchronized(BrushContents.STREAM_CODEC)
+                    .build());
+
+    /**
+     * How long the stroke in progress takes, in ticks, read from the recipe when the
+     * brush is put to a block. Synced but not persistent: it means nothing once the
+     * button is let go, and a half finished stroke should not survive a save.
+     */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> APPLYING_TIME =
+            TYPES.register("applying_time", () -> DataComponentType.<Integer>builder()
+                    .networkSynchronized(ByteBufCodecs.VAR_INT)
                     .build());
 
     /** The same, for the chisel. */

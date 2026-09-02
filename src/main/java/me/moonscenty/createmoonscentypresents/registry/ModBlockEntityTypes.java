@@ -20,6 +20,8 @@ import me.moonscenty.createmoonscentypresents.content.kinetics.ModSifterBlockEnt
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModPoweredShaftBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRackBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRackRenderer;
+import me.moonscenty.createmoonscentypresents.content.tapping.TapperBlockEntity;
+import me.moonscenty.createmoonscentypresents.content.tapping.TapperRenderer;
 
 public class ModBlockEntityTypes {
     // Create's own simple kinetic type only lists Create's blocks as valid, so the
@@ -59,6 +61,13 @@ public class ModBlockEntityTypes {
             .blockEntity("drying_rack", DryingRackBlockEntity::new)
             .validBlocks(ModBlocks.DRYING_RACK)
             .renderer(() -> DryingRackRenderer::new)
+            .register();
+
+    // Holds a tapper's tank and the lump that has set in it, and draws both.
+    public static final BlockEntityEntry<TapperBlockEntity> TAPPER = CreateMoonScentyPresents.REGISTRATE
+            .blockEntity("tapper", TapperBlockEntity::new)
+            .validBlocks(ModBlocks.TAPPER)
+            .renderer(() -> TapperRenderer::new)
             .register();
 
     // Create's powered shaft type only lists Create's block. The block entity class

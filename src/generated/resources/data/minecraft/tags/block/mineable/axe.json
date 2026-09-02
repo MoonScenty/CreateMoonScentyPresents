@@ -7,6 +7,15 @@
     "createmoonscentypresents:stone_cogwheel",
     "createmoonscentypresents:large_stone_cogwheel",
     "createmoonscentypresents:wooden_shaft",
-    "createmoonscentypresents:wooden_powered_shaft"
+    "createmoonscentypresents:wooden_powered_shaft",
+    "createmoonscentypresents:tapper",
+    "createmoonscentypresents:holed_oak_log",
+    "createmoonscentypresents:holed_spruce_log",
+    "createmoonscentypresents:holed_birch_log",
+    "createmoonscentypresents:holed_jungle_log",
+    "createmoonscentypresents:holed_acacia_log",
+    "createmoonscentypresents:holed_dark_oak_log",
+    "createmoonscentypresents:holed_mangrove_log",
+    "createmoonscentypresents:holed_cherry_log"
   ]
 }

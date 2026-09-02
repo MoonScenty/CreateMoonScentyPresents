@@ -1,0 +1,11 @@
+{
+  "type": "createmoonscentypresents:tapping",
+  "log": {
+    "tag": "createmoonscentypresents:holed_logs"
+  },
+  "processing_time": 500,
+  "result": {
+    "amount": 100,
+    "id": "createmoonscentypresents:liquid_resin"
+  }
+}

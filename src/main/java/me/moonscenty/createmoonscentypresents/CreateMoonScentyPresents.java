@@ -9,6 +9,7 @@ import me.moonscenty.createmoonscentypresents.registry.ModBlockEntityTypes;
 import me.moonscenty.createmoonscentypresents.registry.ModBlocks;
 import me.moonscenty.createmoonscentypresents.registry.ModCreativeTabs;
 import me.moonscenty.createmoonscentypresents.registry.ModDataComponents;
+import me.moonscenty.createmoonscentypresents.registry.ModFluids;
 import me.moonscenty.createmoonscentypresents.registry.ModItems;
 import me.moonscenty.createmoonscentypresents.registry.ModRecipeTypes;
 import me.moonscenty.createmoonscentypresents.registry.ModRecipes;
@@ -39,6 +40,7 @@ public class CreateMoonScentyPresents {
         REGISTRATE.defaultCreativeTab(ModCreativeTabs.MAIN_KEY);
 
         ModItems.register();
+        ModFluids.register();
         ModBlocks.register();
         ModBlockEntityTypes.register();
         ModRecipeTypes.register(modEventBus);

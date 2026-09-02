@@ -1,0 +1,11 @@
+{
+  "type": "createmoonscentypresents:applying",
+  "block": {
+    "item": "minecraft:cracked_stone_bricks"
+  },
+  "processing_time": 60,
+  "result": "minecraft:stone_bricks",
+  "substance": {
+    "item": "createmoonscentypresents:resin"
+  }
+}

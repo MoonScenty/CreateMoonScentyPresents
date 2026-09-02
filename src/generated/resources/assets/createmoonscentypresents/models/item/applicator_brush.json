@@ -1,0 +1,74 @@
+{
+  "parent": "minecraft:item/generated",
+  "display": {
+    "firstperson_lefthand": {
+      "rotation": [
+        55,
+        -85,
+        0
+      ],
+      "translation": [
+        8,
+        0.5,
+        -5.5
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        0,
+        0,
+        -45
+      ],
+      "scale": [
+        0.9,
+        0.9,
+        0.9
+      ],
+      "translation": [
+        0,
+        4,
+        0
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        0,
+        0,
+        45
+      ],
+      "scale": [
+        0.9,
+        0.9,
+        0.9
+      ],
+      "translation": [
+        0,
+        4,
+        0
+      ]
+    }
+  },
+  "overrides": [
+    {
+      "model": "createmoonscentypresents:item/applicator_brush_brushing_0",
+      "predicate": {
+        "createmoonscentypresents:brushing": 0.25
+      }
+    },
+    {
+      "model": "createmoonscentypresents:item/applicator_brush_brushing_1",
+      "predicate": {
+        "createmoonscentypresents:brushing": 0.5
+      }
+    },
+    {
+      "model": "createmoonscentypresents:item/applicator_brush_brushing_2",
+      "predicate": {
+        "createmoonscentypresents:brushing": 0.75
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "createmoonscentypresents:item/applicator_brush"
+  }
+}

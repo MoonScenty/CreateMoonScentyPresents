@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_resin": {
+    "has_hand_drill": {
       "conditions": {
         "items": [
           {
-            "items": "createmoonscentypresents:resin"
+            "items": "createmoonscentypresents:hand_drill"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "createmoonscentypresents:resin_dipped_brush"
+        "recipe": "createmoonscentypresents:tapper"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_resin"
+      "has_hand_drill"
     ]
   ],
   "rewards": {
     "recipes": [
-      "createmoonscentypresents:resin_dipped_brush"
+      "createmoonscentypresents:tapper"
     ]
   }
 }

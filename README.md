@@ -11,7 +11,9 @@
 
 ### 개념
 
-**석기 시대에는 무인 동력이 없다.** 수차도 풍차도 없고, 사람이 자리를 뜨면 도는 것은 아무것도 없다.
+**석기 시대에는 무인 동력이 없다.** 수차도 풍차도 없고, 사람이 자리를 뜨면 **도는 것**은 아무것도 없다.
+
+시간이 알아서 하는 일은 있다 — 널어놓은 것은 마르고, 뚫어놓은 나무는 수액을 흘린다. 그것은 동력이 아니라 기다림이고, 이 시대에서 자리를 비우는 유일한 이유다.
 
 가공 수단은 둘뿐이다.
 
@@ -36,23 +38,53 @@ Create의 안산암 계층은 **네 개의 관문**으로 나뉜다. 관문마�
 | Sawing | `wooden_saw` | `sawing` | 32틱, 앞뒤 왕복 | **구현 완료** |
 | Hammering | `stone_hammer` | `hammering` | 40틱, 10틱마다 타격 | **구현 완료** |
 | Shaping | `stone_chisel` | `shaping` | 48틱, 짧고 느린 긁기 | **구현 완료** |
-| Applying | `resin_dipped_brush` | `applying` | 56틱, 바닐라 brushing 모션 | **구현 완료** |
+| Applying | `applicator_brush` | `applying` | 레시피가 정한 시간, 바닐라 brushing 모션 | **구현 완료** |
 
-#### Applying은 브러시가 도구다
+#### Applying만 대상이 블록이다
 
-물질을 직접 도구로 만들지 않는다. **바닐라 브러시에 물질을 묻혀 쓰고, 한 번 쓰면 물질만 소모되어 일반 브러시로 돌아온다.**
+나머지 셋은 손에 든 아이템을 다른 아이템으로 바꾼다. Applying은 **이미 세워져 있는 블록에 물질을 바른다.** 바른다는 건 무언가 *위에* 하는 일이고, 그 무언가는 블록이다. Create가 케이싱을 조합대가 아니라 놓여 있는 원목을 손봐서 만드는 것과 같은 이유다.
 
 ```text
-minecraft:brush + resin  →  resin_dipped_brush   (무형 조합)
-                                  ↓ Applying 1회
-                            minecraft:brush
+붓 + 반대 손의 물질  →  붓에 물질이 담긴다        (허공 우클릭)
+블록에 우클릭 유지   →  processing_time 뒤 블록이 바뀌고 물질 1개 소모
+웅크리고 우클릭      →  담긴 물질을 통째로 회수
 ```
 
-브러시는 재사용하는 인프라이고 담근 물질이 소모품이다. 그래서 `resin`은 도구가 아니라 **평범한 재료**로 남고, 이후 시대에 타르·기름·밀랍이 생겨도 **조합 레시피 한 줄**이면 된다. 새 클래스도 새 레시피 타입도 필요 없다.
+붓은 재사용하는 인프라이고 담은 물질이 소모품이다. 한 종류만 담기고, **용량은 그 아이템 자신의 스택 크기를 따른다** — 수지면 64개, 16개까지만 쌓이는 물질이면 16개.
 
-`applying` 레시피는 어떤 브러시를 썼는지를 함께 지정하므로, **같은 재료라도 수지를 바르면 A, 타르를 바르면 B**가 나올 수 있다.
+그래서 `resin`은 도구가 아니라 **평범한 재료**로 남고, 이후 시대에 타르·기름·밀랍이 생겨도 **레시피 한 줄**이면 된다. 붓은 무엇을 담고 있는지 신경 쓰지 않으므로 새 아이템도 새 클래스도 필요 없다.
 
-가공 도중 손을 떼면 재료는 돌려주고 물질은 남는다. 완료했을 때만 소모된다.
+`applying` 레시피는 어떤 물질을 발랐는지를 함께 지정하므로, **같은 블록이라도 수지를 바르면 A, 타르를 바르면 B**가 된다. 어떤 레시피도 이름을 부르지 않는 아이템은 애초에 붓에 들어가지 않는다.
+
+대상은 클릭한 순간에 기억하지 않고 **매 틱 시선에서 다시 읽는다.** 바닐라 brushing과 같은 방식이며, 고개를 돌리면 작업이 취소된다. 도중에 손을 떼면 아무것도 소모되지 않는다.
+
+블록이 바뀔 때 두 블록이 공유하는 속성(축 방향 등)은 그대로 넘어간다. 동서로 누운 원목은 동서로 누운 케이싱이 된다.
+
+애니메이션은 바닐라 것을 그대로 쓴다. 1인칭 문지르기는 `UseAnim.BRUSH`가, 3인칭 스윙은 `brushing` 모델 오버라이드 4종이 담당한다.
+
+---
+
+### 수액 채취
+
+Resin은 만드는 것이 아니라 **받는 것**이다. 이 시대에서 유일하게 사람이 없어도 진행되는 일이며, 그래서 나머지 전부가 손으로 도는 것과 대비된다.
+
+```text
+Hand Drill 로 통나무 우클릭  →  Holed Log        (되돌릴 수 없다)
+Holed Log 옆면에 Tapper 설치
+     500틱마다  →  Liquid Resin 100mB
+     1000mB 차면 1000틱  →  굳어서 Resin 1개
+     통 안에 아이템이 있으면 둘 다 멈춘다. 맨손 우클릭으로 회수
+```
+
+한 덩이에 **정확히 5분**(500틱 ×10 + 1000틱). 붙어서 지켜볼 시간이 아니라 다른 일을 하고 돌아올 시간이다.
+
+**구멍 뚫린 통나무는 되돌아오지 않는다.** 조합에도 쓸 수 없고 다른 통나무와 섞이지도 않는다. 남은 용도는 톱으로 켜서 판자로 만드는 것뿐이며, 수율은 멀쩡한 통나무와 같다 — 구멍이 앗아간 것은 목재가 아니라 나무다.
+
+**통이 차면 멈춘다.** 통 용량이 정확히 한 덩이분이므로, 굳는 중에 더 받는 일도 넘쳐서 버려지는 일도 없다. 다 굳은 덩이를 꺼내 가기 전까지 그 tapper는 아무것도 하지 않는다. **정확히 이것이 tapper를 여러 개 세우게 만드는 이유다.**
+
+Tapper는 통나무 **옆 칸**에 서서 주둥이를 나무에 박는다. 통나무를 캐면 함께 떨어지고, 안에 굳어 있던 것도 같이 떨어진다.
+
+Liquid Resin은 버킷과 월드 배치가 있는 보통 유체다. 석기 시대에는 파이프가 없으므로 통에서 꺼내는 방법은 굳기를 기다리는 것뿐이지만, 나중 시대에서 쓸 자리는 열어 두었다.
 
 ---
 
@@ -66,7 +98,7 @@ minecraft:brush + resin  →  resin_dipped_brush   (무형 조합)
 |---:|---|---|---|---|
 | 1 | `create:andesite_alloy` | `andesite_grit` | Hammering | `crafting/materials/andesite_alloy.json` 외 3개 |
 | 2 | `create:shaft` | `wooden_stave` | Sawing | `crafting/kinetics/shaft.json` |
-| 3 | `create:andesite_casing` | `andesite_cement` | Applying | `item_application/andesite_casing_from_log.json` 외 1개 |
+| 3 | `create:andesite_casing` | `andesite_cement` | 조합 (합금 + 수지) | `item_application/andesite_casing_from_log.json` 외 1개 |
 | 4 | `create:mechanical_press` | `stone_die` | Shaping | `crafting/kinetics/mechanical_press.json` |
 
 #### 각 관문의 강제 방식
@@ -90,11 +122,18 @@ mixing/andesite_alloy_from_zinc.json
 
 `cogwheel`(축 + 판자)과 `large_cogwheel`(축 + 판자 ×2)은 **둘 다 축을 요구하므로 자동으로 뒤에 선다.** 따로 건드리지 않는다.
 
-**3. 케이싱 — 적용 아이템 치환**
+**3. 케이싱 — 즉발을 시간으로 바꾼다**
 
-`andesite_casing`은 껍질 벗긴 원목에 합금을 우클릭하는 `item_application`이다. **우클릭 대상 블록은 건드리지 않고 손에 든 아이템만** 바꾼다: `create:andesite_alloy` → `andesite_cement`.
+`andesite_casing`은 껍질 벗긴 원목에 합금을 **한 번 우클릭하면 즉시** 나오는 `item_application`이다. 이 관문은 그 즉발을 없애고 같은 자리에 Applying을 놓는다.
 
-블록 쪽을 모드 블록으로 바꾸면 `ItemApplicationRecipe`가 그것을 어떻게 해석하는지에 의존하게 되고, 실패하면 케이싱이 조용히 제작 불가가 된다. 아이템만 바꾸면 그 위험이 없다.
+```text
+create:andesite_alloy + resin  →  andesite_cement        (조합)
+붓에 andesite_cement 를 담고 껍질 벗긴 원목에 우클릭 유지  →  create:andesite_casing
+```
+
+Create의 두 `item_application` 레시피는 `neoforge:false` 조건으로 닫는다. 레시피를 이상한 재료로 바꿔 놓는 것보다 아예 없애는 쪽이 JEI에 헛것이 남지 않는다.
+
+**Applying은 여기서 아이템을 만들지 않는다.** 대상이 블록이므로 결과도 블록이고, 그래서 `andesite_cement`는 Applying의 산물이 아니라 Applying에 쓰는 재료다. 관문이 요구하는 것은 물건이 아니라 **동작** — 붓을 들고 서서 통나무 하나마다 시간을 들이는 일이며, 이것이 케이싱이 싸지 않다는 감각을 만든다.
 
 **4. 프레스 — 재료 추가**
 
@@ -134,9 +173,9 @@ mixing/andesite_alloy_from_zinc.json
 [1장] 맨손
 덩굴 / 풀 / 묘목 → Plant Fiber → Twine
 ↓
-Wooden Saw / Stone Hammer / Stone Chisel 제작
+Wooden Saw / Stone Hammer / Stone Chisel / Applicator Brush 제작
 ↓
-원목에서 Resin 채취 → brush + resin → Resin Dipped Brush
+Hand Drill로 통나무에 구멍 → Tapper 설치 → 고인 수액이 굳어 Resin
         (도구 넷이 갖춰진다. 아직 Create는 아무것도 열리지 않았다)
 
 [2장] 첫 관문 — Hammering
@@ -154,9 +193,9 @@ Primitive Hand Crank + Primitive Millstone 조립
 크랭크로 맷돌을 돌려 Grit 생산이 2배가 된다
 
 [4장] 케이싱 — Applying
-Resin Dipped Brush + 합금 → Andesite Cement
+합금 + Resin → Andesite Cement
 ↓
-껍질 벗긴 원목에 Cement 우클릭 → create:andesite_casing
+붓에 Cement를 담고 껍질 벗긴 원목에 우클릭 유지 → create:andesite_casing
 
 [5장] 졸업 — Shaping
 Stone Chisel + 돌 → Stone Die
@@ -208,14 +247,16 @@ Stone Chisel + 돌 → Stone Die
 |---|---|---|---|
 | 식물 섬유 | `plant_fiber` | 끈의 재료 | 덩굴·풀·묘목 (무형, 도구 불필요) |
 | 끈 | `twine` | 네 도구의 공통 결속재 | Plant Fiber ×3 |
-| 나무 수지 | `resin` | 브러시에 묻히는 물질 | 원목에서 채취 |
-| 수지 브러시 | `resin_dipped_brush` | **Applying 도구.** 1회용, 쓰면 일반 브러시로 돌아온다 | `minecraft:brush` + Resin |
+| 나무 수지 | `resin` | 붓에 담는 물질 | Tapper에서 액체 수지 1000mB가 굳어서 |
+| 액체 수지 | `liquid_resin` | 유체. Tapper에 고인다. 버킷과 월드 배치 있음 | Tapper가 구멍 난 통나무에서 받는다 |
+| 손 드릴 | `hand_drill` | 통나무를 우클릭해 구멍을 낸다. 내구도 128 | 철괴 ×2 + Stick ×1 |
+| 도포용 붓 | `applicator_brush` | **Applying 도구.** 물질 한 종류를 그 아이템의 스택 크기만큼 담고, 1회에 1개 소모한다. 닳지 않는다 | Plant Fiber ×1 + Twine ×1 + Stick ×1 |
 | 나무 톱 | `wooden_saw` | **Sawing 도구** | Planks ×2 + Flint ×1 + Twine ×1 |
 | 돌 망치 | `stone_hammer` | **Hammering 도구.** 3×3 범위 채굴도 한다 | 안산암 ×2 + Stick ×2 + Twine ×1 |
 | 돌 끌 | `stone_chisel` | **Shaping 도구** | Flint ×1 + Stick ×1 + Twine ×1 |
 | 안산암 분말 | `andesite_grit` | 관문 1. 합금의 재료 | Hammering: 안산암 |
 | 나무 살대 | `wooden_stave` | 관문 2. Create 축의 재료 | Sawing: 껍질 벗긴 원목 |
-| 안산암 시멘트 | `andesite_cement` | 관문 3. 케이싱을 만드는 도포재 | Applying: 합금 |
+| 안산암 시멘트 | `andesite_cement` | 관문 3. 붓에 담아 원목에 바르는 도포재 | 합금 ×1 + Resin ×1 |
 | 돌 거푸집 | `stone_die` | 관문 4. 프레스의 성형 부품 | Shaping: 돌 |
 | 나무 베어링 | `wooden_bearing` | 회전체 지지 부품 | Planks ×2 + Twine ×2 |
 
@@ -230,6 +271,8 @@ Stone Chisel + 돌 → Stone Die
 | 원시 수직 기어박스 | `primitive_vertical_gearbox` | 수평·수직 축 전환 | Primitive Gearbox 상호 변환 |
 | 손 크랭크 | `primitive_hand_crank` | 사람이 돌리는 유일한 동력원. 1대만 구동 | Planks ×3 + Wooden Shaft |
 | 원시 맷돌 | `primitive_millstone` | Andesite → Grit ×2 | Stone Cogwheel + Wooden Bearing + 돌 |
+| 채취통 | `tapper` | 구멍 난 통나무 옆에 붙어 수액을 받고 굳힌다. 통 1000mB | 판자 ×7 + 철 조각 ×1 |
+| 구멍 난 통나무 | `holed_<나무>_log` | 8종. 조합에 못 쓰고 톱으로 판자 ×4만 나온다 | Hand Drill로 통나무에 구멍 |
 
 ---
 
@@ -263,9 +306,13 @@ Stone Chisel + 돌 → Stone Die
 
 ### 구현 현황
 
-**동작까지 완료** — 손 가공 4종(`sawing` / `hammering` / `shaping` / `applying`)의 레시피 타입·도구·데이터 컴포넌트, `resin_dipped_brush`와 그 조합 레시피, `ModKineticLimits`(32 RPM), `primitive_hand_crank`, `primitive_millstone`, `wooden_shaft`, `stone_cogwheel`, `large_stone_cogwheel`, `primitive_gearbox`.
+**동작까지 완료** — 손 가공 4종(`sawing` / `hammering` / `shaping` / `applying`)의 레시피 타입·도구·데이터 컴포넌트, `applicator_brush`(적재·회수·블록 적용·4종 브러시 모델), 수액 채취 한 줄 전부(`hand_drill`, 구멍 난 통나무 8종, `tapper`, `liquid_resin` 유체, `tapping`·`coagulating` 레시피 타입과 그 레시피들), `ModKineticLimits`(32 RPM), `primitive_hand_crank`, `primitive_millstone`, `wooden_shaft`, `stone_cogwheel`, `large_stone_cogwheel`, `primitive_gearbox`.
 
-**아직 없다** — 관문 아이템 4종(`andesite_grit`, `wooden_stave`, `andesite_cement`, `stone_die`), 손 가공 레시피 전부, Create 레시피 덮어쓰기 8개 파일, 발전기 차단 3개, 보상 2종과 Curios 의존성, `stone_hammer`의 3×3 범위 채굴, Shaping·Applying의 JEI 카테고리.
+**아직 없다** — 관문 아이템 4종(`andesite_grit`, `wooden_stave`, `andesite_cement`, `stone_die`), 관문 레시피 전부, Create 레시피 덮어쓰기 8개 파일, 발전기 차단 3개, 보상 2종, `plant_fiber`와 `twine`의 조합 레시피, `stone_hammer`의 3×3 범위 채굴, Shaping·Applying·Tapping의 JEI 카테고리.
+
+`applying`에는 시험용 레시피가 하나 있다 — 수지를 금 간 석재 벽돌에 발라 메운다. 건조대의 젖은 스펀지와 같은 역할로, 관문 재료가 생기기 전에 붓을 실제로 굴려 볼 수 있게 하는 것이 목적이다.
+
+Tapper는 유체 캐퍼빌리티를 내놓지 않는다. 석기 시대에는 통에서 유체를 빼낼 수단이 없으므로 굳기를 기다리는 것 외에 길이 없고, 이 제약이 통이 차면 멈추는 규칙을 의미 있게 만든다. 파이프가 생기는 시대에 열면 된다.
 
 **이 시대에 쓰지 않는다** — `drying_rack`, `pit_kiln`, `charcoal_pit`, `fired_crucible`, `primitive_sifter`, 점토 가공 라인, 광석 정광·분말 라인, 주석 라인. 전부 브론즈 이후로 미룬다.
 

@@ -1,0 +1,12 @@
+{
+  "type": "createmoonscentypresents:coagulating",
+  "fluid": {
+    "amount": 1000,
+    "id": "createmoonscentypresents:liquid_resin"
+  },
+  "processing_time": 1000,
+  "result": {
+    "count": 1,
+    "id": "createmoonscentypresents:resin"
+  }
+}

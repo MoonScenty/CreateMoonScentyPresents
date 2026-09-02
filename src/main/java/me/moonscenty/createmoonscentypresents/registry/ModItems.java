@@ -3,14 +3,18 @@ package me.moonscenty.createmoonscentypresents.registry;
 import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
 
 import com.simibubi.create.foundation.data.recipe.CommonMetal;
+import com.tterrag.registrate.providers.DataGenContext;
+import com.tterrag.registrate.providers.RegistrateItemModelProvider;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModVerticalGearboxItem;
-import me.moonscenty.createmoonscentypresents.content.applying.DippedBrushItem;
+import me.moonscenty.createmoonscentypresents.content.applying.ApplicatorBrushItem;
+import me.moonscenty.createmoonscentypresents.content.tapping.HandDrillItem;
 import me.moonscenty.createmoonscentypresents.content.hammering.StoneHammerItem;
 import me.moonscenty.createmoonscentypresents.content.shaping.StoneChiselItem;
 import me.moonscenty.createmoonscentypresents.content.sawing.WoodenSawItem;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.Item;
@@ -25,10 +29,12 @@ public class ModItems {
     // Stone Age - binding and sealing materials
     public static final ItemEntry<Item> RESIN = simple("resin");
 
-    // A vanilla brush loaded with resin. One application spends the load and gives the
-    // plain brush back; more substances mean more dipped brushes, not more mechanics.
-    public static final ItemEntry<DippedBrushItem> RESIN_DIPPED_BRUSH = CreateMoonScentyPresents.REGISTRATE
-            .item("resin_dipped_brush", DippedBrushItem::new)
+    // Holds one substance and works it into a placed block. The brush is the reusable
+    // part and the load is the consumable, so another substance later needs a recipe
+    // and nothing else - not another item, and not another mechanic.
+    public static final ItemEntry<ApplicatorBrushItem> APPLICATOR_BRUSH = CreateMoonScentyPresents.REGISTRATE
+            .item("applicator_brush", ApplicatorBrushItem::new)
+            .model(ModItems::brushModels)
             .register();
     public static final ItemEntry<Item> LEATHER_STRIP = simple("leather_strip");
 
@@ -80,6 +86,13 @@ public class ModItems {
                     .rotation(0, -90, 25).translation(1.13f, 3.2f, 1.13f).scale(0.68f)
                     .end()
                     .end())
+            .register();
+    // Bores a log so a tapper has somewhere to sit. Iron rather than stone: this is the
+    // one place in the age where vanilla smelting, which was never gated, pays off.
+    public static final ItemEntry<HandDrillItem> HAND_DRILL = CreateMoonScentyPresents.REGISTRATE
+            .item("hand_drill", HandDrillItem::new)
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.mcLoc("item/handheld"))
+                    .texture("layer0", prov.modLoc("item/" + ctx.getName())))
             .register();
     public static final ItemEntry<Item> WOODEN_TONGS = simple("wooden_tongs");
     public static final ItemEntry<Item> PRIMITIVE_SIEVE = simple("primitive_sieve");
@@ -162,6 +175,46 @@ public class ModItems {
         return CreateMoonScentyPresents.REGISTRATE.item(name, Item::new)
                 .tag(ModTags.CONCENTRATES, metalTag)
                 .register();
+    }
+
+    /**
+     * The brush is drawn by four models rather than one, the way vanilla draws its own:
+     * a base, and three that swing it about in third person while it is in use. The
+     * client class registers the {@code brushing} property that picks between them; the
+     * first person motion is separate and comes from {@link net.minecraft.world.item.UseAnim#BRUSH}.
+     */
+    private static void brushModels(DataGenContext<Item, ApplicatorBrushItem> ctx,
+            RegistrateItemModelProvider prov) {
+        ResourceLocation texture = prov.modLoc("item/" + ctx.getName());
+        ResourceLocation brushing = prov.modLoc("brushing");
+        var mid = brushModel(prov, ctx.getName() + "_brushing_0", texture, 0, 4, 2);
+        var raised = brushModel(prov, ctx.getName() + "_brushing_1", texture, 45, 0, 4);
+        var over = brushModel(prov, ctx.getName() + "_brushing_2", texture, 90, -4, 2);
+        brushModel(prov, ctx.getName(), texture, 45, 0, 4)
+                .override().predicate(brushing, 0.25f).model(mid).end()
+                .override().predicate(brushing, 0.5f).model(raised).end()
+                .override().predicate(brushing, 0.75f).model(over).end();
+    }
+
+    /**
+     * @param roll third person tilt; the off hand mirrors it, as does the sideways offset.
+     */
+    private static net.neoforged.neoforge.client.model.generators.ItemModelBuilder brushModel(
+            RegistrateItemModelProvider prov, String name, ResourceLocation texture,
+            float roll, float x, float y) {
+        return prov.withExistingParent(name, prov.mcLoc("item/generated"))
+                .texture("layer0", texture)
+                .transforms()
+                .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND)
+                .rotation(55, -85, 0).translation(8.0f, 0.5f, -5.5f).scale(1)
+                .end()
+                .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
+                .rotation(0, 0, roll).translation(x, y, 0).scale(0.9f)
+                .end()
+                .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND)
+                .rotation(0, 0, -roll).translation(-x, y, 0).scale(0.9f)
+                .end()
+                .end();
     }
 
     // Plain crafting material with no behaviour of its own.

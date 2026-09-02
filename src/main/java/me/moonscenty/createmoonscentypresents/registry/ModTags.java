@@ -1,9 +1,12 @@
 package me.moonscenty.createmoonscentypresents.registry;
 
+import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
+
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 
 /**
  * Common tags introduced by this mod.
@@ -39,7 +42,24 @@ public class ModTags {
     public static final TagKey<Item> PLATES = item("plates");
     public static final TagKey<Item> BRONZE_PLATES = item("plates/bronze");
 
+    // Logs a hand drill has been through. Not a common tag - nothing else has the idea -
+    // so these two live in this mod's own namespace. The block tag is what a tapper asks
+    // when it wants to know whether it is leaning on something worth tapping; the item
+    // tag lets one tapping recipe cover all eight woods.
+    public static final TagKey<Block> HOLED_LOG_BLOCKS = block("holed_logs");
+    public static final TagKey<Item> HOLED_LOGS = ownItem("holed_logs");
+
     private static TagKey<Item> item(String path) {
         return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", path));
+    }
+
+    private static TagKey<Item> ownItem(String path) {
+        return TagKey.create(Registries.ITEM,
+                ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, path));
+    }
+
+    private static TagKey<Block> block(String path) {
+        return TagKey.create(Registries.BLOCK,
+                ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, path));
     }
 }

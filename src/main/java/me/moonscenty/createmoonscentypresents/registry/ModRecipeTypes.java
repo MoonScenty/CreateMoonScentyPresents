@@ -11,6 +11,8 @@ import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 import me.moonscenty.createmoonscentypresents.content.kinetics.PrimitiveMillingRecipe;
 import me.moonscenty.createmoonscentypresents.content.kinetics.PrimitiveSiftingRecipe;
 import me.moonscenty.createmoonscentypresents.content.sawing.SawingRecipe;
+import me.moonscenty.createmoonscentypresents.content.tapping.CoagulatingRecipe;
+import me.moonscenty.createmoonscentypresents.content.tapping.TappingRecipe;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -64,6 +66,26 @@ public class ModRecipeTypes {
 
     public static final DeferredHolder<RecipeSerializer<?>, DryingRecipe.Serializer> DRYING_SERIALIZER =
             SERIALIZERS.register("drying", DryingRecipe.Serializer::new);
+
+    // What a tapper draws out of a bored log, and what the pool it collects sets into.
+    // Two types rather than one: the first is keyed on a block and yields a fluid, the
+    // second is keyed on a fluid and yields an item, and nothing is shared between them
+    // but the block that runs both.
+    public static final DeferredHolder<RecipeType<?>, RecipeType<TappingRecipe>> TAPPING =
+            TYPES.register("tapping", () -> RecipeType.simple(
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(
+                            CreateMoonScentyPresents.MODID, "tapping")));
+
+    public static final DeferredHolder<RecipeSerializer<?>, TappingRecipe.Serializer> TAPPING_SERIALIZER =
+            SERIALIZERS.register("tapping", TappingRecipe.Serializer::new);
+
+    public static final DeferredHolder<RecipeType<?>, RecipeType<CoagulatingRecipe>> COAGULATING =
+            TYPES.register("coagulating", () -> RecipeType.simple(
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(
+                            CreateMoonScentyPresents.MODID, "coagulating")));
+
+    public static final DeferredHolder<RecipeSerializer<?>, CoagulatingRecipe.Serializer> COAGULATING_SERIALIZER =
+            SERIALIZERS.register("coagulating", CoagulatingRecipe.Serializer::new);
 
     // Kept apart from create:milling so the primitive millstone and Create's own
     // grind different things; see PrimitiveMillingRecipe.

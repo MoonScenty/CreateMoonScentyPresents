@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "N": {
+      "item": "minecraft:iron_nugget"
+    },
+    "P": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "pattern": [
+    "P P",
+    "PNP",
+    "PPP"
+  ],
+  "result": {
+    "count": 1,
+    "id": "createmoonscentypresents:tapper"
+  }
+}
