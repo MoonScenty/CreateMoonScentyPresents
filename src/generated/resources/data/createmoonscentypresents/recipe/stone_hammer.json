@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "minecraft:andesite"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "T": {
+      "item": "createmoonscentypresents:twine"
+    }
+  },
+  "pattern": [
+    "ATA",
+    " S ",
+    " S "
+  ],
+  "result": {
+    "count": 1,
+    "id": "createmoonscentypresents:stone_hammer"
+  }
+}

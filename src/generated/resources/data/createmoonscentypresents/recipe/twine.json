@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "createmoonscentypresents:plant_fiber"
+    },
+    {
+      "item": "createmoonscentypresents:plant_fiber"
+    },
+    {
+      "item": "createmoonscentypresents:plant_fiber"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "createmoonscentypresents:twine"
+  }
+}

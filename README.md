@@ -97,7 +97,7 @@ Liquid Resin은 버킷과 월드 배치가 있는 보통 유체다. 석기 시�
 | # | Create 대상 | 요구하는 원시 부품 | 만드는 방식 | 제거할 Create 레시피 |
 |---:|---|---|---|---|
 | 1 | `create:andesite_alloy` | `andesite_grit` | Hammering | 조합 2 + 믹싱 2 |
-| 2 | `create:shaft` | `wooden_stave` | Sawing | `crafting/kinetics/shaft` |
+| 2 | `create:shaft` 봉쇄 → `wooden_shaft` | `wooden_stave` | Sawing | `crafting/kinetics/shaft` |
 | 3 | `create:andesite_casing` | `andesite_cement` | 조합 (합금 + 수지) | `item_application` 2 |
 | 4 | `create:mechanical_press` | `stone_die` | Shaping | `crafting/kinetics/mechanical_press` |
 
@@ -134,11 +134,22 @@ create:mixing/andesite_alloy_from_zinc
 안산암  →  (망치질)  →  andesite_grit  →  + 아연 조각  →  create:andesite_alloy
 ```
 
-**2. 축 — 재료 추가**
+**2. 축 — 대체 없는 봉쇄**
 
-`shaft`는 세로 2칸 `"A"/"A"`(합금 ×2 → 축 ×8)이다. 아래 칸을 `wooden_stave`로 바꾼다.
+`create:shaft`는 이 시대에 **열지 않는다.** 대체 레시피도 두지 않는다.
 
-`cogwheel`(축 + 판자)과 `large_cogwheel`(축 + 판자 ×2)은 **둘 다 축을 요구하므로 자동으로 뒤에 선다.** 따로 건드리지 않는다.
+`ModKineticLimits`는 블록 id로 상한을 찾으므로 Create의 축은 `UNLIMITED`다. 시대 중간에 이것을 손에 쥐여 주면 `wooden_shaft`를 쓸 이유가 사라지고, 시대 전체가 서 있는 32 RPM 천장이 그 자리에서 무너진다. `cogwheel`(축 + 판자)과 `large_cogwheel`(축 + 판자 ×2)은 축만 열리면 따라오므로 같이 무너진다. Create의 축에 상한을 거는 것은 답이 아니다 — 뒷 시대에는 무제한이어야 하는데 진행 상태를 들고 있지 않아 영구 상한이 된다.
+
+`create:crafting/kinetics/shaft`는 지운 채로 두고, **졸업(5장)에서 프레스와 함께 돌려준다.** 프레스가 축을 요구하고, 그 시점은 시대가 끝나는 자리라 상한이 풀려도 된다.
+
+톱이 대신 여는 것은 **우리 축**이다. 이쪽은 상한이 걸린다.
+
+```text
+판자  →  (톱질)  →  wooden_stave ×2
+wooden_stave + twine  →  wooden_shaft
+```
+
+살대는 껍질 벗긴 원목이 아니라 **판자에서 켠다.** 나무별 원목 태그가 껍질 벗긴 원목까지 포함하므로, 껍질 벗긴 원목에 살대 레시피를 걸면 같은 입력을 두고 판자 레시피와 경쟁해 둘 중 하나가 무작위로 이긴다.
 
 **3. 케이싱 — 즉발을 시간으로 바꾼다**
 
@@ -202,9 +213,10 @@ Stone Hammer + Andesite → Andesite Grit
 create:andesite_alloy   ← 첫 Create 아이템
 
 [3장] 회전 부품 — Sawing
-Wooden Saw + 껍질 벗긴 원목 → Wooden Stave
+Wooden Saw + 판자 → Wooden Stave
 ↓
-합금 + Stave → create:shaft → cogwheel / large_cogwheel
+Stave + Twine → wooden_shaft → stone_cogwheel / large_stone_cogwheel
+        (create:shaft 는 열리지 않는다. 32 RPM 천장을 지키기 위해서다)
 ↓
 Primitive Hand Crank + Primitive Millstone 조립
 ↓
@@ -217,6 +229,8 @@ Primitive Hand Crank + Primitive Millstone 조립
 
 [5장] 졸업 — Shaping
 Stone Chisel + 돌 → Stone Die
+↓
+create:shaft 가 여기서 돌아온다
 ↓
 축 + 케이싱 + 철 블록 + Die ×2 → create:mechanical_press
 ↓
@@ -263,7 +277,7 @@ Stone Chisel + 돌 → Stone Die
 
 | 아이템 이름 | registry_id | 기능 내용 | 제작 방법 |
 |---|---|---|---|
-| 식물 섬유 | `plant_fiber` | 끈의 재료 | 덩굴·풀·묘목 (무형, 도구 불필요) |
+| 식물 섬유 | `plant_fiber` | 끈의 재료 | 덩굴 / 풀·키큰풀·고사리 / 묘목 (무형, 도구 불필요) |
 | 끈 | `twine` | 네 도구의 공통 결속재 | Plant Fiber ×3 |
 | 나무 수지 | `resin` | 붓에 담는 물질 | Tapper에서 액체 수지 1000mB가 굳어서 |
 | 액체 수지 | `liquid_resin` | 유체. Tapper에 고인다. 버킷과 월드 배치 있음 | Tapper가 구멍 난 통나무에서 받는다 |
@@ -273,7 +287,7 @@ Stone Chisel + 돌 → Stone Die
 | 돌 망치 | `stone_hammer` | **Hammering 도구** | 안산암 ×2 + Stick ×2 + Twine ×1 |
 | 돌 끌 | `stone_chisel` | **Shaping 도구** | Flint ×1 + Stick ×1 + Twine ×1 |
 | 안산암 분말 | `andesite_grit` | 관문 1. 합금의 재료 | Hammering: 안산암 |
-| 나무 살대 | `wooden_stave` | 관문 2. Create 축의 재료 | Sawing: 껍질 벗긴 원목 |
+| 나무 살대 | `wooden_stave` | 관문 2. Create 축의 재료 | Sawing: 판자 ×1 → ×2 |
 | 안산암 시멘트 | `andesite_cement` | 관문 3. 붓에 담아 원목에 바르는 도포재 | 합금 ×1 + Resin ×1 |
 | 돌 거푸집 | `stone_die` | 관문 4. 프레스의 성형 부품 | Shaping: 돌 |
 | 나무 베어링 | `wooden_bearing` | 회전체 지지 부품 | Planks ×2 + Twine ×2 |
@@ -325,9 +339,11 @@ Stone Chisel + 돌 → Stone Die
 
 **동작까지 완료** — 손 가공 4종(`sawing` / `hammering` / `shaping` / `applying`)의 레시피 타입·도구·데이터 컴포넌트, `applicator_brush`(적재·회수·블록 적용·4종 브러시 모델), 수액 채취 한 줄 전부(`hand_drill`, 구멍 난 통나무 8종, `tapper`, `liquid_resin` 유체, `tapping`·`coagulating` 레시피 타입과 그 레시피들), `ModKineticLimits`(32 RPM), `primitive_hand_crank`, `primitive_millstone`, `wooden_shaft`, `stone_cogwheel`, `large_stone_cogwheel`, `primitive_gearbox`.
 
-**관문 1 완료** — 레시피를 ID로 지우는 방식(`ModRecipeRemovals` + `RecipeManagerMixin`)과 그 위에 올린 안산암 합금 관문 전체. `andesite_grit` 아이템, 망치질 레시피, 대체 조합·믹싱 레시피까지 인게임에서 확인했다. 남은 관문 셋은 같은 틀에 얹기만 하면 된다.
+**관문 1·2 완료** — 레시피를 ID로 지우는 방식(`ModRecipeRemovals` + `RecipeManagerMixin`)과 그 위에 올린 안산암 합금 관문, 축 관문. `andesite_grit`·`wooden_stave` 아이템과 그 가공 레시피, 안산암 합금의 대체 조합·믹싱 레시피, `wooden_shaft`의 조합 레시피까지 들어가 있다.
 
-**아직 없다** — 관문 아이템 3종(`wooden_stave`, `andesite_cement`, `stone_die`)과 그 관문 레시피, 발전기 차단 3개, 보상 2종, `plant_fiber`와 `twine`의 조합 레시피, Shaping·Applying·Tapping의 JEI 카테고리.
+`create:shaft`는 지금 **아무 레시피도 없다.** 의도한 상태이며, 5장이 생길 때 돌려준다. 그때까지 Create의 회전 부품 전체가 조합으로 닿지 않는다.
+
+**아직 없다** — 관문 아이템 2종(`andesite_cement`, `stone_die`)과 그 관문 레시피, 발전기 차단 3개, 보상 2종, 석기 시대 도구·블록의 조합 레시피 대부분(`wooden_saw`·`stone_hammer`·`stone_chisel`·`stone_cogwheel` 등), Shaping·Applying·Tapping의 JEI 카테고리.
 
 `applying`에는 시험용 레시피가 하나 있다 — 수지를 금 간 석재 벽돌에 발라 메운다. 건조대의 젖은 스펀지와 같은 역할로, 관문 재료가 생기기 전에 붓을 실제로 굴려 볼 수 있게 하는 것이 목적이다.
 

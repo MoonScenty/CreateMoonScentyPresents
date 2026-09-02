@@ -18,7 +18,8 @@ public class ModRecipeRemovals {
             create("crafting/materials/andesite_alloy"),
             create("crafting/materials/andesite_alloy_from_zinc"),
             create("mixing/andesite_alloy"),
-            create("mixing/andesite_alloy_from_zinc"));
+            create("mixing/andesite_alloy_from_zinc"),
+            create("crafting/kinetics/shaft"));
 
     private static ResourceLocation create(String path) {
         return ResourceLocation.fromNamespaceAndPath("create", path);

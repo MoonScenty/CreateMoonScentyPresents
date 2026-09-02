@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "F": {
+      "item": "minecraft:flint"
+    },
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "T": {
+      "item": "createmoonscentypresents:twine"
+    }
+  },
+  "pattern": [
+    "FP",
+    "TP"
+  ],
+  "result": {
+    "count": 1,
+    "id": "createmoonscentypresents:wooden_saw"
+  }
+}

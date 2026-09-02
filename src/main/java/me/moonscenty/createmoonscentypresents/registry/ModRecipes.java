@@ -26,6 +26,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -36,6 +37,8 @@ public class ModRecipes {
     // worth half a log in vanilla, and stays worth half here.
     private static final int PLANKS_PER_LOG = 4;
     private static final int PLANKS_PER_BAMBOO_BLOCK = 2;
+    private static final int STAVES_PER_PLANK = 2;
+    private static final int FIBER_PER_TWINE = 3;
 
     /** 20 seconds. Balancing comes later, like every other number in this pack. */
     private static final int DRYING_TIME = 400;
@@ -98,6 +101,52 @@ public class ModRecipes {
                 ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, "drying/sponge"),
                 new DryingRecipe(Ingredient.of(Items.WET_SPONGE), new ItemStack(Items.SPONGE), DRYING_TIME),
                 null));
+        // The very start of the pack: everything a bare hand can pull off a plant. Three
+        // recipes rather than one compound ingredient so JEI names each source.
+        fiber("vine", Ingredient.of(Items.VINE));
+        fiber("grass", Ingredient.of(Items.SHORT_GRASS, Items.TALL_GRASS, Items.FERN, Items.LARGE_FERN));
+        fiber("sapling", Ingredient.of(ItemTags.SAPLINGS));
+
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.TWINE.get())
+                        .requires(ModItems.PLANT_FIBER.get(), FIBER_PER_TWINE)
+                        .unlockedBy("has_plant_fiber", prov.has(ModItems.PLANT_FIBER.get()))
+                        .save(prov));
+
+        // The three worked-by-hand tools. All of them are a working end bound to a handle
+        // with twine, and they share that column so the family reads at a glance.
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ModItems.WOODEN_SAW.get())
+                        .pattern("FP")
+                        .pattern("TP")
+                        .define('F', Items.FLINT)
+                        .define('P', ItemTags.PLANKS)
+                        .define('T', ModItems.TWINE.get())
+                        .unlockedBy("has_twine", prov.has(ModItems.TWINE.get()))
+                        .save(prov));
+
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ModItems.STONE_HAMMER.get())
+                        .pattern("ATA")
+                        .pattern(" S ")
+                        .pattern(" S ")
+                        .define('A', Blocks.ANDESITE)
+                        .define('S', Items.STICK)
+                        .define('T', ModItems.TWINE.get())
+                        .unlockedBy("has_twine", prov.has(ModItems.TWINE.get()))
+                        .save(prov));
+
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ModItems.STONE_CHISEL.get())
+                        .pattern("F")
+                        .pattern("T")
+                        .pattern("S")
+                        .define('F', Items.FLINT)
+                        .define('S', Items.STICK)
+                        .define('T', ModItems.TWINE.get())
+                        .unlockedBy("has_twine", prov.has(ModItems.TWINE.get()))
+                        .save(prov));
+
         // The brush itself. Vanilla stacks bristles, binding and handle in a column; this
         // is the same shape in stone age materials.
         CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
@@ -156,6 +205,42 @@ public class ModRecipes {
         // The mixer route has to move with it, or a mixer would put the gate back to
         // plain andesite. Same two ingredients as the bench recipe.
         andesiteAlloyMixing("mixing/andesite_alloy_from_zinc", AllTags.commonItemTag("nuggets/zinc"));
+
+        // Gate 2: the shaft. Create stacks two alloy in a column; the lower one becomes a
+        // stave, so the count and the shape hold and only the lower half changes hands.
+        //
+        // Cut from planks rather than from stripped logs as first sketched: the per-wood
+        // log tags already include stripped logs, so a stave recipe on those would race
+        // the planks recipe for the same input and one of the two would win at random.
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov -> prov.accept(
+                ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, "sawing/wooden_stave"),
+                new SawingRecipe(Ingredient.of(ItemTags.PLANKS),
+                        new ItemStack(ModItems.WOODEN_STAVE.get(), STAVES_PER_PLANK)),
+                null));
+
+        // create:shaft gets no recipe back here. ModKineticLimits is keyed by block id, so
+        // Create's shaft is UNLIMITED - handing it out mid age would let every build skip
+        // wooden_shaft and with it the 32 RPM ceiling the whole age is built on. Create's
+        // cogwheels come along for free too, since their recipes only ask for a shaft.
+        // It returns at graduation, next to the press that needs it.
+
+        // What the saw opens instead: our own shaft, which the limit does cover.
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModBlocks.WOODEN_SHAFT.get())
+                        .requires(ModItems.WOODEN_STAVE.get())
+                        .requires(ModItems.TWINE.get())
+                        .unlockedBy("has_wooden_stave", prov.has(ModItems.WOODEN_STAVE.get()))
+                        .save(prov));
+    }
+
+    /** One fibre off whatever the source is; no tool, no station. */
+    private static void fiber(String source, Ingredient from) {
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.PLANT_FIBER.get())
+                        .requires(from)
+                        .unlockedBy("has_" + source, prov.has(ModItems.PLANT_FIBER.get()))
+                        .save(prov, ResourceLocation.fromNamespaceAndPath(
+                                CreateMoonScentyPresents.MODID, "plant_fiber_from_" + source)));
     }
 
     private static void andesiteAlloyMixing(String name, TagKey<Item> nugget) {

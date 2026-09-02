@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "createmoonscentypresents:wooden_stave"
+    },
+    {
+      "item": "createmoonscentypresents:twine"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "createmoonscentypresents:wooden_shaft"
+  }
+}

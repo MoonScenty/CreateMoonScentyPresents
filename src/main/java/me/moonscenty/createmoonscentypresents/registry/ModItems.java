@@ -34,6 +34,10 @@ public class ModItems {
     // it can be alloyed at all.
     public static final ItemEntry<Item> ANDESITE_GRIT = simple("andesite_grit");
 
+    // Gate 2. Create's shaft is two alloy in a column; the lower one becomes a stave,
+    // so every shaft costs a length of wood cut with the saw.
+    public static final ItemEntry<Item> WOODEN_STAVE = simple("wooden_stave");
+
     // Holds one substance and works it into a placed block. The brush is the reusable
     // part and the load is the consumable, so another substance later needs a recipe
     // and nothing else - not another item, and not another mechanic.

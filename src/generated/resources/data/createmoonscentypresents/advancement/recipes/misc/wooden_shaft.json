@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "createmoonscentypresents:wooden_shaft"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_wooden_stave": {
+      "conditions": {
+        "items": [
+          {
+            "items": "createmoonscentypresents:wooden_stave"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_wooden_stave"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "createmoonscentypresents:wooden_shaft"
+    ]
+  }
+}
