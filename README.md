@@ -94,26 +94,44 @@ Liquid Resin은 버킷과 월드 배치가 있는 보통 유체다. 석기 시�
 
 관문마다 **다른 도구, 다른 방식**을 요구한다.
 
-| # | Create 대상 | 요구하는 원시 부품 | 만드는 방식 | 변경할 파일 |
+| # | Create 대상 | 요구하는 원시 부품 | 만드는 방식 | 제거할 Create 레시피 |
 |---:|---|---|---|---|
-| 1 | `create:andesite_alloy` | `andesite_grit` | Hammering | `crafting/materials/andesite_alloy.json` 외 3개 |
-| 2 | `create:shaft` | `wooden_stave` | Sawing | `crafting/kinetics/shaft.json` |
-| 3 | `create:andesite_casing` | `andesite_cement` | 조합 (합금 + 수지) | `item_application/andesite_casing_from_log.json` 외 1개 |
-| 4 | `create:mechanical_press` | `stone_die` | Shaping | `crafting/kinetics/mechanical_press.json` |
+| 1 | `create:andesite_alloy` | `andesite_grit` | Hammering | 조합 2 + 믹싱 2 |
+| 2 | `create:shaft` | `wooden_stave` | Sawing | `crafting/kinetics/shaft` |
+| 3 | `create:andesite_casing` | `andesite_cement` | 조합 (합금 + 수지) | `item_application` 2 |
+| 4 | `create:mechanical_press` | `stone_die` | Shaping | `crafting/kinetics/mechanical_press` |
+
+#### 관문을 거는 방법
+
+**Create의 파일을 덮어쓰지 않는다.** 같은 경로에 파일을 두는 방식은 어느 모드의 팩이 위에 오느냐에 달려 있고, 실제로 동작하지 않았다 — 조건부 제거(`neoforge:conditions`)까지 함께 무시됐다. 파일이 아예 읽히지 않은 것이다.
+
+대신 **레시피 ID로 지우고 우리 레시피를 새로 넣는다.**
+
+1. `ModRecipeRemovals`에 넘겨받을 Create 레시피 ID를 적는다.
+2. `RecipeManagerMixin`이 `RecipeManager.apply` 진입 시점에 그 항목을 입력 맵에서 걷어낸다. 파싱 자체가 일어나지 않으므로 JEI에도 발전과제에도 죽은 ID가 남지 않는다.
+3. 대체 레시피는 `data/createmoonscentypresents/recipe/` 에 우리 것으로 둔다. 결과가 Create 아이템이어도 레시피 ID는 우리 것이어도 된다.
+
+팩 우선순위에 기대지 않으므로 로드 순서와 무관하고, 넘겨받은 목록이 코드 한 곳에 모여 있어 무엇을 건드렸는지 추적된다.
 
 #### 각 관문의 강제 방식
 
 **1. 합금 — 재료 치환**
 
-`andesite_alloy`는 2×2 `"BA"/"AB"`로 네 칸이 다 차 있다. 재료를 더할 자리가 없으므로 **키 `A`의 값만 바꾼다**: `minecraft:andesite` → `andesite_grit`. 패턴도 칸 수도 JEI 표시도 그대로다.
+`andesite_alloy`는 2×2 `"BA"/"AB"`로 네 칸이 다 차 있다. 재료를 더할 자리가 없으므로 **키 `A`의 값만 바꾼다**: `minecraft:andesite` → `andesite_grit`. 패턴도 칸 수도 JEI 표시도 그대로고, 붙는 비용은 앞단의 망치질뿐이다.
 
-아연 우회와 Mixer 우회가 있으므로 네 파일을 전부 바꾼다.
+아연 우회와 Mixer 우회가 있으므로 Create의 넷을 전부 지운다.
 
 ```text
-crafting/materials/andesite_alloy.json
-crafting/materials/andesite_alloy_from_zinc.json
-mixing/andesite_alloy.json
-mixing/andesite_alloy_from_zinc.json
+create:crafting/materials/andesite_alloy
+create:crafting/materials/andesite_alloy_from_zinc
+create:mixing/andesite_alloy
+create:mixing/andesite_alloy_from_zinc
+```
+
+돌아오는 것은 **아연 쪽 둘뿐이다.** 철 조각은 석기 시대의 재료가 아니므로 그 경로는 열어 두지 않는다. 믹서 레시피도 재료를 작업대와 똑같이 맞춰 두었으므로, 믹서를 얻어도 관문을 건너뛰지 못하고 처리량만 늘어난다.
+
+```text
+안산암  →  (망치질)  →  andesite_grit  →  + 아연 조각  →  create:andesite_alloy
 ```
 
 **2. 축 — 재료 추가**
@@ -131,7 +149,7 @@ create:andesite_alloy + resin  →  andesite_cement        (조합)
 붓에 andesite_cement 를 담고 껍질 벗긴 원목에 우클릭 유지  →  create:andesite_casing
 ```
 
-Create의 두 `item_application` 레시피는 `neoforge:false` 조건으로 닫는다. 레시피를 이상한 재료로 바꿔 놓는 것보다 아예 없애는 쪽이 JEI에 헛것이 남지 않는다.
+Create의 두 `item_application` 레시피는 대체 없이 지우기만 한다. 레시피를 이상한 재료로 바꿔 놓는 것보다 아예 없애는 쪽이 JEI에 헛것이 남지 않는다.
 
 **Applying은 여기서 아이템을 만들지 않는다.** 대상이 블록이므로 결과도 블록이고, 그래서 `andesite_cement`는 Applying의 산물이 아니라 Applying에 쓰는 재료다. 관문이 요구하는 것은 물건이 아니라 **동작** — 붓을 들고 서서 통나무 하나마다 시간을 들이는 일이며, 이것이 케이싱이 싸지 않다는 감각을 만든다.
 
@@ -307,7 +325,9 @@ Stone Chisel + 돌 → Stone Die
 
 **동작까지 완료** — 손 가공 4종(`sawing` / `hammering` / `shaping` / `applying`)의 레시피 타입·도구·데이터 컴포넌트, `applicator_brush`(적재·회수·블록 적용·4종 브러시 모델), 수액 채취 한 줄 전부(`hand_drill`, 구멍 난 통나무 8종, `tapper`, `liquid_resin` 유체, `tapping`·`coagulating` 레시피 타입과 그 레시피들), `ModKineticLimits`(32 RPM), `primitive_hand_crank`, `primitive_millstone`, `wooden_shaft`, `stone_cogwheel`, `large_stone_cogwheel`, `primitive_gearbox`.
 
-**아직 없다** — 관문 아이템 4종(`andesite_grit`, `wooden_stave`, `andesite_cement`, `stone_die`), 관문 레시피 전부, Create 레시피 덮어쓰기 8개 파일, 발전기 차단 3개, 보상 2종, `plant_fiber`와 `twine`의 조합 레시피, Shaping·Applying·Tapping의 JEI 카테고리.
+**관문 1 완료** — 레시피를 ID로 지우는 방식(`ModRecipeRemovals` + `RecipeManagerMixin`)과 그 위에 올린 안산암 합금 관문 전체. `andesite_grit` 아이템, 망치질 레시피, 대체 조합·믹싱 레시피까지 인게임에서 확인했다. 남은 관문 셋은 같은 틀에 얹기만 하면 된다.
+
+**아직 없다** — 관문 아이템 3종(`wooden_stave`, `andesite_cement`, `stone_die`)과 그 관문 레시피, 발전기 차단 3개, 보상 2종, `plant_fiber`와 `twine`의 조합 레시피, Shaping·Applying·Tapping의 JEI 카테고리.
 
 `applying`에는 시험용 레시피가 하나 있다 — 수지를 금 간 석재 벽돌에 발라 메운다. 건조대의 젖은 스펀지와 같은 역할로, 관문 재료가 생기기 전에 붓을 실제로 굴려 볼 수 있게 하는 것이 목적이다.
 
@@ -321,6 +341,5 @@ Tapper는 유체 캐퍼빌리티를 내놓지 않는다. 석기 시대에는 통
 
 #### 확인이 필요한 것
 
-- **Create 레시피를 모드 리소스로 덮어쓰는 것이 런타임에 실제로 우선하는지.** 이 설계의 관문 전부가 여기 걸려 있다. 안 되면 내장 데이터팩 → `neoforge:conditions` 순으로 시도한다.
 - 크랭크가 프레스를 실제로 돌릴 수 있는지. 크랭크는 256 SU를 내고 프레스는 8 RPM에서 64 SU를 쓰므로 계산상 가능하지만, 조작감은 재봐야 한다.
 - **시대 분량.** 관문 4개 + 도구 4개 + 스테이션 1개가 몇 시간인지는 재보기 전에는 모른다. 짧으면 스테이션을 늘리는 쪽으로 확장하고, **요구 수량이나 타이머를 늘리는 쪽으로는 확장하지 않는다.**
