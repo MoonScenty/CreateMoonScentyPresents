@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "G": {
+      "item": "createmoonscentypresents:andesite_grit"
+    },
+    "L": {
+      "item": "minecraft:leather"
+    },
+    "T": {
+      "item": "createmoonscentypresents:twine"
+    }
+  },
+  "pattern": [
+    "T T",
+    "LGL",
+    "TTT"
+  ],
+  "result": {
+    "count": 1,
+    "id": "createmoonscentypresents:gatherers_satchel"
+  }
+}

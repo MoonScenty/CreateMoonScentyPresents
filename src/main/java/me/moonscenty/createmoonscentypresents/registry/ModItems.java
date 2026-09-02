@@ -20,6 +20,8 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.common.Tags;
 
+import top.theillusivec4.curios.api.CuriosTags;
+
 public class ModItems {
     // Stone Age - fibre chain
     public static final ItemEntry<Item> PLANT_FIBER = simple("plant_fiber");
@@ -45,6 +47,15 @@ public class ModItems {
     // Gate 4, and the end of the age. The press cannot be reached with casings alone,
     // and it is also what brings create:shaft back.
     public static final ItemEntry<Item> STONE_DIE = simple("stone_die");
+
+    // Age reward. Worn on the back; the effect lives in GatherersSatchelCurio and is
+    // only reachable through the Curios capability, so one carried in the inventory
+    // does nothing.
+    public static final ItemEntry<Item> GATHERERS_SATCHEL = CreateMoonScentyPresents.REGISTRATE
+            .item("gatherers_satchel", Item::new)
+            .properties(p -> p.stacksTo(1))
+            .tag(CuriosTags.BACK)
+            .register();
 
     // Holds one substance and works it into a placed block. The brush is the reusable
     // part and the load is the consumable, so another substance later needs a recipe

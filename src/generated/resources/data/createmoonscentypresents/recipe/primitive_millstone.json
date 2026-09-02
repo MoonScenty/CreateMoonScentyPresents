@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "createmoonscentypresents:wooden_bearing"
+    },
+    "C": {
+      "item": "createmoonscentypresents:stone_cogwheel"
+    },
+    "S": {
+      "tag": "c:stones"
+    }
+  },
+  "pattern": [
+    "C",
+    "B",
+    "S"
+  ],
+  "result": {
+    "count": 1,
+    "id": "createmoonscentypresents:primitive_millstone"
+  }
+}

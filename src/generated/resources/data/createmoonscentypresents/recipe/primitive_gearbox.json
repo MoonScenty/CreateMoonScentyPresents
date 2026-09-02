@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "createmoonscentypresents:stone_cogwheel"
+    },
+    "G": {
+      "item": "createmoonscentypresents:wooden_gearbox_component"
+    }
+  },
+  "pattern": [
+    " C ",
+    "CGC",
+    " C "
+  ],
+  "result": {
+    "count": 1,
+    "id": "createmoonscentypresents:primitive_gearbox"
+  }
+}

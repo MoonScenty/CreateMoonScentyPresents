@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "createmoonscentypresents:wooden_shaft"
+    },
+    {
+      "tag": "c:stones"
+    },
+    {
+      "tag": "c:stones"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "createmoonscentypresents:large_stone_cogwheel"
+  }
+}

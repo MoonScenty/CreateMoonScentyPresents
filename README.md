@@ -293,6 +293,7 @@ wooden_shaft + 케이싱 + 철 블록 + Die ×2 → create:mechanical_press
 | 안산암 시멘트 | `andesite_cement` | 관문 3. 붓에 담아 원목에 바르는 도포재 | 합금 ×1 + Resin ×1 |
 | 돌 거푸집 | `stone_die` | 관문 4. 프레스의 성형 부품 | Shaping: 돌 |
 | 나무 베어링 | `wooden_bearing` | 회전체 지지 부품 | Planks ×2 + Twine ×2 |
+| 나무 기어박스 부품 | `wooden_gearbox_component` | 기어박스의 속심. 나무로 감싼 베어링 | Wooden Bearing ×1 + 돌 ×1 |
 
 돌 망치는 **1장에서** 만들 수 있어야 하므로 분말을 요구하지 않는다. 분말을 요구하면 "분말을 갈려면 망치가 필요한데 망치를 만들려면 분말이 필요한" 잠금이 생긴다.
 
@@ -303,7 +304,7 @@ wooden_shaft + 케이싱 + 철 블록 + Die ×2 → create:mechanical_press
 | 나무 축 | `wooden_shaft` | 회전 전달, 최대 32 RPM | Wooden Stave + Twine |
 | 돌 톱니바퀴 | `stone_cogwheel` | 기어비 구성, 최대 32 RPM | Wooden Shaft + 돌 |
 | 대형 돌 톱니바퀴 | `large_stone_cogwheel` | 2:1 증감속, 최대 32 RPM | Wooden Shaft + 돌 ×2 |
-| 원시 기어박스 | `primitive_gearbox` | 방향 전환, 최대 32 RPM | Stone Cogwheel ×4 + Wooden Bearing |
+| 원시 기어박스 | `primitive_gearbox` | 방향 전환, 최대 32 RPM | Stone Cogwheel ×4 + Wooden Gearbox Component |
 | 원시 수직 기어박스 | `primitive_vertical_gearbox` | 수평·수직 축 전환 | Primitive Gearbox 상호 변환 |
 | 손 크랭크 | `primitive_hand_crank` | 사람이 돌리는 유일한 동력원. 1대만 구동 | Planks ×3 + Wooden Shaft |
 | 원시 맷돌 | `primitive_millstone` | Andesite → Grit ×2 | Stone Cogwheel + Wooden Bearing + 돌 |
@@ -341,21 +342,21 @@ wooden_shaft + 케이싱 + 철 블록 + Die ×2 → create:mechanical_press
 
 **동작까지 완료** — 손 가공 4종(`sawing` / `hammering` / `shaping` / `applying`)의 레시피 타입·도구·데이터 컴포넌트, `applicator_brush`(적재·회수·블록 적용·4종 브러시 모델), 수액 채취 한 줄 전부(`hand_drill`, 구멍 난 통나무 8종, `tapper`, `liquid_resin` 유체, `tapping`·`coagulating` 레시피 타입과 그 레시피들), `ModKineticLimits`(32 RPM), `primitive_hand_crank`, `primitive_millstone`, `wooden_shaft`, `stone_cogwheel`, `large_stone_cogwheel`, `primitive_gearbox`.
 
+**석기 시대 전 구간이 조합으로 이어진다** — 1장 도구 넷, 3장 회전 부품 전부(`wooden_bearing`, `stone_cogwheel`, `large_stone_cogwheel`, `primitive_gearbox`와 수직 변환, `primitive_hand_crank`, `primitive_millstone`), 5장 프레스까지 크리에이티브 없이 도달한다. JEI 카테고리는 일곱 개(Sawing / Hammering / Shaping / Applying / Tapping / Coagulating / Drying).
+
 **관문 넷 완료** — 레시피를 ID로 지우는 방식(`ModRecipeRemovals` + `RecipeManagerMixin`)과 그 위에 올린 관문 넷 전부. 넘겨받은 Create 레시피는 여덟 개(합금 4, 축 1, 케이싱 2, 프레스 1)이고, `andesite_grit`·`wooden_stave`·`andesite_cement`·`stone_die` 네 아이템과 그 가공 레시피, 대체 레시피 전부가 들어가 있다. 1장부터 5장까지 조합으로 이어진다.
 
 `create:shaft`는 **아무 레시피도 없고, 돌려줄 계획도 없다.** 상한이 걸리지 않는 부품이기 때문이다. 따라서 Create의 톱니바퀴·기어박스 등 축을 요구하는 것 전부가 조합으로 닿지 않는다. 뒷 시대는 그 시대의 축과 그 시대의 부품으로 짓는다 — Create의 회전 부품 레시피를 시대별로 넘겨받는 일이 브론즈 이후의 과제로 남는다.
 
-**아직 없다** — 보상 2종, 석기 시대 블록의 조합 레시피(`stone_cogwheel`·`large_stone_cogwheel`·`primitive_gearbox`·`primitive_hand_crank`·`primitive_millstone`·`wooden_bearing` 등), Shaping·Applying·Tapping의 JEI 카테고리.
+**아직 없다** — 시대 보상 2종(`apprentice_goggles`, `gatherers_satchel`). Curios 의존성만 있고 쓰는 코드가 없다.
+
+**쓰이지 않는 아이템** — `bronze_gearbox_component`. 나무 쪽은 원시 기어박스의 속심으로 자리를 잡았으니, 브론즈 기어박스도 같은 자리에 놓으면 된다.
 
 `applying`에는 시험용 레시피가 하나 있다 — 수지를 금 간 석재 벽돌에 발라 메운다. 건조대의 젖은 스펀지와 같은 역할로, 관문 재료가 생기기 전에 붓을 실제로 굴려 볼 수 있게 하는 것이 목적이다.
 
 Tapper는 유체 캐퍼빌리티를 내놓지 않는다. 석기 시대에는 통에서 유체를 빼낼 수단이 없으므로 굳기를 기다리는 것 외에 길이 없고, 이 제약이 통이 차면 멈추는 규칙을 의미 있게 만든다. 파이프가 생기는 시대에 열면 된다.
 
 **이 시대에 쓰지 않는다** — `drying_rack`, `pit_kiln`, `charcoal_pit`, `fired_crucible`, `primitive_sifter`, 점토 가공 라인, 광석 정광·분말 라인, 주석 라인. 전부 브론즈 이후로 미룬다.
-
-#### 알려진 결함
-
-`ModHandCrankBlockEntity`가 `getStressConfigKey()`를 재정의하지 않아, Create의 구현이 `AllBlocks.HAND_CRANK.has(state)` 검사에서 탈락해 **`copper_valve_handle`의 용량을 읽는다.** 등록한 값이 죽어 있고 크랭크 소리도 나지 않는다. 두 줄로 고친다.
 
 #### 확인이 필요한 것
 

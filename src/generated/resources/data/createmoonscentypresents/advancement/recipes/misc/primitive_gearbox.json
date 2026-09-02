@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "createmoonscentypresents:primitive_gearbox"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_wooden_gearbox_component": {
+      "conditions": {
+        "items": [
+          {
+            "items": "createmoonscentypresents:wooden_gearbox_component"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_wooden_gearbox_component"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "createmoonscentypresents:primitive_gearbox"
+    ]
+  }
+}

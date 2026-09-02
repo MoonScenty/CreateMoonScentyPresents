@@ -1,8 +1,10 @@
 package me.moonscenty.createmoonscentypresents.registry;
 
 import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
+import me.moonscenty.createmoonscentypresents.network.ToggleSatchelPayload;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
@@ -31,6 +33,7 @@ import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 public class ModRecipes {
@@ -114,6 +117,13 @@ public class ModRecipes {
         CreateMoonScentyPresents.REGISTRATE.addRawLang(TAPPING_CATEGORY_KEY, "Tapping");
         CreateMoonScentyPresents.REGISTRATE.addRawLang(COAGULATING_CATEGORY_KEY, "Coagulating");
         CreateMoonScentyPresents.REGISTRATE.addRawLang(TIME_KEY, "%ss");
+        CreateMoonScentyPresents.REGISTRATE.addRawLang(ToggleSatchelPayload.KEY_CATEGORY, "Create: MoonScenty Presents");
+        CreateMoonScentyPresents.REGISTRATE.addRawLang(ToggleSatchelPayload.KEY_NAME,
+                "Toggle Gatherer's Satchel");
+        CreateMoonScentyPresents.REGISTRATE.addRawLang(ToggleSatchelPayload.ON_KEY,
+                "Gatherer's Satchel: drawing items in");
+        CreateMoonScentyPresents.REGISTRATE.addRawLang(ToggleSatchelPayload.OFF_KEY,
+                "Gatherer's Satchel: off");
         // The only drying recipe so far. It is the plainest case of what the rack is
         // for - a wet thing left out until it is not - and it makes the rack testable
         // before the stone age materials that will really use it exist.
@@ -198,7 +208,117 @@ public class ModRecipes {
         });
 
         registerTapping();
+        registerKinetics();
+        registerRewards();
         registerGates();
+    }
+
+    // --- stone age kinetics ---------------------------------------------------
+
+    /**
+     * The parts the age actually turns on. They mirror Create's own shapes so the two
+     * sets read as the same family, with our materials in place of alloy and casing -
+     * a wooden shaft where Create uses its own, stone where it uses planks, and a
+     * wooden bearing where it uses andesite casing.
+     */
+    private static void registerKinetics() {
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.WOODEN_BEARING.get())
+                        .pattern("PT")
+                        .pattern("TP")
+                        .define('P', ItemTags.PLANKS)
+                        .define('T', ModItems.TWINE.get())
+                        .unlockedBy("has_twine", prov.has(ModItems.TWINE.get()))
+                        .save(prov));
+
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModBlocks.STONE_COGWHEEL.get())
+                        .requires(ModBlocks.WOODEN_SHAFT.get())
+                        .requires(Tags.Items.STONES)
+                        .unlockedBy("has_wooden_shaft", prov.has(ModBlocks.WOODEN_SHAFT.get()))
+                        .save(prov));
+
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModBlocks.LARGE_STONE_COGWHEEL.get())
+                        .requires(ModBlocks.WOODEN_SHAFT.get())
+                        .requires(Tags.Items.STONES)
+                        .requires(Tags.Items.STONES)
+                        .unlockedBy("has_wooden_shaft", prov.has(ModBlocks.WOODEN_SHAFT.get()))
+                        .save(prov));
+
+        // A bearing cased in wood and packed with stone. The gearbox is the only thing
+        // that needs one, but it is what makes the gearbox more than four cogwheels
+        // around a bearing - the same step bronze will take with its own component.
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.WOODEN_GEARBOX_COMPONENT.get())
+                        .requires(ModItems.WOODEN_BEARING.get())
+                        .requires(Tags.Items.STONES)
+                        .unlockedBy("has_wooden_bearing", prov.has(ModItems.WOODEN_BEARING.get()))
+                        .save(prov));
+
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.PRIMITIVE_GEARBOX.get())
+                        .pattern(" C ")
+                        .pattern("CGC")
+                        .pattern(" C ")
+                        .define('C', ModBlocks.STONE_COGWHEEL.get())
+                        .define('G', ModItems.WOODEN_GEARBOX_COMPONENT.get())
+                        .unlockedBy("has_wooden_gearbox_component",
+                                prov.has(ModItems.WOODEN_GEARBOX_COMPONENT.get()))
+                        .save(prov));
+
+        // The vertical one is the same block on a different axis, so it is a conversion
+        // rather than a build, and it goes both ways.
+        gearboxConversion("primitive_vertical_gearbox_from_conversion",
+                ModItems.PRIMITIVE_VERTICAL_GEARBOX, ModBlocks.PRIMITIVE_GEARBOX);
+        gearboxConversion("primitive_gearbox_from_conversion",
+                ModBlocks.PRIMITIVE_GEARBOX, ModItems.PRIMITIVE_VERTICAL_GEARBOX);
+
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.PRIMITIVE_HAND_CRANK.get())
+                        .pattern("PPP")
+                        .pattern("  S")
+                        .define('P', ItemTags.PLANKS)
+                        .define('S', ModBlocks.WOODEN_SHAFT.get())
+                        .unlockedBy("has_wooden_shaft", prov.has(ModBlocks.WOODEN_SHAFT.get()))
+                        .save(prov));
+
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.PRIMITIVE_MILLSTONE.get())
+                        .pattern("C")
+                        .pattern("B")
+                        .pattern("S")
+                        .define('C', ModBlocks.STONE_COGWHEEL.get())
+                        .define('B', ModItems.WOODEN_BEARING.get())
+                        .define('S', Tags.Items.STONES)
+                        .unlockedBy("has_stone_cogwheel", prov.has(ModBlocks.STONE_COGWHEEL.get()))
+                        .save(prov));
+    }
+
+    private static void gearboxConversion(String name, Supplier<? extends ItemLike> result,
+            Supplier<? extends ItemLike> from) {
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, result.get())
+                        .requires(from.get())
+                        .unlockedBy("has_primitive_gearbox", prov.has(ModBlocks.PRIMITIVE_GEARBOX.get()))
+                        .save(prov, ResourceLocation.fromNamespaceAndPath(
+                                CreateMoonScentyPresents.MODID, name)));
+    }
+
+    // --- age rewards ----------------------------------------------------------
+
+    /** Not handed out - made from what this age already gathers. */
+    private static void registerRewards() {
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ModItems.GATHERERS_SATCHEL.get())
+                        .pattern("T T")
+                        .pattern("LGL")
+                        .pattern("TTT")
+                        .define('T', ModItems.TWINE.get())
+                        .define('L', Items.LEATHER)
+                        .define('G', ModItems.ANDESITE_GRIT.get())
+                        .unlockedBy("has_andesite_grit", prov.has(ModItems.ANDESITE_GRIT.get()))
+                        .save(prov));
     }
 
     // --- Create gates --------------------------------------------------------

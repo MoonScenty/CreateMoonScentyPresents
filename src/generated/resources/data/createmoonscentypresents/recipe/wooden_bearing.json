@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "T": {
+      "item": "createmoonscentypresents:twine"
+    }
+  },
+  "pattern": [
+    "PT",
+    "TP"
+  ],
+  "result": {
+    "count": 1,
+    "id": "createmoonscentypresents:wooden_bearing"
+  }
+}

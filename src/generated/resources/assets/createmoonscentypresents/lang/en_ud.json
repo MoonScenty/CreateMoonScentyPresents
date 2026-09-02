@@ -53,6 +53,7 @@
   "item.createmoonscentypresents.copper_fragment": "ʇuǝɯbɐɹℲ ɹǝddoƆ",
   "item.createmoonscentypresents.fire_brick": "ʞɔıɹᗺ ǝɹıℲ",
   "item.createmoonscentypresents.flint_knife": "ǝɟıuʞ ʇuıןℲ",
+  "item.createmoonscentypresents.gatherers_satchel": "ןǝɥɔʇɐS sɹǝɹǝɥʇɐ⅁",
   "item.createmoonscentypresents.hand_drill": "ןןıɹᗡ puɐH",
   "item.createmoonscentypresents.ingot_mold": "pןoW ʇobuI",
   "item.createmoonscentypresents.iron_dust": "ʇsnᗡ uoɹI",
@@ -82,5 +83,9 @@
   "item.createmoonscentypresents.wooden_saw": "ʍɐS uǝpooM",
   "item.createmoonscentypresents.wooden_stave": "ǝʌɐʇS uǝpooM",
   "item.createmoonscentypresents.wooden_tongs": "sbuo⟘ uǝpooM",
-  "itemGroup.createmoonscentypresents.main": "sʇuǝsǝɹԀ ʎʇuǝɔSuooW :ǝʇɐǝɹƆ"
+  "itemGroup.createmoonscentypresents.main": "sʇuǝsǝɹԀ ʎʇuǝɔSuooW :ǝʇɐǝɹƆ",
+  "key.categories.createmoonscentypresents": "sʇuǝsǝɹԀ ʎʇuǝɔSuooW :ǝʇɐǝɹƆ",
+  "key.createmoonscentypresents.toggle_satchel": "ןǝɥɔʇɐS s,ɹǝɹǝɥʇɐ⅁ ǝןbbo⟘",
+  "message.createmoonscentypresents.satchel.off": "ɟɟo :ןǝɥɔʇɐS s,ɹǝɹǝɥʇɐ⅁",
+  "message.createmoonscentypresents.satchel.on": "uı sɯǝʇı buıʍɐɹp :ןǝɥɔʇɐS s,ɹǝɹǝɥʇɐ⅁"
 }

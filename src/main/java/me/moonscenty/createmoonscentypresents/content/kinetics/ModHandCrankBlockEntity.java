@@ -7,6 +7,7 @@ import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
@@ -23,6 +24,16 @@ public class ModHandCrankBlockEntity extends HandCrankBlockEntity {
 
     public ModHandCrankBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
+    }
+
+    /**
+     * Create's own falls through its {@code AllBlocks.HAND_CRANK} check and ends up
+     * reading the copper valve handle's capacity, which leaves our registered value dead
+     * and the crank silent. Our own block is always the right key.
+     */
+    @Override
+    protected Block getStressConfigKey() {
+        return getBlockState().getBlock();
     }
 
     @Override

@@ -53,6 +53,7 @@
   "item.createmoonscentypresents.copper_fragment": "Copper Fragment",
   "item.createmoonscentypresents.fire_brick": "Fire Brick",
   "item.createmoonscentypresents.flint_knife": "Flint Knife",
+  "item.createmoonscentypresents.gatherers_satchel": "Gatherers Satchel",
   "item.createmoonscentypresents.hand_drill": "Hand Drill",
   "item.createmoonscentypresents.ingot_mold": "Ingot Mold",
   "item.createmoonscentypresents.iron_dust": "Iron Dust",
@@ -82,5 +83,9 @@
   "item.createmoonscentypresents.wooden_saw": "Wooden Saw",
   "item.createmoonscentypresents.wooden_stave": "Wooden Stave",
   "item.createmoonscentypresents.wooden_tongs": "Wooden Tongs",
-  "itemGroup.createmoonscentypresents.main": "Create: MoonScenty Presents"
+  "itemGroup.createmoonscentypresents.main": "Create: MoonScenty Presents",
+  "key.categories.createmoonscentypresents": "Create: MoonScenty Presents",
+  "key.createmoonscentypresents.toggle_satchel": "Toggle Gatherer's Satchel",
+  "message.createmoonscentypresents.satchel.off": "Gatherer's Satchel: off",
+  "message.createmoonscentypresents.satchel.on": "Gatherer's Satchel: drawing items in"
 }

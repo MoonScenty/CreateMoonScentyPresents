@@ -2,6 +2,8 @@ package me.moonscenty.createmoonscentypresents.registry;
 
 import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
 
+import com.mojang.serialization.Codec;
+
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -50,6 +52,17 @@ public class ModDataComponents {
             TYPES.register("shaping", () -> DataComponentType.<ShapingItemComponent>builder()
                     .persistent(ShapingItemComponent.CODEC)
                     .networkSynchronized(ShapingItemComponent.STREAM_CODEC)
+                    .build());
+
+    /**
+     * Whether the satchel is drawing items in. Kept on the stack rather than on the
+     * player so each satchel remembers its own setting, and so the tooltip can read it
+     * without asking the server.
+     */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> SATCHEL_ACTIVE =
+            TYPES.register("satchel_active", () -> DataComponentType.<Boolean>builder()
+                    .persistent(Codec.BOOL)
+                    .networkSynchronized(ByteBufCodecs.BOOL)
                     .build());
 
     /** The same, for the hammer. */
