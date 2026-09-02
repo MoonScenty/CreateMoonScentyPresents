@@ -7,7 +7,8 @@
     "SteamEngineBlockMixin",
     "SteamEnginePlacementHelperMixin",
     "PoweredShaftBlockMixin",
-    "RecipeManagerMixin"
+    "RecipeManagerMixin",
+    "KineticBlockEntityMixin"
   ],
   "client": [
     "GearboxRendererMixin",

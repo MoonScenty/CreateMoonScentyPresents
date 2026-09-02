@@ -12,6 +12,7 @@ import me.moonscenty.createmoonscentypresents.registry.ModCreativeTabs;
 import me.moonscenty.createmoonscentypresents.registry.ModDataComponents;
 import me.moonscenty.createmoonscentypresents.registry.ModFluids;
 import me.moonscenty.createmoonscentypresents.registry.ModItems;
+import me.moonscenty.createmoonscentypresents.registry.ModLang;
 import me.moonscenty.createmoonscentypresents.registry.ModRecipeTypes;
 import me.moonscenty.createmoonscentypresents.registry.ModRecipes;
 
@@ -47,6 +48,7 @@ public class CreateMoonScentyPresents {
         ModRecipeTypes.register(modEventBus);
         ModDataComponents.register(modEventBus);
         ModRecipes.register();
+        ModLang.register();
         JadeLang.register();
     }
 }

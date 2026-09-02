@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "createmoonscentypresents:andesite_grit"
+    },
+    "G": {
+      "item": "minecraft:glass_pane"
+    },
+    "T": {
+      "item": "createmoonscentypresents:twine"
+    }
+  },
+  "pattern": [
+    "TGT",
+    "AGA"
+  ],
+  "result": {
+    "count": 1,
+    "id": "createmoonscentypresents:apprentice_goggles"
+  }
+}

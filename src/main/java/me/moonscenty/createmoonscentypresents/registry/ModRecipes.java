@@ -556,6 +556,18 @@ public class ModRecipes {
 
     /** Not handed out - made from what this age already gathers. */
     private static void registerRewards() {
+        // Buildable before the first gear ratio is: it asks for nothing that turns, so
+        // the warning is in hand before anything can be overspun.
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ModItems.APPRENTICE_GOGGLES.get())
+                        .pattern("TGT")
+                        .pattern("AGA")
+                        .define('T', ModItems.TWINE.get())
+                        .define('G', Items.GLASS_PANE)
+                        .define('A', ModItems.ANDESITE_GRIT.get())
+                        .unlockedBy("has_andesite_grit", prov.has(ModItems.ANDESITE_GRIT.get()))
+                        .save(prov));
+
         CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
                 ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ModItems.GATHERERS_SATCHEL.get())
                         .pattern("T T")

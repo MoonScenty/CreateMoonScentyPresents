@@ -48,6 +48,14 @@ public class ModItems {
     // and it is also what brings create:shaft back.
     public static final ItemEntry<Item> STONE_DIE = simple("stone_die");
 
+    // Age reward. Worn on the head; Create draws everything it shows, so the item
+    // itself does nothing but tell Create it is being worn.
+    public static final ItemEntry<Item> APPRENTICE_GOGGLES = CreateMoonScentyPresents.REGISTRATE
+            .item("apprentice_goggles", Item::new)
+            .properties(p -> p.stacksTo(1))
+            .tag(CuriosTags.HEAD)
+            .register();
+
     // Age reward. Worn on the back; the effect lives in GatherersSatchelCurio and is
     // only reachable through the Curios capability, so one carried in the inventory
     // does nothing.
