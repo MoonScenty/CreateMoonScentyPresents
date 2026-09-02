@@ -252,13 +252,15 @@ Stone Chisel + 돌 → Stone Die
 | 손 드릴 | `hand_drill` | 통나무를 우클릭해 구멍을 낸다. 내구도 128 | 철괴 ×2 + Stick ×1 |
 | 도포용 붓 | `applicator_brush` | **Applying 도구.** 물질 한 종류를 그 아이템의 스택 크기만큼 담고, 1회에 1개 소모한다. 닳지 않는다 | Plant Fiber ×1 + Twine ×1 + Stick ×1 |
 | 나무 톱 | `wooden_saw` | **Sawing 도구** | Planks ×2 + Flint ×1 + Twine ×1 |
-| 돌 망치 | `stone_hammer` | **Hammering 도구.** 3×3 범위 채굴도 한다 | 안산암 ×2 + Stick ×2 + Twine ×1 |
+| 돌 망치 | `stone_hammer` | **Hammering 도구** | 안산암 ×2 + Stick ×2 + Twine ×1 |
 | 돌 끌 | `stone_chisel` | **Shaping 도구** | Flint ×1 + Stick ×1 + Twine ×1 |
 | 안산암 분말 | `andesite_grit` | 관문 1. 합금의 재료 | Hammering: 안산암 |
 | 나무 살대 | `wooden_stave` | 관문 2. Create 축의 재료 | Sawing: 껍질 벗긴 원목 |
 | 안산암 시멘트 | `andesite_cement` | 관문 3. 붓에 담아 원목에 바르는 도포재 | 합금 ×1 + Resin ×1 |
 | 돌 거푸집 | `stone_die` | 관문 4. 프레스의 성형 부품 | Shaping: 돌 |
 | 나무 베어링 | `wooden_bearing` | 회전체 지지 부품 | Planks ×2 + Twine ×2 |
+
+돌 망치는 **1장에서** 만들 수 있어야 하므로 분말을 요구하지 않는다. 분말을 요구하면 "분말을 갈려면 망치가 필요한데 망치를 만들려면 분말이 필요한" 잠금이 생긴다.
 
 ### 블록
 
@@ -282,11 +284,8 @@ Stone Chisel + 돌 → Stone Die
 
 | 아이템 이름 | registry_id | 기능 내용 | 제작 방법 |
 |---|---|---|---|
-| 돌 망치 | `stone_hammer` | 곡괭이 대상 3×3 범위 채굴. 채굴 속도는 바닐라보다 느리고 등급도 올려주지 않는다 — **면적으로만 이긴다** | 안산암 ×2 + Stick ×2 + Twine ×1 |
 | 견습생 고글 | `apprentice_goggles` | Curios `head`. 원시 부품의 현재 RPM과 32 한계를 표시한다 | Glass ×2 + Andesite Grit ×2 + Twine ×2 |
 | 채집 가방 | `gatherers_satchel` | Curios `back`. 반경 4블록 드롭 아이템 자동 회수 | Twine ×4 + Leather ×2 + Andesite Grit ×1 |
-
-돌 망치는 **1장에서** 만들 수 있어야 하므로 분말을 요구하지 않는다. 분말을 요구하면 "분말을 갈려면 망치가 필요한데 망치를 만들려면 분말이 필요한" 잠금이 생긴다.
 
 고글은 **첫 증속 이전에** 만들 수 있다. 회전 부품을 하나도 요구하지 않으므로, 과속 파손이 일어나기 전에 경고 도구가 손에 들어온다.
 
@@ -308,7 +307,7 @@ Stone Chisel + 돌 → Stone Die
 
 **동작까지 완료** — 손 가공 4종(`sawing` / `hammering` / `shaping` / `applying`)의 레시피 타입·도구·데이터 컴포넌트, `applicator_brush`(적재·회수·블록 적용·4종 브러시 모델), 수액 채취 한 줄 전부(`hand_drill`, 구멍 난 통나무 8종, `tapper`, `liquid_resin` 유체, `tapping`·`coagulating` 레시피 타입과 그 레시피들), `ModKineticLimits`(32 RPM), `primitive_hand_crank`, `primitive_millstone`, `wooden_shaft`, `stone_cogwheel`, `large_stone_cogwheel`, `primitive_gearbox`.
 
-**아직 없다** — 관문 아이템 4종(`andesite_grit`, `wooden_stave`, `andesite_cement`, `stone_die`), 관문 레시피 전부, Create 레시피 덮어쓰기 8개 파일, 발전기 차단 3개, 보상 2종, `plant_fiber`와 `twine`의 조합 레시피, `stone_hammer`의 3×3 범위 채굴, Shaping·Applying·Tapping의 JEI 카테고리.
+**아직 없다** — 관문 아이템 4종(`andesite_grit`, `wooden_stave`, `andesite_cement`, `stone_die`), 관문 레시피 전부, Create 레시피 덮어쓰기 8개 파일, 발전기 차단 3개, 보상 2종, `plant_fiber`와 `twine`의 조합 레시피, Shaping·Applying·Tapping의 JEI 카테고리.
 
 `applying`에는 시험용 레시피가 하나 있다 — 수지를 금 간 석재 벽돌에 발라 메운다. 건조대의 젖은 스펀지와 같은 역할로, 관문 재료가 생기기 전에 붓을 실제로 굴려 볼 수 있게 하는 것이 목적이다.
 
