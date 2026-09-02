@@ -1,0 +1,11 @@
+{
+  "type": "createmoonscentypresents:applying",
+  "block": {
+    "tag": "c:stripped_logs"
+  },
+  "processing_time": 200,
+  "result": "create:andesite_casing",
+  "substance": {
+    "item": "createmoonscentypresents:andesite_cement"
+  }
+}

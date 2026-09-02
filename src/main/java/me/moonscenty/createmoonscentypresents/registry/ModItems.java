@@ -38,6 +38,14 @@ public class ModItems {
     // so every shaft costs a length of wood cut with the saw.
     public static final ItemEntry<Item> WOODEN_STAVE = simple("wooden_stave");
 
+    // Gate 3. Not a product of Applying but the load for it: this goes in the brush and
+    // is worked into a standing stripped log until the casing takes.
+    public static final ItemEntry<Item> ANDESITE_CEMENT = simple("andesite_cement");
+
+    // Gate 4, and the end of the age. The press cannot be reached with casings alone,
+    // and it is also what brings create:shaft back.
+    public static final ItemEntry<Item> STONE_DIE = simple("stone_die");
+
     // Holds one substance and works it into a placed block. The brush is the reusable
     // part and the load is the consumable, so another substance later needs a recipe
     // and nothing else - not another item, and not another mechanic.

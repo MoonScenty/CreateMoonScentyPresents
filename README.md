@@ -140,7 +140,7 @@ create:mixing/andesite_alloy_from_zinc
 
 `ModKineticLimits`는 블록 id로 상한을 찾으므로 Create의 축은 `UNLIMITED`다. 시대 중간에 이것을 손에 쥐여 주면 `wooden_shaft`를 쓸 이유가 사라지고, 시대 전체가 서 있는 32 RPM 천장이 그 자리에서 무너진다. `cogwheel`(축 + 판자)과 `large_cogwheel`(축 + 판자 ×2)은 축만 열리면 따라오므로 같이 무너진다. Create의 축에 상한을 거는 것은 답이 아니다 — 뒷 시대에는 무제한이어야 하는데 진행 상태를 들고 있지 않아 영구 상한이 된다.
 
-`create:crafting/kinetics/shaft`는 지운 채로 두고, **졸업(5장)에서 프레스와 함께 돌려준다.** 프레스가 축을 요구하고, 그 시점은 시대가 끝나는 자리라 상한이 풀려도 된다.
+`create:crafting/kinetics/shaft`는 **돌려주지 않는다.** 졸업 시점도 안 된다 — 상한은 시대마다 다시 걸리고(브론즈 64, 그 뒤로도), 상한 없는 축이 손에 들어오는 순간 그 사다리 전체가 무너진다. **시대마다 그 시대의 축으로 돌린다.** Create의 톱니바퀴들도 축을 요구하므로 함께 닫힌 채로 있는다.
 
 톱이 대신 여는 것은 **우리 축**이다. 이쪽은 상한이 걸린다.
 
@@ -160,7 +160,7 @@ create:andesite_alloy + resin  →  andesite_cement        (조합)
 붓에 andesite_cement 를 담고 껍질 벗긴 원목에 우클릭 유지  →  create:andesite_casing
 ```
 
-Create의 두 `item_application` 레시피는 대체 없이 지우기만 한다. 레시피를 이상한 재료로 바꿔 놓는 것보다 아예 없애는 쪽이 JEI에 헛것이 남지 않는다.
+Create의 두 `item_application` 레시피(`from_log` / `from_wood`)는 대체 없이 지우기만 한다. 레시피를 이상한 재료로 바꿔 놓는 것보다 아예 없애는 쪽이 JEI에 헛것이 남지 않는다. 같은 두 태그(`c:stripped_logs` / `c:stripped_woods`)를 Applying이 그대로 받는다.
 
 **Applying은 여기서 아이템을 만들지 않는다.** 대상이 블록이므로 결과도 블록이고, 그래서 `andesite_cement`는 Applying의 산물이 아니라 Applying에 쓰는 재료다. 관문이 요구하는 것은 물건이 아니라 **동작** — 붓을 들고 서서 통나무 하나마다 시간을 들이는 일이며, 이것이 케이싱이 싸지 않다는 감각을 만든다.
 
@@ -173,6 +173,8 @@ Create의 두 `item_application` 레시피는 대체 없이 지우기만 한다.
  C              "DCD"     D = stone_die
  I              " I "
 ```
+
+`S` 자리는 `create:shaft`가 아니라 **`wooden_shaft`**다. 프레스는 석기 시대의 마지막 조립물이므로 석기 시대의 부품으로 짓는다.
 
 프레스가 케이싱만으로 도달하는 것을 막는다. **이것이 시대의 종결 조건이다.**
 
@@ -230,9 +232,7 @@ Primitive Hand Crank + Primitive Millstone 조립
 [5장] 졸업 — Shaping
 Stone Chisel + 돌 → Stone Die
 ↓
-create:shaft 가 여기서 돌아온다
-↓
-축 + 케이싱 + 철 블록 + Die ×2 → create:mechanical_press
+wooden_shaft + 케이싱 + 철 블록 + Die ×2 → create:mechanical_press
 ↓
 크랭크로 프레스를 돌려 첫 create:iron_sheet
 ↓
@@ -339,11 +339,11 @@ create:shaft 가 여기서 돌아온다
 
 **동작까지 완료** — 손 가공 4종(`sawing` / `hammering` / `shaping` / `applying`)의 레시피 타입·도구·데이터 컴포넌트, `applicator_brush`(적재·회수·블록 적용·4종 브러시 모델), 수액 채취 한 줄 전부(`hand_drill`, 구멍 난 통나무 8종, `tapper`, `liquid_resin` 유체, `tapping`·`coagulating` 레시피 타입과 그 레시피들), `ModKineticLimits`(32 RPM), `primitive_hand_crank`, `primitive_millstone`, `wooden_shaft`, `stone_cogwheel`, `large_stone_cogwheel`, `primitive_gearbox`.
 
-**관문 1·2 완료** — 레시피를 ID로 지우는 방식(`ModRecipeRemovals` + `RecipeManagerMixin`)과 그 위에 올린 안산암 합금 관문, 축 관문. `andesite_grit`·`wooden_stave` 아이템과 그 가공 레시피, 안산암 합금의 대체 조합·믹싱 레시피, `wooden_shaft`의 조합 레시피까지 들어가 있다.
+**관문 넷 완료** — 레시피를 ID로 지우는 방식(`ModRecipeRemovals` + `RecipeManagerMixin`)과 그 위에 올린 관문 넷 전부. 넘겨받은 Create 레시피는 여덟 개(합금 4, 축 1, 케이싱 2, 프레스 1)이고, `andesite_grit`·`wooden_stave`·`andesite_cement`·`stone_die` 네 아이템과 그 가공 레시피, 대체 레시피 전부가 들어가 있다. 1장부터 5장까지 조합으로 이어진다.
 
-`create:shaft`는 지금 **아무 레시피도 없다.** 의도한 상태이며, 5장이 생길 때 돌려준다. 그때까지 Create의 회전 부품 전체가 조합으로 닿지 않는다.
+`create:shaft`는 **아무 레시피도 없고, 돌려줄 계획도 없다.** 상한이 걸리지 않는 부품이기 때문이다. 따라서 Create의 톱니바퀴·기어박스 등 축을 요구하는 것 전부가 조합으로 닿지 않는다. 뒷 시대는 그 시대의 축과 그 시대의 부품으로 짓는다 — Create의 회전 부품 레시피를 시대별로 넘겨받는 일이 브론즈 이후의 과제로 남는다.
 
-**아직 없다** — 관문 아이템 2종(`andesite_cement`, `stone_die`)과 그 관문 레시피, 발전기 차단 3개, 보상 2종, 석기 시대 도구·블록의 조합 레시피 대부분(`wooden_saw`·`stone_hammer`·`stone_chisel`·`stone_cogwheel` 등), Shaping·Applying·Tapping의 JEI 카테고리.
+**아직 없다** — 발전기 차단 3개, 보상 2종, 석기 시대 블록의 조합 레시피(`stone_cogwheel`·`large_stone_cogwheel`·`primitive_gearbox`·`primitive_hand_crank`·`primitive_millstone`·`wooden_bearing` 등), Shaping·Applying·Tapping의 JEI 카테고리.
 
 `applying`에는 시험용 레시피가 하나 있다 — 수지를 금 간 석재 벽돌에 발라 메운다. 건조대의 젖은 스펀지와 같은 역할로, 관문 재료가 생기기 전에 붓을 실제로 굴려 볼 수 있게 하는 것이 목적이다.
 

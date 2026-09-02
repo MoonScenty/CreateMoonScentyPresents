@@ -4,6 +4,7 @@ import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
 
 import java.util.List;
 
+import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
 import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
@@ -14,6 +15,7 @@ import me.moonscenty.createmoonscentypresents.content.applying.ApplyingRecipe;
 import me.moonscenty.createmoonscentypresents.content.hammering.HammeringRecipe;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRecipe;
 import me.moonscenty.createmoonscentypresents.content.sawing.SawingRecipe;
+import me.moonscenty.createmoonscentypresents.content.shaping.ShapingRecipe;
 import me.moonscenty.createmoonscentypresents.content.tapping.CoagulatingRecipe;
 import me.moonscenty.createmoonscentypresents.content.tapping.TappingRecipe;
 
@@ -45,6 +47,8 @@ public class ModRecipes {
 
     /** Three seconds of brushing. Long enough to feel worked, short enough to hold. */
     private static final int SEALING_TIME = 60;
+    /** Longer than sealing: this is the gate, and the cost is the standing there. */
+    private static final int CASING_TIME = 200;
 
     // A tapper is the one thing in the age that works unattended, so it is allowed to be
     // slow: ten batches of sap at twenty five seconds each, then another fifty for it to
@@ -218,11 +222,46 @@ public class ModRecipes {
                         new ItemStack(ModItems.WOODEN_STAVE.get(), STAVES_PER_PLANK)),
                 null));
 
-        // create:shaft gets no recipe back here. ModKineticLimits is keyed by block id, so
-        // Create's shaft is UNLIMITED - handing it out mid age would let every build skip
-        // wooden_shaft and with it the 32 RPM ceiling the whole age is built on. Create's
-        // cogwheels come along for free too, since their recipes only ask for a shaft.
-        // It returns at graduation, next to the press that needs it.
+        // create:shaft gets no recipe, here or anywhere. ModKineticLimits is keyed by
+        // block id, so Create's shaft is UNLIMITED - and every age has a ceiling, not
+        // just this one, so there is no later point at which handing it over is safe.
+        // Each age drives on its own shaft; Create's cogwheels follow it out, since
+        // their recipes only ask for a shaft.
+
+        // Gate 3: the casing. Create hands one over the moment alloy touches a stripped
+        // log; both of those recipes are gone. What stands in their place is the same
+        // gesture stretched out - cement in the brush, held against the log until it
+        // takes. The gate asks for a minute of standing there, not for another item.
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.ANDESITE_CEMENT.get())
+                        .requires(AllItems.ANDESITE_ALLOY.get())
+                        .requires(ModItems.RESIN.get())
+                        .unlockedBy("has_resin", prov.has(ModItems.RESIN.get()))
+                        .save(prov));
+
+        andesiteCasing("from_log", AllTags.commonItemTag("stripped_logs"));
+        andesiteCasing("from_wood", AllTags.commonItemTag("stripped_woods"));
+
+        // Gate 4: the press, and with it the end of the age. Create stacks shaft, casing
+        // and an iron block in a column; the pattern widens to five so a die sits on
+        // either side of the casing. Casings alone no longer reach it.
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, AllBlocks.MECHANICAL_PRESS.get())
+                        .pattern(" S ")
+                        .pattern("DCD")
+                        .pattern(" I ")
+                        .define('S', ModBlocks.WOODEN_SHAFT.get())
+                        .define('C', AllBlocks.ANDESITE_CASING.get())
+                        .define('D', ModItems.STONE_DIE.get())
+                        .define('I', AllTags.commonItemTag("storage_blocks/iron"))
+                        .unlockedBy("has_stone_die", prov.has(ModItems.STONE_DIE.get()))
+                        .save(prov, ResourceLocation.fromNamespaceAndPath(
+                                CreateMoonScentyPresents.MODID, "mechanical_press")));
+
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov -> prov.accept(
+                ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, "shaping/stone_die"),
+                new ShapingRecipe(Ingredient.of(Blocks.STONE), new ItemStack(ModItems.STONE_DIE.get())),
+                null));
 
         // What the saw opens instead: our own shaft, which the limit does cover.
         CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
@@ -231,6 +270,15 @@ public class ModRecipes {
                         .requires(ModItems.TWINE.get())
                         .unlockedBy("has_wooden_stave", prov.has(ModItems.WOODEN_STAVE.get()))
                         .save(prov));
+    }
+
+    private static void andesiteCasing(String name, TagKey<Item> stripped) {
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov -> prov.accept(
+                ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID,
+                        "applying/andesite_casing_" + name),
+                new ApplyingRecipe(Ingredient.of(ModItems.ANDESITE_CEMENT.get()),
+                        Ingredient.of(stripped), AllBlocks.ANDESITE_CASING.get(), CASING_TIME),
+                null));
     }
 
     /** One fibre off whatever the source is; no tool, no station. */

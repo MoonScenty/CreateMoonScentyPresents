@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "create:andesite_casing"
+    },
+    "D": {
+      "item": "createmoonscentypresents:stone_die"
+    },
+    "I": {
+      "tag": "c:storage_blocks/iron"
+    },
+    "S": {
+      "item": "createmoonscentypresents:wooden_shaft"
+    }
+  },
+  "pattern": [
+    " S ",
+    "DCD",
+    " I "
+  ],
+  "result": {
+    "count": 1,
+    "id": "create:mechanical_press"
+  }
+}

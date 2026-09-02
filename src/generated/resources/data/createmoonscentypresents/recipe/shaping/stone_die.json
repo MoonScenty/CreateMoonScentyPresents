@@ -1,0 +1,10 @@
+{
+  "type": "createmoonscentypresents:shaping",
+  "ingredient": {
+    "item": "minecraft:stone"
+  },
+  "result": {
+    "count": 1,
+    "id": "createmoonscentypresents:stone_die"
+  }
+}
