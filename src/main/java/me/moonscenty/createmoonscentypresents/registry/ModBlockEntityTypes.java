@@ -15,6 +15,7 @@ import me.moonscenty.createmoonscentypresents.content.kinetics.ModKineticBlockEn
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModKineticVisual;
 import me.moonscenty.createmoonscentypresents.content.charring.CharcoalPitBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.firing.PitKilnBlockEntity;
+import me.moonscenty.createmoonscentypresents.content.foundry.FaucetBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.foundry.FoundryBasinBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.foundry.FoundryLidBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.milling.MillstoneBlockEntity;
@@ -82,6 +83,12 @@ public class ModBlockEntityTypes {
                     .blockEntity("foundry_lid", FoundryLidBlockEntity::new)
                     .validBlocks(ModBlocks.FOUNDRY_LID)
                     .register();
+
+    // Drains whatever it is stuck to into whatever is under it.
+    public static final BlockEntityEntry<FaucetBlockEntity> FAUCET = CreateMoonScentyPresents.REGISTRATE
+            .blockEntity("faucet", FaucetBlockEntity::new)
+            .validBlocks(ModBlocks.FAUCET)
+            .register();
 
     // Holds the wood buried in a charcoal pit while it smoulders.
     public static final BlockEntityEntry<CharcoalPitBlockEntity> CHARCOAL_PIT =

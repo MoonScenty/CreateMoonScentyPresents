@@ -5,6 +5,7 @@ import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
@@ -62,4 +63,12 @@ public class ModTags {
         return TagKey.create(Registries.BLOCK,
                 ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, path));
     }
+
+    /**
+     * Fluids hot enough to set light to whatever is standing in them. Molten metal is
+     * what this is for; a faucet reads it to decide whether a pour hurts.
+     */
+    public static final TagKey<Fluid> MOLTEN =
+            TagKey.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath(
+                    CreateMoonScentyPresents.MODID, "molten"));
 }

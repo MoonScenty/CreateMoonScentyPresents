@@ -21,6 +21,7 @@ import me.moonscenty.createmoonscentypresents.content.kinetics.ModHandCrankBlock
 import me.moonscenty.createmoonscentypresents.content.milling.MillstoneBlock;
 import me.moonscenty.createmoonscentypresents.content.charring.CharcoalPitBlock;
 import me.moonscenty.createmoonscentypresents.content.firing.PitKilnBlock;
+import me.moonscenty.createmoonscentypresents.content.foundry.FaucetBlock;
 import me.moonscenty.createmoonscentypresents.content.foundry.FoundryBasinBlock;
 import me.moonscenty.createmoonscentypresents.content.foundry.FoundryLidBlock;
 import me.moonscenty.createmoonscentypresents.content.processing.BasinShapedBlock;
@@ -176,6 +177,20 @@ public class ModBlocks {
     public static final BlockEntry<ModCogwheelBlock> BRONZE_COGWHEEL =
             cogwheel("bronze_cogwheel", false, () -> Blocks.COPPER_BLOCK, SoundType.COPPER,
                     MapColor.TERRACOTTA_ORANGE, false);
+
+    // Stone Age - the only way to move a fluid before pipes: a tap on the side of
+    // something that holds one.
+    public static final BlockEntry<FaucetBlock> FAUCET = CreateMoonScentyPresents.REGISTRATE
+            .block("faucet", FaucetBlock::new)
+            .initialProperties(() -> Blocks.BRICKS)
+            .properties(p -> p.mapColor(MapColor.COLOR_GRAY).noOcclusion())
+            .transform(TagGen.pickaxeOnly())
+            .blockstate((ctx, prov) -> prov.directionalBlock(ctx.getEntry(), state -> prov.models()
+                    .getExistingFile(prov.modLoc("block/faucet/" + faucetModel(state)))))
+            .item()
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/faucet/block")))
+            .build()
+            .register();
 
     // Stone Age - the vessel metal is melted in. The foundry basin from Create:
     // Metallurgy, which is Create's basin with more room and a spout; the melting
@@ -427,5 +442,14 @@ public class ModBlocks {
         if (state.getValue(FoundryLidBlock.OPEN))
             return window ? "block_open_window" : "block_open";
         return window ? "block_window" : "block";
+    }
+
+    /** Down or sideways, open or shut - four models off a direction and a boolean. */
+    private static String faucetModel(net.minecraft.world.level.block.state.BlockState state) {
+        boolean open = state.getValue(FaucetBlock.OPEN);
+        boolean down = state.getValue(FaucetBlock.FACING).getAxis().isVertical();
+        if (down)
+            return open ? "block_down_open" : "block_down";
+        return open ? "block_open" : "block";
     }
 }

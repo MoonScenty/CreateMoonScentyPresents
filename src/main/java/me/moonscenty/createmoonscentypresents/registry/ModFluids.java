@@ -44,6 +44,7 @@ public class ModFluids {
                             .slopeFindDistance(2)
                             .explosionResistance(100f))
                     .noBucket()
+                    .tag(ModTags.MOLTEN)
                     .register();
 
     // Called from the mod constructor purely to load this class, which declares
