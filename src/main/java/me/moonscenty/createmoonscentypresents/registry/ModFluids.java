@@ -91,11 +91,10 @@ public class ModFluids {
     /**
      * Copper, the other half of bronze.
      *
-     * <p>Melting it is the one place the heat ladder is bent. Copper really wants 1085
-     * degrees, which is a blaze burner - but a blaze burner is a trip to the Nether, and
-     * putting the Nether in front of bronze would close the age the same way requiring
-     * one for zinc would have closed it. The bend is deliberate and it is the only one;
-     * see the melting recipes.
+     * <p>The only metal in the age that cannot be had off a campfire. 1085 degrees is a
+     * rung above what one gives, so this is what the bellows is for: a burning charcoal
+     * pit pumped by hand reaches it, and that is the whole of the answer the stone age
+     * has to a fire that is not hot enough.
      */
     public static final FluidEntry<BaseFlowingFluid.Flowing> MOLTEN_COPPER =
             CreateMoonScentyPresents.REGISTRATE.standardFluid("molten_copper")

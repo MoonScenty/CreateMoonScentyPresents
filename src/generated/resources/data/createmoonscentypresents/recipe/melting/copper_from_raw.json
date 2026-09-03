@@ -1,5 +1,6 @@
 {
   "type": "createmoonscentypresents:melting",
+  "heat_requirement": "heated",
   "ingredients": [
     {
       "tag": "c:raw_materials/copper"

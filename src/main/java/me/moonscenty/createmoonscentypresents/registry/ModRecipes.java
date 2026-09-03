@@ -615,16 +615,19 @@ public class ModRecipes {
         melting("tin_from_ingot", CommonMetal.TIN.ingots, HeatCondition.NONE,
                 () -> new FluidStack(ModFluids.MOLTEN_TIN.get().getSource(), METAL_PER_INGOT));
 
-        // Copper on a plain fire, which is the one place the real melting point is not
-        // followed: 1085 degrees is a blaze burner, and a blaze burner is the Nether.
-        // Gating bronze behind the Nether would end the age exactly the way gating zinc
-        // behind it would have, so copper is let through on the same grounds as zinc and
-        // the ladder keeps its shape everywhere else.
-        melting("copper_from_raw", Tags.Items.RAW_MATERIALS_COPPER, HeatCondition.NONE,
+        // Copper at its real melting point, 1085 degrees, which is a rung above what a
+        // campfire gives. There is no blaze burner in this age - what reaches it is a
+        // burning charcoal pit with somebody working a bellows on the side of it, and a
+        // basin set on top of that.
+        //
+        // So the last metal before bronze is the one that has to be stood over. The pit
+        // has to be kept fed with logs to stay lit at all, and the button has to be held
+        // for the whole melt, which is the most the stone age ever asks of anybody.
+        melting("copper_from_raw", Tags.Items.RAW_MATERIALS_COPPER, HeatCondition.HEATED,
                 () -> new FluidStack(ModFluids.MOLTEN_COPPER.get().getSource(), METAL_PER_RAW_ORE));
-        melting("copper_from_concentrate", ModTags.COPPER_CONCENTRATES, HeatCondition.NONE,
+        melting("copper_from_concentrate", ModTags.COPPER_CONCENTRATES, HeatCondition.HEATED,
                 () -> new FluidStack(ModFluids.MOLTEN_COPPER.get().getSource(), METAL_PER_CONCENTRATE));
-        melting("copper_from_ingot", Tags.Items.INGOTS_COPPER, HeatCondition.NONE,
+        melting("copper_from_ingot", Tags.Items.INGOTS_COPPER, HeatCondition.HEATED,
                 () -> new FluidStack(ModFluids.MOLTEN_COPPER.get().getSource(), METAL_PER_INGOT));
 
         // Bronze back into the pot. Nothing produces bronze but the mixer, so this is

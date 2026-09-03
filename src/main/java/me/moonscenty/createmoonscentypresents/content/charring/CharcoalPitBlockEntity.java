@@ -45,7 +45,8 @@ public class CharcoalPitBlockEntity extends KilnBlockEntity<CharringRecipe> {
      * Its own fire, not one underneath.
      *
      * <p>Read straight off the block, because the block is where the fire is written -
-     * which is the same place a foundry basin standing on this pit reads it from.
+     * which is the same place a foundry basin standing on this pit reads it from. That
+     * includes the rung a bellows adds, so a pumped pit chars faster as well.
      */
     @Override
     public HeatLevel availableHeat() {

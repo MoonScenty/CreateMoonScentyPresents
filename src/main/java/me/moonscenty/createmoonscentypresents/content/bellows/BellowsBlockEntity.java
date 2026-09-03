@@ -38,10 +38,23 @@ public class BellowsBlockEntity extends SmartBlockEntity {
         // None; a bellows is one countdown.
     }
 
-    /** Starts a stroke, or restarts the one already running. */
-    public void pump() {
+    /**
+     * Starts a stroke if the last one has finished.
+     *
+     * <p>Held down, the click repeats several times a second - far faster than the
+     * leather can travel. Restarting on each one snapped the boards back to open every
+     * few ticks and read as a stutter rather than a pump, so a stroke in progress is left
+     * alone to finish. The air it puts on the fire is not gated by this; that keeps being
+     * pushed out on every click, which is what holding the button is for.
+     *
+     * @return whether this click began a new stroke
+     */
+    public boolean pump() {
+        if (stroke > 0)
+            return false;
         stroke = STROKE_TICKS;
         notifyUpdate();
+        return true;
     }
 
     public boolean isPumping() {
