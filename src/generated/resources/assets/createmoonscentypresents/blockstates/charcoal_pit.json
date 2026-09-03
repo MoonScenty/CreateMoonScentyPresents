@@ -1,18 +1,78 @@
 {
   "variants": {
-    "facing=east": {
+    "blaze=fading,facing=east": {
+      "model": "createmoonscentypresents:block/charcoal_pit_lit",
+      "y": 90
+    },
+    "blaze=fading,facing=north": {
+      "model": "createmoonscentypresents:block/charcoal_pit_lit"
+    },
+    "blaze=fading,facing=south": {
+      "model": "createmoonscentypresents:block/charcoal_pit_lit",
+      "y": 180
+    },
+    "blaze=fading,facing=west": {
+      "model": "createmoonscentypresents:block/charcoal_pit_lit",
+      "y": 270
+    },
+    "blaze=kindled,facing=east": {
+      "model": "createmoonscentypresents:block/charcoal_pit_lit",
+      "y": 90
+    },
+    "blaze=kindled,facing=north": {
+      "model": "createmoonscentypresents:block/charcoal_pit_lit"
+    },
+    "blaze=kindled,facing=south": {
+      "model": "createmoonscentypresents:block/charcoal_pit_lit",
+      "y": 180
+    },
+    "blaze=kindled,facing=west": {
+      "model": "createmoonscentypresents:block/charcoal_pit_lit",
+      "y": 270
+    },
+    "blaze=none,facing=east": {
       "model": "createmoonscentypresents:block/charcoal_pit",
       "y": 90
     },
-    "facing=north": {
+    "blaze=none,facing=north": {
       "model": "createmoonscentypresents:block/charcoal_pit"
     },
-    "facing=south": {
+    "blaze=none,facing=south": {
       "model": "createmoonscentypresents:block/charcoal_pit",
       "y": 180
     },
-    "facing=west": {
+    "blaze=none,facing=west": {
       "model": "createmoonscentypresents:block/charcoal_pit",
+      "y": 270
+    },
+    "blaze=seething,facing=east": {
+      "model": "createmoonscentypresents:block/charcoal_pit_lit",
+      "y": 90
+    },
+    "blaze=seething,facing=north": {
+      "model": "createmoonscentypresents:block/charcoal_pit_lit"
+    },
+    "blaze=seething,facing=south": {
+      "model": "createmoonscentypresents:block/charcoal_pit_lit",
+      "y": 180
+    },
+    "blaze=seething,facing=west": {
+      "model": "createmoonscentypresents:block/charcoal_pit_lit",
+      "y": 270
+    },
+    "blaze=smouldering,facing=east": {
+      "model": "createmoonscentypresents:block/charcoal_pit_lit",
+      "y": 90
+    },
+    "blaze=smouldering,facing=north": {
+      "model": "createmoonscentypresents:block/charcoal_pit_lit"
+    },
+    "blaze=smouldering,facing=south": {
+      "model": "createmoonscentypresents:block/charcoal_pit_lit",
+      "y": 180
+    },
+    "blaze=smouldering,facing=west": {
+      "model": "createmoonscentypresents:block/charcoal_pit_lit",
       "y": 270
     }
   }

@@ -27,6 +27,8 @@ import me.moonscenty.createmoonscentypresents.content.sifting.SifterBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModHandCrankBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModPoweredShaftBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRackBlockEntity;
+import me.moonscenty.createmoonscentypresents.content.bellows.BellowsBlockEntity;
+import me.moonscenty.createmoonscentypresents.content.bellows.BellowsRenderer;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRackRenderer;
 import me.moonscenty.createmoonscentypresents.content.tapping.TapperBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.tapping.TapperRenderer;
@@ -115,6 +117,13 @@ public class ModBlockEntityTypes {
                     .blockEntity("charcoal_pit", CharcoalPitBlockEntity::new)
                     .validBlocks(ModBlocks.CHARCOAL_PIT)
                     .register();
+
+    // Counts down one squeeze, which is the whole of what the renderer needs.
+    public static final BlockEntityEntry<BellowsBlockEntity> BELLOWS = CreateMoonScentyPresents.REGISTRATE
+            .blockEntity("bellows", BellowsBlockEntity::new)
+            .validBlocks(ModBlocks.BELLOWS)
+            .renderer(() -> BellowsRenderer::new)
+            .register();
 
     // Holds the one item hung on a drying rack, and draws it.
     public static final BlockEntityEntry<DryingRackBlockEntity> DRYING_RACK = CreateMoonScentyPresents.REGISTRATE

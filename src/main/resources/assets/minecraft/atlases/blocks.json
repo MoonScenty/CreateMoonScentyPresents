@@ -15,6 +15,38 @@
     {
       "type": "single",
       "resource": "createmoonscentypresents:fluid/molten_zinc_flow"
+    },
+    {
+      "type": "single",
+      "resource": "createmoonscentypresents:fluid/molten_tin_still"
+    },
+    {
+      "type": "single",
+      "resource": "createmoonscentypresents:fluid/molten_tin_flow"
+    },
+    {
+      "type": "single",
+      "resource": "createmoonscentypresents:fluid/molten_iron_still"
+    },
+    {
+      "type": "single",
+      "resource": "createmoonscentypresents:fluid/molten_iron_flow"
+    },
+    {
+      "type": "single",
+      "resource": "createmoonscentypresents:fluid/molten_copper_still"
+    },
+    {
+      "type": "single",
+      "resource": "createmoonscentypresents:fluid/molten_copper_flow"
+    },
+    {
+      "type": "single",
+      "resource": "createmoonscentypresents:fluid/molten_bronze_still"
+    },
+    {
+      "type": "single",
+      "resource": "createmoonscentypresents:fluid/molten_bronze_flow"
     }
   ]
 }

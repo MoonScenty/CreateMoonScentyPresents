@@ -20,6 +20,7 @@ import me.moonscenty.createmoonscentypresents.content.kinetics.ModGearboxBlock;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModHandCrankBlock;
 import me.moonscenty.createmoonscentypresents.content.milling.MillstoneBlock;
 import me.moonscenty.createmoonscentypresents.content.casting.CastingTableBlock;
+import me.moonscenty.createmoonscentypresents.content.bellows.BellowsBlock;
 import me.moonscenty.createmoonscentypresents.content.charring.CharcoalPitBlock;
 import me.moonscenty.createmoonscentypresents.content.firing.PitKilnBlock;
 import me.moonscenty.createmoonscentypresents.content.foundry.FaucetBlock;
@@ -70,14 +71,28 @@ public class ModBlocks {
     public static final BlockEntry<CharcoalPitBlock> CHARCOAL_PIT = CreateMoonScentyPresents.REGISTRATE
             .block("charcoal_pit", CharcoalPitBlock::new)
             .initialProperties(() -> Blocks.BRICKS)
-            .properties(p -> p.mapColor(MapColor.STONE))
+            // A struck pit glows out of its own grate, which is the only way to tell a
+            // burning one from a cold one once it has been buried.
+            .properties(p -> p.mapColor(MapColor.STONE)
+                    .lightLevel(state -> CharcoalPitBlock.isLit(state) ? 8 : 0))
             .transform(TagGen.pickaxeOnly())
-            .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(),
-                    prov.models().orientable(ctx.getName(),
-                            prov.modLoc("block/charcoal_pit_side"),
-                            prov.modLoc("block/charcoal_pit_front"),
-                            prov.modLoc("block/charcoal_pit_top"))))
-            .simpleItem()
+            .blockstate((ctx, prov) -> {
+                var cold = prov.models().orientable(ctx.getName(),
+                        prov.modLoc("block/charcoal_pit_side"),
+                        prov.modLoc("block/charcoal_pit_front"),
+                        prov.modLoc("block/charcoal_pit_top"));
+                var burning = prov.models().orientable(ctx.getName() + "_lit",
+                        prov.modLoc("block/charcoal_pit_side"),
+                        prov.modLoc("block/charcoal_pit_front_lit"),
+                        prov.modLoc("block/charcoal_pit_top"));
+                prov.horizontalBlock(ctx.getEntry(),
+                        state -> CharcoalPitBlock.isLit(state) ? burning : cold);
+            })
+            .item()
+            // The item is the cold one; a lit pit is a state, not a thing you carry.
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(),
+                    prov.modLoc("block/" + ctx.getName())))
+            .build()
             .register();
 
     // Stone Age - time based drying. Hand made model; see
@@ -224,13 +239,19 @@ public class ModBlocks {
             .build()
             .register();
 
-    // Not for this age: alloying needs a kinetic network the stone age cannot build.
-    // Registered so the block and its recipe type are in place for the one that can.
+    // Stone Age - alloying. A hand crank at 32 RPM makes 256 SU and this takes 128, so
+    // one crank drives one mixer and nothing else, which is the same bargain every other
+    // station in the age offers.
+    //
+    // The impact has to be registered here: the block entity extends Create's mixer, but
+    // stress is looked up by block, so without this the mixer would turn for free and
+    // the crank would stop meaning anything.
     public static final BlockEntry<FoundryMixerBlock> FOUNDRY_MIXER = CreateMoonScentyPresents.REGISTRATE
             .block("foundry_mixer", FoundryMixerBlock::new)
             .initialProperties(() -> Blocks.BRICKS)
             .properties(p -> p.mapColor(MapColor.COLOR_GRAY).noOcclusion())
             .transform(TagGen.pickaxeOnly())
+            .onRegister(block -> BlockStressValues.IMPACTS.register(block, () -> 4.0))
             .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
                     prov.models().getExistingFile(prov.modLoc("block/foundry_mixer/block"))))
             .item()
@@ -289,6 +310,23 @@ public class ModBlocks {
             .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(),
                     prov.models().getExistingFile(prov.modLoc("block/tapper")), 0))
             .simpleItem()
+            .register();
+
+    // Stone Age - stands against a charcoal pit and lifts it a rung while somebody works
+    // it. The block model is only the board it stands on and the nozzle; the bag and the
+    // two boards that ride on it are drawn by BellowsRenderer so they can be squeezed.
+    public static final BlockEntry<BellowsBlock> BELLOWS = CreateMoonScentyPresents.REGISTRATE
+            .block("bellows", BellowsBlock::new)
+            .initialProperties(() -> Blocks.OAK_PLANKS)
+            .properties(p -> p.sound(SoundType.WOOD).mapColor(MapColor.WOOD).noOcclusion())
+            .transform(TagGen.axeOrPickaxe())
+            .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(),
+                    prov.models().getExistingFile(prov.modLoc("block/bellows/block"))))
+            .item()
+            // The item shows the whole thing, since nothing is animating it in a hand.
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(),
+                    prov.modLoc("block/bellows/item")))
+            .build()
             .register();
 
     /** One bored log, the wood it came from, and the planks a saw gets back out of it. */

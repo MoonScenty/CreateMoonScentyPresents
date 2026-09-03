@@ -1,0 +1,15 @@
+{
+  "type": "createmoonscentypresents:sifting",
+  "ingredients": [
+    {
+      "tag": "c:raw_materials/tin"
+    }
+  ],
+  "processing_time": 250,
+  "results": [
+    {
+      "id": "createmoonscentypresents:tin_concentrate"
+    }
+  ],
+  "waterlogged": true
+}

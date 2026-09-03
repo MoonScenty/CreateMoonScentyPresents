@@ -21,6 +21,8 @@ import me.moonscenty.createmoonscentypresents.content.heat.HeatLevel;
 import me.moonscenty.createmoonscentypresents.content.milling.MillingRecipe;
 import me.moonscenty.createmoonscentypresents.content.sifting.SiftingRecipe;
 import com.simibubi.create.AllTags;
+import com.simibubi.create.content.processing.recipe.HeatCondition;
+import com.simibubi.create.foundation.data.recipe.CommonMetal;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
@@ -34,6 +36,7 @@ import me.moonscenty.createmoonscentypresents.content.tapping.TappingRecipe;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -73,9 +76,25 @@ public class ModRecipes {
     private static final int SIFTING_TIME = 250;
     /** Dressing without water loses half the ore. */
     private static final float DRY_DRESSING = 0.5f;
+    /**
+     * One raw tin in four washes of iron.
+     *
+     * <p>Rare enough that bronze is worked towards rather than stumbled into, common
+     * enough that it is not a lottery. It is also the only source of tin the pack has,
+     * so this number is what the whole bronze age is paced by.
+     */
+    private static final float TIN_FROM_IRON = 0.25f;
     private static final float CLAY_FROM_SAND = 0.25f;
     /** Long enough to watch it go dull, short enough not to be a wait. */
     private static final int CASTING_TIME = 120;
+
+    // One tin to three copper, measured in the same units an ingot is worth - so a batch
+    // is one tin ingot and three copper ingots, and four bronze come back out. Nothing
+    // is lost in the mixing: what makes bronze expensive is the tin.
+    private static final int TIN_PER_BRONZE = METAL_PER_INGOT;
+    private static final int COPPER_PER_BRONZE = METAL_PER_INGOT * 3;
+    /** Longer than melting - this is the last thing the age does, and it is turned by hand. */
+    private static final int ALLOYING_TIME = 300;
 
     /** 20 seconds. Balancing comes later, like every other number in this pack. */
     private static final int DRYING_TIME = 400;
@@ -283,6 +302,7 @@ public class ModRecipes {
         registerClay();
         registerFoundry();
         registerMelting();
+        registerAlloying();
         registerCasting();
         registerRewards();
         registerGates();
@@ -416,6 +436,38 @@ public class ModRecipes {
         sifting("zinc_concentrate_dry", false, Ingredient.of(AllTags.commonItemTag("raw_materials/zinc")),
                 builder -> builder.output(DRY_DRESSING, ModItems.ZINC_CONCENTRATE.get()));
 
+        // Iron goes through the same washing, and this is where tin comes from.
+        //
+        // Tin has no ore of its own to find, so it is found beside something else - and
+        // iron is the ore this age already has every reason to be digging. Washing it is
+        // therefore the whole route to bronze, which is why the byproduct is on the wet
+        // side only: water is what separates one metal from another, and a dry shake
+        // just breaks the rock up.
+        //
+        // Raw tin rather than a concentrate or an ingot. It goes back through this same
+        // sifter to be washed like any other ore, so finding tin and refining tin stay
+        // two different jobs.
+        sifting("iron_concentrate", true, Ingredient.of(Tags.Items.RAW_MATERIALS_IRON),
+                builder -> builder.output(ModItems.IRON_CONCENTRATE.get())
+                        .output(TIN_FROM_IRON, ModItems.RAW_TIN.get()));
+
+        sifting("iron_concentrate_dry", false, Ingredient.of(Tags.Items.RAW_MATERIALS_IRON),
+                builder -> builder.output(DRY_DRESSING, ModItems.IRON_CONCENTRATE.get()));
+
+        sifting("tin_concentrate", true, Ingredient.of(CommonMetal.TIN.rawOres),
+                builder -> builder.output(ModItems.TIN_CONCENTRATE.get()));
+
+        sifting("tin_concentrate_dry", false, Ingredient.of(CommonMetal.TIN.rawOres),
+                builder -> builder.output(DRY_DRESSING, ModItems.TIN_CONCENTRATE.get()));
+
+        // Copper is the bulk of bronze, so washing it is where the last of the age is
+        // spent - three of these for every one tin.
+        sifting("copper_concentrate", true, Ingredient.of(Tags.Items.RAW_MATERIALS_COPPER),
+                builder -> builder.output(ModItems.COPPER_CONCENTRATE.get()));
+
+        sifting("copper_concentrate_dry", false, Ingredient.of(Tags.Items.RAW_MATERIALS_COPPER),
+                builder -> builder.output(DRY_DRESSING, ModItems.COPPER_CONCENTRATE.get()));
+
         // Not ore dressing, but the same washing: sand gives up the clay in it, which is
         // what keeps a foundry in crucibles once the nearest lake bed is dug out.
         sifting("clay_from_sand", true, Ingredient.of(ItemTags.SAND),
@@ -544,18 +596,60 @@ public class ModRecipes {
      * and gating zinc behind one would gate the whole age behind it.
      */
     private static void registerMelting() {
-        melting("zinc_from_raw", AllTags.commonItemTag("raw_materials/zinc"),
+        melting("zinc_from_raw", AllTags.commonItemTag("raw_materials/zinc"), HeatCondition.NONE,
                 () -> new FluidStack(ModFluids.MOLTEN_ZINC.get().getSource(), METAL_PER_RAW_ORE));
         // Half again as much for having washed it first. That is what a sifter is for -
         // not finding ore, but getting more out of the ore already dug.
-        melting("zinc_from_concentrate", ModTags.ZINC_CONCENTRATES,
+        melting("zinc_from_concentrate", ModTags.ZINC_CONCENTRATES, HeatCondition.NONE,
                 () -> new FluidStack(ModFluids.MOLTEN_ZINC.get().getSource(), METAL_PER_CONCENTRATE));
-        melting("zinc_from_ingot", AllTags.commonItemTag("ingots/zinc"),
+        melting("zinc_from_ingot", AllTags.commonItemTag("ingots/zinc"), HeatCondition.NONE,
                 () -> new FluidStack(ModFluids.MOLTEN_ZINC.get().getSource(), METAL_PER_INGOT));
+
+        // Tin melts lower than zinc does, so the same fire that makes the alloy makes
+        // this. Nothing new is needed to pour it - only the tin itself, which is the
+        // hard part.
+        melting("tin_from_raw", CommonMetal.TIN.rawOres, HeatCondition.NONE,
+                () -> new FluidStack(ModFluids.MOLTEN_TIN.get().getSource(), METAL_PER_RAW_ORE));
+        melting("tin_from_concentrate", ModTags.TIN_CONCENTRATES, HeatCondition.NONE,
+                () -> new FluidStack(ModFluids.MOLTEN_TIN.get().getSource(), METAL_PER_CONCENTRATE));
+        melting("tin_from_ingot", CommonMetal.TIN.ingots, HeatCondition.NONE,
+                () -> new FluidStack(ModFluids.MOLTEN_TIN.get().getSource(), METAL_PER_INGOT));
+
+        // Copper on a plain fire, which is the one place the real melting point is not
+        // followed: 1085 degrees is a blaze burner, and a blaze burner is the Nether.
+        // Gating bronze behind the Nether would end the age exactly the way gating zinc
+        // behind it would have, so copper is let through on the same grounds as zinc and
+        // the ladder keeps its shape everywhere else.
+        melting("copper_from_raw", Tags.Items.RAW_MATERIALS_COPPER, HeatCondition.NONE,
+                () -> new FluidStack(ModFluids.MOLTEN_COPPER.get().getSource(), METAL_PER_RAW_ORE));
+        melting("copper_from_concentrate", ModTags.COPPER_CONCENTRATES, HeatCondition.NONE,
+                () -> new FluidStack(ModFluids.MOLTEN_COPPER.get().getSource(), METAL_PER_CONCENTRATE));
+        melting("copper_from_ingot", Tags.Items.INGOTS_COPPER, HeatCondition.NONE,
+                () -> new FluidStack(ModFluids.MOLTEN_COPPER.get().getSource(), METAL_PER_INGOT));
+
+        // Bronze back into the pot. Nothing produces bronze but the mixer, so this is
+        // only a way to undo a casting - which is worth having when the tin in it is the
+        // scarcest thing in the age.
+        melting("bronze_from_ingot", ModTags.BRONZE_INGOTS, HeatCondition.NONE,
+                () -> new FluidStack(ModFluids.MOLTEN_BRONZE.get().getSource(), METAL_PER_INGOT));
+
+        // Iron asks for a blaze burner and so belongs to the next age. It is written now
+        // because the rest of its line is: washing iron is how tin is found, and the
+        // concentrate that comes out of that has to be worth keeping.
+        //
+        // Vanilla smelting is untouched, so nobody is waiting on this for iron - it is
+        // the better path, not the only one.
+        melting("iron_from_raw", Tags.Items.RAW_MATERIALS_IRON, HeatCondition.HEATED,
+                () -> new FluidStack(ModFluids.MOLTEN_IRON.get().getSource(), METAL_PER_RAW_ORE));
+        melting("iron_from_concentrate", ModTags.IRON_CONCENTRATES, HeatCondition.HEATED,
+                () -> new FluidStack(ModFluids.MOLTEN_IRON.get().getSource(), METAL_PER_CONCENTRATE));
+        melting("iron_from_ingot", Tags.Items.INGOTS_IRON, HeatCondition.HEATED,
+                () -> new FluidStack(ModFluids.MOLTEN_IRON.get().getSource(), METAL_PER_INGOT));
     }
 
     /** The result is a supplier: fluids are not bound yet when this is called. */
-    private static void melting(String name, TagKey<Item> input, Supplier<FluidStack> result) {
+    private static void melting(String name, TagKey<Item> input, HeatCondition heat,
+            Supplier<FluidStack> result) {
         CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov -> {
             ResourceLocation id = ResourceLocation.fromNamespaceAndPath(
                     CreateMoonScentyPresents.MODID, "melting/" + name);
@@ -563,6 +657,7 @@ public class ModRecipes {
                     params -> new FoundryRecipe(ModRecipeTypes.MELTING_INFO, params), id)
                             .require(input)
                             .output(result.get())
+                            .requiresHeat(heat)
                             .duration(MELTING_TIME)
                             .build(), null);
         });
@@ -580,6 +675,20 @@ public class ModRecipes {
      * reaches it without a bench recipe.
      */
     private static void registerFoundry() {
+        // Boards, a hide between them and a metal nozzle - which is what the three
+        // textures on the model are. It belongs to the charcoal pit rather than the
+        // foundry, but it is a bench recipe for a station and this is where those live.
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.BELLOWS.get())
+                        .pattern("PLP")
+                        .pattern("PLP")
+                        .pattern("PNP")
+                        .define('P', ItemTags.PLANKS)
+                        .define('L', Items.LEATHER)
+                        .define('N', Items.IRON_NUGGET)
+                        .unlockedBy("has_leather", prov.has(Items.LEATHER))
+                        .save(prov));
+
         // A heavy flat cap with an iron hinge, to shut the heat in.
         CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
                 ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.FOUNDRY_LID.get())
@@ -610,14 +719,24 @@ public class ModRecipes {
                         .unlockedBy("has_fire_brick", prov.has(ModItems.FIRE_BRICK.get()))
                         .save(prov));
 
-        // Not for this age - a mixer needs a kinetic network first. Lining Create's own
-        // mixer rather than building another says what it is: the same machine, made to
-        // stand over a fire.
+        // Built from the age's own parts rather than by lining Create's mixer. Lining
+        // one read well but could never be made here: Create's mixer wants a shaft, and
+        // shafts are what the second gate closes. This is the same machine described in
+        // stone age terms - a fire brick body, an iron whisk, and the shaft and bearing
+        // every other turning thing in the age is built from.
+        //
+        // The bearing is what makes it late: it costs an andesite alloy, so the mixer
+        // cannot be reached before the first gate has been worked through by hand.
         CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
-                ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModBlocks.FOUNDRY_MIXER.get())
-                        .requires(AllBlocks.MECHANICAL_MIXER.get())
-                        .requires(ModItems.FIRE_BRICK.get(), 2)
-                        .unlockedBy("has_mechanical_mixer", prov.has(AllBlocks.MECHANICAL_MIXER.get()))
+                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.FOUNDRY_MIXER.get())
+                        .pattern("FSF")
+                        .pattern("FIF")
+                        .pattern(" B ")
+                        .define('F', ModItems.FIRE_BRICK.get())
+                        .define('S', ModBlocks.WOODEN_SHAFT.get())
+                        .define('I', Items.IRON_INGOT)
+                        .define('B', ModItems.WOODEN_BEARING.get())
+                        .unlockedBy("has_wooden_bearing", prov.has(ModItems.WOODEN_BEARING.get()))
                         .save(prov));
     }
 
@@ -629,13 +748,60 @@ public class ModRecipes {
      * <p>The ingot mould is fired clay and survives being knocked out, so it is not
      * consumed - one mould casts as many ingots as you can pour into it.
      */
+    // --- alloying --------------------------------------------------------------
+
+    /**
+     * The only thing the foundry mixer makes, and the end of the age.
+     *
+     * <p>One part tin to three of copper, poured rather than stirred: both go in as
+     * metal that is already melted, which is why the mixer sits on a basin and not on a
+     * bench. Nothing is lost - four ingots in, four out - because the cost is not in the
+     * mixing but in the tin, which only comes out of washed iron.
+     *
+     * <p>It needs turning, and a hand crank at 32 RPM is exactly enough for one mixer.
+     * That is the last thing the age asks for: everything built up to here, used at once.
+     */
+    private static void registerAlloying() {
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov -> {
+            ResourceLocation id = ResourceLocation.fromNamespaceAndPath(
+                    CreateMoonScentyPresents.MODID, "alloying/bronze");
+            prov.accept(id, new StandardProcessingRecipe.Builder<>(
+                    params -> new FoundryRecipe(ModRecipeTypes.ALLOYING_INFO, params), id)
+                            .require(SizedFluidIngredient.of(
+                                    ModFluids.MOLTEN_TIN.get().getSource(), TIN_PER_BRONZE))
+                            .require(SizedFluidIngredient.of(
+                                    ModFluids.MOLTEN_COPPER.get().getSource(), COPPER_PER_BRONZE))
+                            .output(new FluidStack(ModFluids.MOLTEN_BRONZE.get().getSource(),
+                                    TIN_PER_BRONZE + COPPER_PER_BRONZE))
+                            .duration(ALLOYING_TIME)
+                            .build(), null);
+        });
+    }
+
+    // --- casting ---------------------------------------------------------------
+
     private static void registerCasting() {
+        casting("zinc_ingot", () -> ModFluids.MOLTEN_ZINC.get().getSource(),
+                () -> new ItemStack(AllItems.ZINC_INGOT.get()));
+        casting("bronze_ingot", () -> ModFluids.MOLTEN_BRONZE.get().getSource(),
+                () -> new ItemStack(ModItems.BRONZE_INGOT.get()));
+        casting("copper_ingot", () -> ModFluids.MOLTEN_COPPER.get().getSource(),
+                () -> new ItemStack(Items.COPPER_INGOT));
+        casting("tin_ingot", () -> ModFluids.MOLTEN_TIN.get().getSource(),
+                () -> new ItemStack(ModItems.TIN_INGOT.get()));
+        // For the age that can melt it; see registerMelting.
+        casting("iron_ingot", () -> ModFluids.MOLTEN_IRON.get().getSource(),
+                () -> new ItemStack(Items.IRON_INGOT));
+    }
+
+    /** Suppliers again: neither fluids nor items are bound when this is called. */
+    private static void casting(String name, Supplier<Fluid> metal, Supplier<ItemStack> result) {
         CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov -> prov.accept(
-                ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, "casting/zinc_ingot"),
+                ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, "casting/" + name),
                 new CastingRecipe(
-                        SizedFluidIngredient.of(ModFluids.MOLTEN_ZINC.get().getSource(), METAL_PER_INGOT),
+                        SizedFluidIngredient.of(metal.get(), METAL_PER_INGOT),
                         Ingredient.of(ModItems.INGOT_MOLD.get()),
-                        new ItemStack(AllItems.ZINC_INGOT.get()),
+                        result.get(),
                         CASTING_TIME, false),
                 null));
     }

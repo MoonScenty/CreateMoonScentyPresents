@@ -1,27 +1,27 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_mechanical_mixer": {
-      "conditions": {
-        "items": [
-          {
-            "items": "create:mechanical_mixer"
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
     "has_the_recipe": {
       "conditions": {
         "recipe": "createmoonscentypresents:foundry_mixer"
       },
       "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_wooden_bearing": {
+      "conditions": {
+        "items": [
+          {
+            "items": "createmoonscentypresents:wooden_bearing"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_mechanical_mixer"
+      "has_wooden_bearing"
     ]
   ],
   "rewards": {

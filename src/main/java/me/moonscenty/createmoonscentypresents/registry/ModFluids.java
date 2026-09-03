@@ -47,6 +47,88 @@ public class ModFluids {
                     .tag(ModTags.MOLTEN)
                     .register();
 
+    /**
+     * Tin, which melts at a lower heat than zinc does.
+     *
+     * <p>232 degrees, the lowest melting point of any metal the pack uses, so a campfire
+     * takes it easily. That is what makes bronze a stone age metal at all: the tin comes
+     * out of washing iron, and melting it needs nothing the age does not already have.
+     */
+    public static final FluidEntry<BaseFlowingFluid.Flowing> MOLTEN_TIN =
+            CreateMoonScentyPresents.REGISTRATE.standardFluid("molten_tin")
+                    .lang("Molten Tin")
+                    .properties(p -> p.viscosity(1100).density(1900).temperature(505)
+                            .lightLevel(8))
+                    .fluidProperties(p -> p.levelDecreasePerBlock(2)
+                            .tickRate(25)
+                            .slopeFindDistance(2)
+                            .explosionResistance(100f))
+                    .noBucket()
+                    .tag(ModTags.MOLTEN)
+                    .register();
+
+    /**
+     * Iron, which the stone age cannot reach.
+     *
+     * <p>1538 degrees. Its melting recipes ask for a blaze burner, so this exists for
+     * the age after this one - the ore line is built now because washing iron is how tin
+     * is found, not because iron can be poured yet. Drawn glowing rather than dull for
+     * that reason: it is the one metal here that is genuinely hot.
+     */
+    public static final FluidEntry<BaseFlowingFluid.Flowing> MOLTEN_IRON =
+            CreateMoonScentyPresents.REGISTRATE.standardFluid("molten_iron")
+                    .lang("Molten Iron")
+                    .properties(p -> p.viscosity(1400).density(2400).temperature(1811)
+                            .lightLevel(14))
+                    .fluidProperties(p -> p.levelDecreasePerBlock(2)
+                            .tickRate(20)
+                            .slopeFindDistance(2)
+                            .explosionResistance(100f))
+                    .noBucket()
+                    .tag(ModTags.MOLTEN)
+                    .register();
+
+    /**
+     * Copper, the other half of bronze.
+     *
+     * <p>Melting it is the one place the heat ladder is bent. Copper really wants 1085
+     * degrees, which is a blaze burner - but a blaze burner is a trip to the Nether, and
+     * putting the Nether in front of bronze would close the age the same way requiring
+     * one for zinc would have closed it. The bend is deliberate and it is the only one;
+     * see the melting recipes.
+     */
+    public static final FluidEntry<BaseFlowingFluid.Flowing> MOLTEN_COPPER =
+            CreateMoonScentyPresents.REGISTRATE.standardFluid("molten_copper")
+                    .lang("Molten Copper")
+                    .properties(p -> p.viscosity(1300).density(2200).temperature(1358)
+                            .lightLevel(12))
+                    .fluidProperties(p -> p.levelDecreasePerBlock(2)
+                            .tickRate(22)
+                            .slopeFindDistance(2)
+                            .explosionResistance(100f))
+                    .noBucket()
+                    .tag(ModTags.MOLTEN)
+                    .register();
+
+    /**
+     * What the stone age is working towards: one part tin to three of copper.
+     *
+     * <p>The only fluid here that is made rather than melted, and the only one the mixer
+     * produces. Everything the age built gets used once to reach it.
+     */
+    public static final FluidEntry<BaseFlowingFluid.Flowing> MOLTEN_BRONZE =
+            CreateMoonScentyPresents.REGISTRATE.standardFluid("molten_bronze")
+                    .lang("Molten Bronze")
+                    .properties(p -> p.viscosity(1300).density(2100).temperature(1223)
+                            .lightLevel(11))
+                    .fluidProperties(p -> p.levelDecreasePerBlock(2)
+                            .tickRate(22)
+                            .slopeFindDistance(2)
+                            .explosionResistance(100f))
+                    .noBucket()
+                    .tag(ModTags.MOLTEN)
+                    .register();
+
     // Called from the mod constructor purely to load this class, which declares
     // the entries above. Registrate handles the actual registry events.
     public static void register() {

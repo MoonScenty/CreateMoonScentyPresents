@@ -1,16 +1,24 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "misc",
-  "ingredients": [
-    {
-      "item": "create:mechanical_mixer"
+  "key": {
+    "B": {
+      "item": "createmoonscentypresents:wooden_bearing"
     },
-    {
+    "F": {
       "item": "createmoonscentypresents:fire_brick"
     },
-    {
-      "item": "createmoonscentypresents:fire_brick"
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "S": {
+      "item": "createmoonscentypresents:wooden_shaft"
     }
+  },
+  "pattern": [
+    "FSF",
+    "FIF",
+    " B "
   ],
   "result": {
     "count": 1,

@@ -1,0 +1,19 @@
+{
+  "type": "createmoonscentypresents:sifting",
+  "ingredients": [
+    {
+      "tag": "c:raw_materials/iron"
+    }
+  ],
+  "processing_time": 250,
+  "results": [
+    {
+      "id": "createmoonscentypresents:iron_concentrate"
+    },
+    {
+      "chance": 0.25,
+      "id": "createmoonscentypresents:raw_tin"
+    }
+  ],
+  "waterlogged": true
+}

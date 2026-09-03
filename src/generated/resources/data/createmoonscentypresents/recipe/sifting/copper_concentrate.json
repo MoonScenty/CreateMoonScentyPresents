@@ -1,0 +1,15 @@
+{
+  "type": "createmoonscentypresents:sifting",
+  "ingredients": [
+    {
+      "tag": "c:raw_materials/copper"
+    }
+  ],
+  "processing_time": 250,
+  "results": [
+    {
+      "id": "createmoonscentypresents:copper_concentrate"
+    }
+  ],
+  "waterlogged": true
+}

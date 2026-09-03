@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "createmoonscentypresents:block/bellows/block",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "createmoonscentypresents:block/bellows/block"
+    },
+    "facing=south": {
+      "model": "createmoonscentypresents:block/bellows/block",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "createmoonscentypresents:block/bellows/block",
+      "y": 270
+    }
+  }
+}

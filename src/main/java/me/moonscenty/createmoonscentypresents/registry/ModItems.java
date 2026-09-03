@@ -155,6 +155,10 @@ public class ModItems {
     // than the ore it came from.
     public static final ItemEntry<Item> ZINC_CONCENTRATE =
             concentrate("zinc_concentrate", ModTags.ZINC_CONCENTRATES);
+    // Washed iron ore. The stone age cannot melt it - iron needs a blaze burner - so it
+    // piles up while the sifter is being run for the tin that comes out beside it.
+    public static final ItemEntry<Item> IRON_CONCENTRATE =
+            concentrate("iron_concentrate", ModTags.IRON_CONCENTRATES);
 
     // Millstone output: the meltable powder fed to the crucible furnace.
     public static final ItemEntry<Item> COPPER_DUST = dust("copper_dust", ModTags.COPPER_DUSTS);

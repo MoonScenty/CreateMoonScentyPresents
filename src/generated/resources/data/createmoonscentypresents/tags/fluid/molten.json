@@ -1,6 +1,14 @@
 {
   "values": [
     "createmoonscentypresents:flowing_molten_zinc",
-    "createmoonscentypresents:molten_zinc"
+    "createmoonscentypresents:molten_zinc",
+    "createmoonscentypresents:flowing_molten_tin",
+    "createmoonscentypresents:molten_tin",
+    "createmoonscentypresents:flowing_molten_iron",
+    "createmoonscentypresents:molten_iron",
+    "createmoonscentypresents:flowing_molten_copper",
+    "createmoonscentypresents:molten_copper",
+    "createmoonscentypresents:flowing_molten_bronze",
+    "createmoonscentypresents:molten_bronze"
   ]
 }

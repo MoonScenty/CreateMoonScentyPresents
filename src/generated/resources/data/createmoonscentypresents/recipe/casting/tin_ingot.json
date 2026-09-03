@@ -1,0 +1,16 @@
+{
+  "type": "createmoonscentypresents:casting",
+  "fluid": {
+    "amount": 90,
+    "ingredient": {
+      "fluid": "createmoonscentypresents:molten_tin"
+    }
+  },
+  "mold": {
+    "item": "createmoonscentypresents:ingot_mold"
+  },
+  "processing_time": 120,
+  "result": {
+    "id": "createmoonscentypresents:tin_ingot"
+  }
+}

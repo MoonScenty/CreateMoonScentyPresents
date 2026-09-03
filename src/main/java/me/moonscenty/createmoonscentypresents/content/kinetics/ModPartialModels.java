@@ -59,6 +59,24 @@ public class ModPartialModels {
         COG_SHAFTS.put(name, block(shaftModel));
     }
 
+    // The bellows is not kinetic, but partial models all have to be declared in the same
+    // window before the bake, so they are declared here with the rest.
+    private static final PartialModel BELLOWS_BAG = block("bellows/bag");
+    private static final PartialModel BELLOWS_RIB = block("bellows/rib");
+    private static final PartialModel BELLOWS_TOP = block("bellows/top");
+
+    public static PartialModel bellowsBag() {
+        return BELLOWS_BAG;
+    }
+
+    public static PartialModel bellowsRib() {
+        return BELLOWS_RIB;
+    }
+
+    public static PartialModel bellowsTop() {
+        return BELLOWS_TOP;
+    }
+
     private static PartialModel block(String path) {
         return PartialModel.of(ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, "block/" + path));
     }

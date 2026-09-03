@@ -1,0 +1,22 @@
+{
+  "type": "createmoonscentypresents:alloying",
+  "ingredients": [
+    {
+      "type": "neoforge:single",
+      "amount": 90,
+      "fluid": "createmoonscentypresents:molten_tin"
+    },
+    {
+      "type": "neoforge:single",
+      "amount": 270,
+      "fluid": "createmoonscentypresents:molten_copper"
+    }
+  ],
+  "processing_time": 300,
+  "results": [
+    {
+      "amount": 360,
+      "id": "createmoonscentypresents:molten_bronze"
+    }
+  ]
+}
