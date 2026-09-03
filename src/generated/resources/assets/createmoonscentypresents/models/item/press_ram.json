@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "createmoonscentypresents:item/stone_die"
+    "layer0": "createmoonscentypresents:item/press_ram"
   }
 }

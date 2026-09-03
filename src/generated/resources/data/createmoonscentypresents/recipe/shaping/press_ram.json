@@ -1,10 +1,10 @@
 {
   "type": "createmoonscentypresents:shaping",
   "ingredient": {
-    "item": "minecraft:stone"
+    "tag": "c:storage_blocks/iron"
   },
   "result": {
     "count": 1,
-    "id": "createmoonscentypresents:stone_die"
+    "id": "createmoonscentypresents:press_ram"
   }
 }

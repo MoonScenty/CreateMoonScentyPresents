@@ -7,6 +7,7 @@ import com.simibubi.create.foundation.data.BlockStateGen;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.data.TagGen;
 import com.simibubi.create.foundation.data.recipe.CommonMetal;
+import com.simibubi.create.content.decoration.encasing.CasingBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockModel;
 import com.simibubi.create.content.kinetics.simpleRelays.CogwheelBlockItem;
 import com.tterrag.registrate.util.entry.BlockEntry;
@@ -41,7 +42,7 @@ import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.item.Items;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
@@ -49,6 +50,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.common.Tags;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
@@ -217,12 +219,32 @@ public class ModBlocks {
             .initialProperties(() -> Blocks.BRICKS)
             .properties(p -> p.mapColor(MapColor.COLOR_GRAY).noOcclusion())
             .transform(TagGen.pickaxeOnly())
-            .blockstate((ctx, prov) -> prov.directionalBlock(ctx.getEntry(), state -> prov.models()
-                    .getExistingFile(prov.modLoc("block/faucet/" + faucetModel(state)))))
+            // Not directionalBlock. These models are drawn already lying down and facing
+            // north, so the only turn they want is about Y - directionalBlock assumes a
+            // model drawn pointing up and tips it onto an axis this one is not on.
+            //
+            // Vertical facings have no yaw of their own, and toYRot reports 270 for both
+            // of them, which lands on the same quarter turn the down model was drawn
+            // needing. So one line covers all six.
+            .blockstate((ctx, prov) -> prov.getVariantBuilder(ctx.getEntry())
+                    .forAllStates(state -> ConfiguredModel.builder()
+                            .modelFile(prov.models()
+                                    .getExistingFile(prov.modLoc("block/faucet/" + faucetModel(state))))
+                            .rotationY(((int) state.getValue(FaucetBlock.FACING).toYRot() + 180) % 360)
+                            .build()))
             .item()
             .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), prov.modLoc("block/faucet/block")))
             .build()
             .register();
+
+    // Every block in the foundry line has fully transparent pixels in its texture - 144
+    // in the basin, 472 in the lid, 276 in the casting table, 36 in the faucet - and the
+    // solid layer draws those black, which is what the inside of the bowl is made of.
+    //
+    // The render type is written into the models themselves, as "render_type":
+    // "minecraft:cutout_mipped". Registrate's addLayer did the same job from here and is
+    // marked for removal; its own note says to set it in the model JSON instead. A model
+    // without the line inherits its parent's, so the generated item models need nothing.
 
     // Stone Age - the vessel metal is melted in. The foundry basin from Create:
     // Metallurgy, which is Create's basin with more room and a spout; the melting
@@ -231,10 +253,6 @@ public class ModBlocks {
             .block("foundry_basin", FoundryBasinBlock::new)
             .initialProperties(() -> Blocks.BRICKS)
             .properties(p -> p.mapColor(MapColor.COLOR_GRAY).noOcclusion())
-            // The basin texture has 144 fully transparent pixels in it, and the solid
-            // layer draws those black - which is what the inside of the bowl is made of.
-            // Create puts its own basin on this layer for the same reason.
-            .addLayer(() -> RenderType::cutoutMipped)
             .transform(TagGen.pickaxeOnly())
             .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
                     prov.models().getExistingFile(prov.modLoc("block/foundry_basin/block"))))
@@ -255,8 +273,6 @@ public class ModBlocks {
             .block("foundry_mixer", FoundryMixerBlock::new)
             .initialProperties(() -> Blocks.BRICKS)
             .properties(p -> p.mapColor(MapColor.COLOR_GRAY).noOcclusion())
-            // Same reason as the basin; Create's own mixer is on this layer too.
-            .addLayer(() -> RenderType::cutoutMipped)
             .transform(TagGen.pickaxeOnly())
             .onRegister(block -> BlockStressValues.IMPACTS.register(block, () -> 4.0))
             .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
@@ -494,6 +510,28 @@ public class ModBlocks {
             .build()
             .register();
 
+    // What the stone age ends on. A sheet of bronze pressed flat and worked onto a
+    // stripped log, which is Create's own way of making a casing and the way this one is
+    // made too - the andesite casing is the gate and gets the brush, this is the reward
+    // and gets the plain gesture.
+    //
+    // One texture on all six faces, which is how Create draws its own casings. The
+    // texture is Create's andesite casing with the frame repainted off this pack's bronze
+    // ramp and the boards left alone - a casing is a wooden body in a metal frame, and
+    // only the frame is what tells one apart from another.
+    //
+    // No connected textures yet: Create runs those off a sprite shift, which needs a
+    // sheet drawn for it.
+    public static final BlockEntry<CasingBlock> BRONZE_CASING = CreateMoonScentyPresents.REGISTRATE
+            .block("bronze_casing", CasingBlock::new)
+            .initialProperties(() -> Blocks.COPPER_BLOCK)
+            .properties(p -> p.mapColor(MapColor.TERRACOTTA_ORANGE).sound(SoundType.WOOD))
+            .transform(TagGen.axeOrPickaxe())
+            .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
+                    prov.models().cubeAll(ctx.getName(), prov.modLoc("block/bronze_casing"))))
+            .simpleItem()
+            .register();
+
     // Bronze Age - 64 RPM power transmission. Same classes as the wooden shaft; only
     // the textures and the powered-variant pairing differ.
     public static final BlockEntry<ModShaftBlock> BRONZE_SHAFT = CreateMoonScentyPresents.REGISTRATE
@@ -528,10 +566,16 @@ public class ModBlocks {
         return window ? "block_window" : "block";
     }
 
-    /** Down or sideways, open or shut - four models off a direction and a boolean. */
+    /**
+     * Down or sideways, open or shut - four models off a direction and a boolean.
+     *
+     * <p>Only a faucet pointing straight down gets the standing model. One pointing up is
+     * a placement nobody asks for, so it falls back to the side model, which is what the
+     * mod this came from does with it too.
+     */
     private static String faucetModel(net.minecraft.world.level.block.state.BlockState state) {
         boolean open = state.getValue(FaucetBlock.OPEN);
-        boolean down = state.getValue(FaucetBlock.FACING).getAxis().isVertical();
+        boolean down = state.getValue(FaucetBlock.FACING) == Direction.DOWN;
         if (down)
             return open ? "block_down_open" : "block_down";
         return open ? "block_open" : "block";

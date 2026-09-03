@@ -1,0 +1,16 @@
+{
+  "type": "create:item_application",
+  "ingredients": [
+    {
+      "tag": "c:stripped_woods"
+    },
+    {
+      "item": "createmoonscentypresents:bronze_sheet"
+    }
+  ],
+  "results": [
+    {
+      "id": "createmoonscentypresents:bronze_casing"
+    }
+  ]
+}

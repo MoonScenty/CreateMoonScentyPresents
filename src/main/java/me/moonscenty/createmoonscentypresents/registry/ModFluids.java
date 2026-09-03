@@ -4,8 +4,23 @@ import me.moonscenty.createmoonscentypresents.CreateMoonScentyPresents;
 
 import com.tterrag.registrate.util.entry.FluidEntry;
 
+import net.minecraft.world.item.Items;
+
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 
+/**
+ * The fluids this pack pours.
+ *
+ * <p>Every molten metal below asks for {@code noBucket()}, which Registrate hears as
+ * "do not register a bucket item" - but its FluidBuilder has already aimed the fluid's
+ * bucket supplier at an item named after it, and that item now never exists. So anything
+ * that asks a molten metal for its bucket throws rather than coming up empty, which JEI
+ * does the moment one is clicked in its list.
+ *
+ * <p>NeoForge already reads a missing supplier as {@link Items#AIR}, so each of them
+ * points its own supplier there and gets that answer back. Create reaches the same place
+ * from the other side, overriding {@code getBucket()} on the fluids it gives no bucket.
+ */
 public class ModFluids {
 
     /**
@@ -39,7 +54,8 @@ public class ModFluids {
                     .lang("Molten Zinc")
                     .properties(p -> p.viscosity(1200).density(2000).temperature(693)
                             .lightLevel(10))
-                    .fluidProperties(p -> p.levelDecreasePerBlock(2)
+                    .fluidProperties(p -> p.bucket(() -> Items.AIR)
+                            .levelDecreasePerBlock(2)
                             .tickRate(25)
                             .slopeFindDistance(2)
                             .explosionResistance(100f))
@@ -59,7 +75,8 @@ public class ModFluids {
                     .lang("Molten Tin")
                     .properties(p -> p.viscosity(1100).density(1900).temperature(505)
                             .lightLevel(8))
-                    .fluidProperties(p -> p.levelDecreasePerBlock(2)
+                    .fluidProperties(p -> p.bucket(() -> Items.AIR)
+                            .levelDecreasePerBlock(2)
                             .tickRate(25)
                             .slopeFindDistance(2)
                             .explosionResistance(100f))
@@ -80,7 +97,8 @@ public class ModFluids {
                     .lang("Molten Iron")
                     .properties(p -> p.viscosity(1400).density(2400).temperature(1811)
                             .lightLevel(14))
-                    .fluidProperties(p -> p.levelDecreasePerBlock(2)
+                    .fluidProperties(p -> p.bucket(() -> Items.AIR)
+                            .levelDecreasePerBlock(2)
                             .tickRate(20)
                             .slopeFindDistance(2)
                             .explosionResistance(100f))
@@ -101,7 +119,8 @@ public class ModFluids {
                     .lang("Molten Copper")
                     .properties(p -> p.viscosity(1300).density(2200).temperature(1358)
                             .lightLevel(12))
-                    .fluidProperties(p -> p.levelDecreasePerBlock(2)
+                    .fluidProperties(p -> p.bucket(() -> Items.AIR)
+                            .levelDecreasePerBlock(2)
                             .tickRate(22)
                             .slopeFindDistance(2)
                             .explosionResistance(100f))
@@ -120,7 +139,8 @@ public class ModFluids {
                     .lang("Molten Bronze")
                     .properties(p -> p.viscosity(1300).density(2100).temperature(1223)
                             .lightLevel(11))
-                    .fluidProperties(p -> p.levelDecreasePerBlock(2)
+                    .fluidProperties(p -> p.bucket(() -> Items.AIR)
+                            .levelDecreasePerBlock(2)
                             .tickRate(22)
                             .slopeFindDistance(2)
                             .explosionResistance(100f))

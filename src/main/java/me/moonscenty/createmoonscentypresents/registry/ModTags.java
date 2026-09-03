@@ -17,33 +17,33 @@ import net.minecraft.world.level.block.Block;
  * between crushed ore and dust, a stage no other mod names.
  */
 public class ModTags {
-    public static final TagKey<Item> CONCENTRATES = item("concentrates");
-    public static final TagKey<Item> COPPER_CONCENTRATES = item("concentrates/copper");
-    public static final TagKey<Item> TIN_CONCENTRATES = item("concentrates/tin");
-    public static final TagKey<Item> ZINC_CONCENTRATES = item("concentrates/zinc");
-    public static final TagKey<Item> IRON_CONCENTRATES = item("concentrates/iron");
+    public static final TagKey<Item> CONCENTRATES = common("concentrates");
+    public static final TagKey<Item> COPPER_CONCENTRATES = common("concentrates/copper");
+    public static final TagKey<Item> TIN_CONCENTRATES = common("concentrates/tin");
+    public static final TagKey<Item> ZINC_CONCENTRATES = common("concentrates/zinc");
+    public static final TagKey<Item> IRON_CONCENTRATES = common("concentrates/iron");
 
     // c:dusts itself is a NeoForge tag (Tags.Items.DUSTS); only the per-metal
     // subtags need declaring, since CommonMetal does not cover dusts.
-    public static final TagKey<Item> COPPER_DUSTS = item("dusts/copper");
-    public static final TagKey<Item> TIN_DUSTS = item("dusts/tin");
-    public static final TagKey<Item> IRON_DUSTS = item("dusts/iron");
-    public static final TagKey<Item> LIMESTONE_DUSTS = item("dusts/limestone");
+    public static final TagKey<Item> COPPER_DUSTS = common("dusts/copper");
+    public static final TagKey<Item> TIN_DUSTS = common("dusts/tin");
+    public static final TagKey<Item> IRON_DUSTS = common("dusts/iron");
+    public static final TagKey<Item> LIMESTONE_DUSTS = common("dusts/limestone");
 
     // Low grade metal specks recovered from washing; another step no other mod names.
-    public static final TagKey<Item> FRAGMENTS = item("fragments");
-    public static final TagKey<Item> COPPER_FRAGMENTS = item("fragments/copper");
-    public static final TagKey<Item> TIN_FRAGMENTS = item("fragments/tin");
+    public static final TagKey<Item> FRAGMENTS = common("fragments");
+    public static final TagKey<Item> COPPER_FRAGMENTS = common("fragments/copper");
+    public static final TagKey<Item> TIN_FRAGMENTS = common("fragments/tin");
 
     // Bronze is not one of Create's CommonMetal entries, so its tags live here.
-    public static final TagKey<Item> BRONZE_NUGGETS = item("nuggets/bronze");
-    public static final TagKey<Item> BRONZE_INGOTS = item("ingots/bronze");
+    public static final TagKey<Item> BRONZE_NUGGETS = common("nuggets/bronze");
+    public static final TagKey<Item> BRONZE_INGOTS = common("ingots/bronze");
 
     // Create names the item a sheet but tags it under plates, which is the cross-mod
     // convention. Both are followed: the id reads like Create's, the tag matches
     // everyone else's.
-    public static final TagKey<Item> PLATES = item("plates");
-    public static final TagKey<Item> BRONZE_PLATES = item("plates/bronze");
+    public static final TagKey<Item> PLATES = common("plates");
+    public static final TagKey<Item> BRONZE_PLATES = common("plates/bronze");
 
     // Logs a hand drill has been through. Not a common tag - nothing else has the idea -
     // so these two live in this mod's own namespace. The block tag is what a tapper asks
@@ -52,7 +52,15 @@ public class ModTags {
     public static final TagKey<Block> HOLED_LOG_BLOCKS = block("holed_logs");
     public static final TagKey<Item> HOLED_LOGS = ownItem("holed_logs");
 
-    private static TagKey<Item> item(String path) {
+    /**
+     * A tag in the cross-mod {@code c} namespace.
+     *
+     * <p>Public because it is also how recipes name the c tags this mod does not declare
+     * itself - zinc's forms, stripped logs. Create used to hand those out through
+     * {@code AllTags.commonItemTag}, which it has marked for removal; the body of it was
+     * this line.
+     */
+    public static TagKey<Item> common(String path) {
         return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", path));
     }
 

@@ -11,6 +11,9 @@ import java.util.function.Supplier;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
+import com.simibubi.create.content.kinetics.deployer.ItemApplicationRecipe;
+import com.simibubi.create.content.kinetics.deployer.ManualApplicationRecipe;
+import com.simibubi.create.content.kinetics.press.PressingRecipe;
 import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 
 import me.moonscenty.createmoonscentypresents.content.casting.CastingRecipe;
@@ -20,7 +23,6 @@ import me.moonscenty.createmoonscentypresents.content.foundry.FoundryRecipe;
 import me.moonscenty.createmoonscentypresents.content.heat.HeatLevel;
 import me.moonscenty.createmoonscentypresents.content.milling.MillingRecipe;
 import me.moonscenty.createmoonscentypresents.content.sifting.SiftingRecipe;
-import com.simibubi.create.AllTags;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.foundation.data.recipe.CommonMetal;
 import com.tterrag.registrate.providers.ProviderType;
@@ -304,6 +306,7 @@ public class ModRecipes {
         registerMelting();
         registerAlloying();
         registerCasting();
+        registerBronzeCasing();
         registerRewards();
         registerGates();
     }
@@ -429,11 +432,11 @@ public class ModRecipes {
      */
     private static void registerSifting() {
         // Washed properly, the whole ore comes through as concentrate.
-        sifting("zinc_concentrate", true, Ingredient.of(AllTags.commonItemTag("raw_materials/zinc")),
+        sifting("zinc_concentrate", true, Ingredient.of(ModTags.common("raw_materials/zinc")),
                 builder -> builder.output(ModItems.ZINC_CONCENTRATE.get()));
 
         // Shaken dry, half of it goes over the side as dust.
-        sifting("zinc_concentrate_dry", false, Ingredient.of(AllTags.commonItemTag("raw_materials/zinc")),
+        sifting("zinc_concentrate_dry", false, Ingredient.of(ModTags.common("raw_materials/zinc")),
                 builder -> builder.output(DRY_DRESSING, ModItems.ZINC_CONCENTRATE.get()));
 
         // Iron goes through the same washing, and this is where tin comes from.
@@ -596,13 +599,13 @@ public class ModRecipes {
      * and gating zinc behind one would gate the whole age behind it.
      */
     private static void registerMelting() {
-        melting("zinc_from_raw", AllTags.commonItemTag("raw_materials/zinc"), HeatCondition.NONE,
+        melting("zinc_from_raw", ModTags.common("raw_materials/zinc"), HeatCondition.NONE,
                 () -> new FluidStack(ModFluids.MOLTEN_ZINC.get().getSource(), METAL_PER_RAW_ORE));
         // Half again as much for having washed it first. That is what a sifter is for -
         // not finding ore, but getting more out of the ore already dug.
         melting("zinc_from_concentrate", ModTags.ZINC_CONCENTRATES, HeatCondition.NONE,
                 () -> new FluidStack(ModFluids.MOLTEN_ZINC.get().getSource(), METAL_PER_CONCENTRATE));
-        melting("zinc_from_ingot", AllTags.commonItemTag("ingots/zinc"), HeatCondition.NONE,
+        melting("zinc_from_ingot", ModTags.common("ingots/zinc"), HeatCondition.NONE,
                 () -> new FluidStack(ModFluids.MOLTEN_ZINC.get().getSource(), METAL_PER_INGOT));
 
         // Tin melts lower than zinc does, so the same fire that makes the alloy makes
@@ -880,10 +883,10 @@ public class ModRecipes {
 
         // Only the zinc variant comes back. Iron nuggets are not a stone age material,
         // and leaving that route open would let the alloy skip zinc entirely.
-        andesiteAlloy("andesite_alloy_from_zinc", AllTags.commonItemTag("nuggets/zinc"));
+        andesiteAlloy("andesite_alloy_from_zinc", ModTags.common("nuggets/zinc"));
         // The mixer route has to move with it, or a mixer would put the gate back to
         // plain andesite. Same two ingredients as the bench recipe.
-        andesiteAlloyMixing("mixing/andesite_alloy_from_zinc", AllTags.commonItemTag("nuggets/zinc"));
+        andesiteAlloyMixing("mixing/andesite_alloy_from_zinc", ModTags.common("nuggets/zinc"));
 
         // Gate 2: the shaft. Create stacks two alloy in a column; the lower one becomes a
         // stave, so the count and the shape hold and only the lower half changes hands.
@@ -914,28 +917,30 @@ public class ModRecipes {
                         .unlockedBy("has_resin", prov.has(ModItems.RESIN.get()))
                         .save(prov));
 
-        andesiteCasing("from_log", AllTags.commonItemTag("stripped_logs"));
-        andesiteCasing("from_wood", AllTags.commonItemTag("stripped_woods"));
+        andesiteCasing("from_log", ModTags.common("stripped_logs"));
+        andesiteCasing("from_wood", ModTags.common("stripped_woods"));
 
         // Gate 4: the press, and with it the end of the age. Create stacks shaft, casing
-        // and an iron block in a column; the pattern widens to five so a die sits on
-        // either side of the casing. Casings alone no longer reach it.
+        // and an iron block in a column, and the column stays exactly three tall - the
+        // iron block is chiselled into a ram first, so the gate costs no more iron than
+        // Create asked for. What it adds is the last of the four tools.
         CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
                 ShapedRecipeBuilder.shaped(RecipeCategory.MISC, AllBlocks.MECHANICAL_PRESS.get())
-                        .pattern(" S ")
-                        .pattern("DCD")
-                        .pattern(" I ")
+                        .pattern("S")
+                        .pattern("C")
+                        .pattern("R")
                         .define('S', ModBlocks.WOODEN_SHAFT.get())
                         .define('C', AllBlocks.ANDESITE_CASING.get())
-                        .define('D', ModItems.STONE_DIE.get())
-                        .define('I', AllTags.commonItemTag("storage_blocks/iron"))
-                        .unlockedBy("has_stone_die", prov.has(ModItems.STONE_DIE.get()))
+                        .define('R', ModItems.PRESS_RAM.get())
+                        .unlockedBy("has_press_ram", prov.has(ModItems.PRESS_RAM.get()))
                         .save(prov, ResourceLocation.fromNamespaceAndPath(
                                 CreateMoonScentyPresents.MODID, "mechanical_press")));
 
+        // The only thing the chisel shapes in this age, and the only iron it ever sees.
         CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov -> prov.accept(
-                ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, "shaping/stone_die"),
-                new ShapingRecipe(Ingredient.of(Blocks.STONE), new ItemStack(ModItems.STONE_DIE.get())),
+                ResourceLocation.fromNamespaceAndPath(CreateMoonScentyPresents.MODID, "shaping/press_ram"),
+                new ShapingRecipe(Ingredient.of(ModTags.common("storage_blocks/iron")),
+                        new ItemStack(ModItems.PRESS_RAM.get())),
                 null));
 
         // What the saw opens instead: our own shaft, which the limit does cover.
@@ -945,6 +950,44 @@ public class ModRecipes {
                         .requires(ModItems.TWINE.get())
                         .unlockedBy("has_wooden_stave", prov.has(ModItems.WOODEN_STAVE.get()))
                         .save(prov));
+    }
+
+    /**
+     * The bronze sheet, and the casing it becomes.
+     *
+     * <p>This is where the age stops. Everything before it was building the line; this is
+     * the line producing something that is not a step towards anything else in the stone
+     * age. It also puts the press to work for the first time - gate 4 opened it, and the
+     * only thing it presses before the age closes is the bronze the age was for.
+     *
+     * <p>The casing is made Create's way, by holding the sheet against a stripped log.
+     * The andesite casing was taken off that and given to the brush because it is a gate
+     * and a gate should cost an action; this one is the reward and is left plain.
+     */
+    private static void registerBronzeCasing() {
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov -> {
+            ResourceLocation id = ResourceLocation.fromNamespaceAndPath(
+                    CreateMoonScentyPresents.MODID, "pressing/bronze_sheet");
+            prov.accept(id, new StandardProcessingRecipe.Builder<>(PressingRecipe::new, id)
+                    .require(ModTags.BRONZE_INGOTS)
+                    .output(ModItems.BRONZE_SHEET.get())
+                    .build(), null);
+        });
+
+        bronzeCasing("from_log", Tags.Items.STRIPPED_LOGS);
+        bronzeCasing("from_wood", Tags.Items.STRIPPED_WOODS);
+    }
+
+    private static void bronzeCasing(String name, TagKey<Item> stripped) {
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov -> {
+            ResourceLocation id = ResourceLocation.fromNamespaceAndPath(
+                    CreateMoonScentyPresents.MODID, "item_application/bronze_casing_" + name);
+            prov.accept(id, new ItemApplicationRecipe.Builder<>(ManualApplicationRecipe::new, id)
+                    .require(stripped)
+                    .require(ModItems.BRONZE_SHEET.get())
+                    .output(ModBlocks.BRONZE_CASING.get())
+                    .build(), null);
+        });
     }
 
     private static void andesiteCasing(String name, TagKey<Item> stripped) {

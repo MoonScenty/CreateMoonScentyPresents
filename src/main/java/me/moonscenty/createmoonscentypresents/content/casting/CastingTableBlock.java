@@ -64,11 +64,10 @@ public class CastingTableBlock extends Block implements IBE<CastingTableBlockEnt
             return ItemInteractionResult.SUCCESS;
 
         return onBlockEntityUseItemOn(level, pos, table -> {
-            if (!table.getFluidTank().isEmpty())
-                return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-
-            // Taking the casting comes first: with something finished on the table, a
-            // click should clear it rather than try to lay another mould.
+            // Taking the casting comes first, and it comes before the check below: a
+            // finished casting is a solid thing sitting on top, so whatever is left in
+            // the table underneath is no reason to refuse to hand it over. A table that
+            // had been overfilled used to strand its own casting exactly here.
             if (!table.getResult().isEmpty()) {
                 player.getInventory().placeItemBackInInventory(table.getResult());
                 table.resultInv.setStackInSlot(0, ItemStack.EMPTY);
@@ -77,6 +76,11 @@ public class CastingTableBlock extends Block implements IBE<CastingTableBlockEnt
                         1f + level.getRandom().nextFloat());
                 return ItemInteractionResult.SUCCESS;
             }
+
+            // Reaching into molten metal is not a thing you do, so the mould stays put
+            // while there is any standing in the table.
+            if (!table.getFluidTank().isEmpty())
+                return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 
             if (!stack.isEmpty() && table.getMold().isEmpty()) {
                 table.moldInv.setStackInSlot(0, stack.copyWithCount(1));

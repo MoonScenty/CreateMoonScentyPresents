@@ -44,9 +44,10 @@ public class ModItems {
     // is worked into a standing stripped log until the casing takes.
     public static final ItemEntry<Item> ANDESITE_CEMENT = simple("andesite_cement");
 
-    // Gate 4, and the end of the age. The press cannot be reached with casings alone,
-    // and it is also what brings create:shaft back.
-    public static final ItemEntry<Item> STONE_DIE = simple("stone_die");
+    // Gate 4, and the end of the age. The head that comes down on whatever is under the
+    // press, chiselled out of a block of iron - so it costs the same iron the press
+    // always cost, and what the gate adds is the chisel rather than another material.
+    public static final ItemEntry<Item> PRESS_RAM = simple("press_ram");
 
     // Age reward. Worn on the head; Create draws everything it shows, so the item
     // itself does nothing but tell Create it is being worn.

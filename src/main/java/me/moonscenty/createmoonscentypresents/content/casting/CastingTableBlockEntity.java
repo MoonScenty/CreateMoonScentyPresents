@@ -51,6 +51,28 @@ public class CastingTableBlockEntity extends SmartBlockEntity implements Clearab
             return findRecipe(stack, true).isPresent();
         }
 
+        /**
+         * Takes only as much as the mould on the table is asking for.
+         *
+         * <p>The capacity above is sized for the largest pour any mould could want, and a
+         * plain tank fills to its capacity. Left at that, a faucet keeps pouring after the
+         * recipe has what it needs, and the surplus is still standing in the table when
+         * the casting sets - which is metal the player paid for and cannot get back.
+         *
+         * <p>Asking the recipe here rather than in {@link #isFluidValid} is the point:
+         * validity answers which fluid, and this answers how much of it.
+         */
+        @Override
+        public int fill(FluidStack resource, FluidAction action) {
+            int wanted = findRecipe(resource, true)
+                    .map(recipe -> recipe.fluid().amount())
+                    .orElse(0);
+            int room = wanted - getFluidAmount();
+            if (room <= 0)
+                return 0;
+            return super.fill(resource.copyWithAmount(Math.min(resource.getAmount(), room)), action);
+        }
+
         @Override
         protected void onContentsChanged() {
             setChanged();

@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_stone_die": {
+    "has_press_ram": {
       "conditions": {
         "items": [
           {
-            "items": "createmoonscentypresents:stone_die"
+            "items": "createmoonscentypresents:press_ram"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_stone_die"
+      "has_press_ram"
     ]
   ],
   "rewards": {

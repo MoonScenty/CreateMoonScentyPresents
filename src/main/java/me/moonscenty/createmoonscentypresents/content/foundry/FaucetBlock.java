@@ -47,11 +47,14 @@ public class FaucetBlock extends WrenchableDirectionalBlock implements IBE<Fauce
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
-    private static final VoxelShape SHAPE_DOWN = Block.box(5, 0, 5, 11, 11, 11);
-    private static final VoxelShape SHAPE_NORTH = Block.box(5, 4, 5, 11, 12, 16);
-    private static final VoxelShape SHAPE_SOUTH = Block.box(5, 4, 0, 11, 12, 11);
-    private static final VoxelShape SHAPE_WEST = Block.box(5, 4, 5, 16, 12, 11);
-    private static final VoxelShape SHAPE_EAST = Block.box(0, 4, 5, 11, 12, 11);
+    // A faucet on a wall sits in the half of its block nearest what it is tapping, and
+    // one under a tank sits in the top half reaching up into it. The four side shapes are
+    // the north one turned about Y; the down one is drawn where it stands.
+    private static final VoxelShape SHAPE_DOWN = Block.box(4, 8, 4, 12, 16, 12);
+    private static final VoxelShape SHAPE_NORTH = Block.box(4, 6, 8, 12, 11, 15);
+    private static final VoxelShape SHAPE_SOUTH = Block.box(4, 6, 1, 12, 11, 8);
+    private static final VoxelShape SHAPE_WEST = Block.box(8, 6, 4, 15, 11, 12);
+    private static final VoxelShape SHAPE_EAST = Block.box(1, 6, 4, 8, 11, 12);
 
     public FaucetBlock(Properties properties) {
         super(properties);

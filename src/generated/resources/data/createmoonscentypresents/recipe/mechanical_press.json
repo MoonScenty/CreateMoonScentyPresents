@@ -5,20 +5,17 @@
     "C": {
       "item": "create:andesite_casing"
     },
-    "D": {
-      "item": "createmoonscentypresents:stone_die"
-    },
-    "I": {
-      "tag": "c:storage_blocks/iron"
+    "R": {
+      "item": "createmoonscentypresents:press_ram"
     },
     "S": {
       "item": "createmoonscentypresents:wooden_shaft"
     }
   },
   "pattern": [
-    " S ",
-    "DCD",
-    " I "
+    "S",
+    "C",
+    "R"
   ],
   "result": {
     "count": 1,

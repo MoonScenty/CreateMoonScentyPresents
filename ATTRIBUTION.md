@@ -39,3 +39,6 @@ This is an addon for [Create](https://github.com/Creators-of-Create/Create) and 
 on its block entities, recipe types and rendering throughout. Several blocks are
 subclasses of Create's own, and some of its textures and models are copied and
 recoloured; Create is MIT licensed.
+
+`block/bronze_casing` is Create's `block/andesite_casing` with the frame repainted off
+this pack's own bronze ramp and the boards left as they are.
