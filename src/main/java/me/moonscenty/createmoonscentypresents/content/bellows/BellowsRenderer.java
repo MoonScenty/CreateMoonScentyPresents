@@ -8,7 +8,6 @@ import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModPartialModels;
 
-import net.createmod.catnip.math.AngleHelper;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -63,11 +62,17 @@ public class BellowsRenderer extends SafeBlockEntityRenderer<BellowsBlockEntity>
     private static void draw(PartialModel model, BlockState state, int light, PoseStack ms,
             VertexConsumer buffer, java.util.function.Consumer<SuperByteBuffer> squeeze) {
         SuperByteBuffer part = CachedBuffers.partial(model, state);
-        // The blockstate is the plain horizontal one, and this is the turn Create pairs
-        // with it everywhere - the crafter and the deployer both draw their parts this
-        // way. Working the angle out by hand lands 180 degrees off.
+        // Has to be the same turn the blockstate gives the static half, or the two halves
+        // sit a pixel apart - the boards run z1 to z14 and the bag z2 to z13, so neither
+        // is symmetric about the middle and half a turn shows.
+        //
+        // The blockstate writes y = facing.toYRot() + 180, and a y of Y in a blockstate is
+        // a rotation of minus Y (BlockModelRotation), while rotateYDegrees takes a plain
+        // positive turn about YP. Hence the negation of both terms. Create's own
+        // AngleHelper.horizontalAngle does not fit here: its partial models are drawn
+        // facing the other way, so borrowing it lands exactly half a turn out.
         Direction facing = state.getValue(HorizontalDirectionalBlock.FACING);
-        part.center().rotateYDegrees(AngleHelper.horizontalAngle(facing)).uncenter();
+        part.center().rotateYDegrees(-(facing.toYRot() + 180)).uncenter();
         squeeze.accept(part);
         part.light(light).renderInto(ms, buffer);
     }
