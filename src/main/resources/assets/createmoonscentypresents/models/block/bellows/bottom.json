@@ -1,5 +1,5 @@
 {
-	"__comment": "One of the two boards that ride on the bag; moved down by BellowsRenderer.",
+	"__comment": "The board the bellows stands on; drawn rising towards the rib as it is worked.",
 	"parent": "block/block",
 	"textures": {
 		"0": "createmoonscentypresents:block/bellows_1",
@@ -8,8 +8,8 @@
 	"elements": [
 		{
 			"name": "Board",
-			"from": [1, 7, 1],
-			"to": [15, 9, 14],
+			"from": [1, 0, 1],
+			"to": [15, 2, 14],
 			"faces": {
 				"north": {"uv": [0, 0, 14, 2], "texture": "#0"},
 				"east": {"uv": [3, 0, 16, 2], "texture": "#0"},

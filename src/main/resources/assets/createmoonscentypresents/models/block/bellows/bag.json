@@ -1,5 +1,5 @@
 {
-	"__comment": "The leather between the boards. Scaled in Y about its own underside as the bellows is worked.",
+	"__comment": "The leather between the boards. Scaled in Y about its middle, where the rib holds it, so it draws in from both ends at once.",
 	"parent": "block/block",
 	"textures": {
 		"1": "createmoonscentypresents:block/bellows_2",

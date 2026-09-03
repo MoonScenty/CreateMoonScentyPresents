@@ -21,17 +21,21 @@ import net.minecraft.world.level.block.state.BlockState;
 /**
  * Draws the parts of the bellows that move.
  *
- * <p>The board it stands on and the nozzle are in the block model and stay put. The top
- * board comes down, the rib between the folds comes down half as far, and the leather is
- * squashed to fill what is left - which is what a bellows does and what makes the height
- * of the boards line up with the top and bottom of the bag at every point in the stroke.
+ * <p>The rib and the nozzle are in the block model and stay where they are: the middle
+ * of the bellows is what is pinned, and it is also where the air leaves, so nothing
+ * about the nozzle should shift. Both boards then draw in towards that middle and the
+ * leather closes from both ends at once.
+ *
+ * <p>Each board travels the same distance, so the bag has to give up twice that - which
+ * is what keeps the boards sitting exactly on the ends of the leather at every point in
+ * the stroke.
  */
 public class BellowsRenderer extends SafeBlockEntityRenderer<BellowsBlockEntity> {
 
-    /** How far the top board travels, in blocks. Six of the twelve the bag is tall. */
-    private static final float TRAVEL = 6 / 16f;
-    /** The underside of the bag, which is what it is squashed towards. */
-    private static final float BAG_FLOOR = 2 / 16f;
+    /** How far each board travels, in blocks. Both move, so the bag loses twice this. */
+    private static final float TRAVEL = 3 / 16f;
+    /** The middle of the bag, level with the rib, which is what it closes towards. */
+    private static final float BAG_MIDDLE = 8 / 16f;
     private static final float BAG_HEIGHT = 12 / 16f;
 
     public BellowsRenderer(BlockEntityRendererProvider.Context context) {
@@ -45,14 +49,14 @@ public class BellowsRenderer extends SafeBlockEntityRenderer<BellowsBlockEntity>
         VertexConsumer solid = buffer.getBuffer(RenderType.solid());
 
         draw(ModPartialModels.bellowsBag(), state, light, ms, solid, part -> {
-            // Scaled about the underside, so the bag shrinks downwards onto its board.
-            float remaining = (BAG_HEIGHT - travel) / BAG_HEIGHT;
-            part.translate(0, BAG_FLOOR, 0).scale(1, remaining, 1).translate(0, -BAG_FLOOR, 0);
+            // Scaled about the rib, so the leather draws in from above and below at once.
+            float remaining = (BAG_HEIGHT - 2 * travel) / BAG_HEIGHT;
+            part.translate(0, BAG_MIDDLE, 0).scale(1, remaining, 1).translate(0, -BAG_MIDDLE, 0);
         });
-        draw(ModPartialModels.bellowsRib(), state, light, ms, solid,
-                part -> part.translate(0, -travel / 2, 0));
         draw(ModPartialModels.bellowsTop(), state, light, ms, solid,
                 part -> part.translate(0, -travel, 0));
+        draw(ModPartialModels.bellowsBottom(), state, light, ms, solid,
+                part -> part.translate(0, travel, 0));
     }
 
     /** Turns the part to face the way the block does, then applies the stroke to it. */

@@ -1,5 +1,5 @@
 {
-	"__comment": "The parts that do not move: the board it stands on and the nozzle in the wall. The bag, the rib and the top board are drawn by BellowsRenderer so they can be squeezed.",
+	"__comment": "The parts that do not move: the nozzle in the wall and the rib the bag is squeezed against. The two boards and the leather are drawn by BellowsRenderer.",
 	"parent": "block/block",
 	"textures": {
 		"0": "createmoonscentypresents:block/bellows_1",
@@ -8,9 +8,9 @@
 	},
 	"elements": [
 		{
-			"name": "BottomBoard",
-			"from": [1, 0, 1],
-			"to": [15, 2, 14],
+			"name": "Rib",
+			"from": [1, 7, 1],
+			"to": [15, 9, 14],
 			"faces": {
 				"north": {"uv": [0, 0, 14, 2], "texture": "#0"},
 				"east": {"uv": [3, 0, 16, 2], "texture": "#0"},
