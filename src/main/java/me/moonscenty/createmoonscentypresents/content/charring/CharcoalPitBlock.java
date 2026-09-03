@@ -9,7 +9,6 @@ import me.moonscenty.createmoonscentypresents.content.processing.HorizontalCubeB
 import me.moonscenty.createmoonscentypresents.registry.ModBlockEntityTypes;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -19,7 +18,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
@@ -31,16 +29,12 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 
 /**
- * Wood packed into a pit, lit, and then buried to smoulder.
+ * Wood packed into a pit and lit, to smoulder behind brick.
  *
  * <p>Unlike the kiln this carries its own fire rather than standing over one. A charcoal
- * burn is not a thing you keep a flame under - it is lit once, sealed, and left, and the
- * heat that chars the wood is the wood itself going. So there is nothing to build
- * underneath: strike it with flint and steel and cover it over.
- *
- * <p>The order that suggests is the real one. Lighting does not need the cover, and
- * working does - so the pit is lit and then buried, which is how a charcoal clamp is
- * actually run.
+ * burn is not a thing you keep a flame under - it is lit once and left, and the heat that
+ * chars the wood is the wood itself going. So there is nothing to build around it at all:
+ * pack it, strike it, walk away.
  *
  * <p>The fire goes out when the load does. A pit with nothing left in it has nothing
  * left to burn, so every batch is struck fresh.
@@ -75,14 +69,6 @@ public class CharcoalPitBlock extends HorizontalCubeBlock implements KilnBlock<C
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(HEAT_LEVEL);
-    }
-
-    /** Buried: whatever is directly above keeps the air off. */
-    public static boolean isCovered(BlockGetter level, BlockPos pos) {
-        if (level == null)
-            return false;
-        BlockPos above = pos.above();
-        return level.getBlockState(above).isFaceSturdy(level, above, Direction.DOWN);
     }
 
     public static boolean isLit(BlockState state) {

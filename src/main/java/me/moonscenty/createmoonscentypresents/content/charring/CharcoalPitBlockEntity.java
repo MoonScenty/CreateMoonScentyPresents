@@ -18,13 +18,14 @@ import net.minecraft.world.level.block.state.BlockState;
 /**
  * The charcoal pit.
  *
- * <p>Charcoal is wood that burned without enough air to burn away, so this asks for one
- * thing the pit kiln does not: something solid sitting on top of it. Uncovered it is
- * just a fire, and a fire leaves ash.
+ * <p>Charcoal is wood that burned without enough air to burn away, and the pit is what
+ * keeps the air off - it is a sealed brick box with one grate in the front, so nothing
+ * has to be stacked on top of it to smother the load.
  *
  * <p>Its heat comes from inside rather than from below. The kiln reads whatever fire is
  * under it every tick; this reads whether it has been struck, which is why nothing needs
- * building underneath one.
+ * building underneath one either. A pit is a station that stands on its own, and
+ * whatever is set on top of it is being cooked rather than holding it shut.
  */
 public class CharcoalPitBlockEntity extends KilnBlockEntity<CharringRecipe> {
 
@@ -61,17 +62,16 @@ public class CharcoalPitBlockEntity extends KilnBlockEntity<CharringRecipe> {
      *
      * <p>Written into the blockstate rather than kept here, because the thing that has
      * to see it is whatever is standing on top - and a basin only ever asks the block.
+     *
+     * <p>A cold pit stays cold. Air is not a light: the rung this writes is one <em>up</em>
+     * from smouldering, so blowing on a pit that was never struck would otherwise hand
+     * out a fire for free and make the flint and steel optional.
      */
     public void blow(int ticks) {
-        if (level == null)
+        if (level == null || !CharcoalPitBlock.isLit(getBlockState()))
             return;
         blownUntil = level.getGameTime() + ticks;
         setHeat(BlazeBurnerBlock.HeatLevel.KINDLED);
-    }
-
-    @Override
-    protected boolean isAssembled() {
-        return CharcoalPitBlock.isCovered(level, worldPosition);
     }
 
     /**
