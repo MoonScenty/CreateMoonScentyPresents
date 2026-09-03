@@ -1,5 +1,6 @@
 {
   "type": "createmoonscentypresents:alloying",
+  "heat_requirement": "heated",
   "ingredients": [
     {
       "type": "neoforge:single",

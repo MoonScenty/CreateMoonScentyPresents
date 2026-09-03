@@ -692,6 +692,22 @@ public class ModRecipes {
                         .unlockedBy("has_leather", prov.has(Items.LEATHER))
                         .save(prov));
 
+        // Literally the bellows with a shaft through it, which is what the recipe says.
+        //
+        // It has to be reachable before bronze: alloying asks for a fire a hand cannot
+        // hold and a crank at the same time, so the pump is what closes the age rather
+        // than a reward for having closed it. Copper and a wooden shaft are the most it
+        // can ask for without asking for what it is needed to make.
+        CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
+                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.MECHANICAL_AIR_PUMP.get())
+                        .pattern("CSC")
+                        .pattern(" B ")
+                        .define('C', Items.COPPER_INGOT)
+                        .define('S', ModBlocks.WOODEN_SHAFT.get())
+                        .define('B', ModBlocks.BELLOWS.get())
+                        .unlockedBy("has_bellows", prov.has(ModBlocks.BELLOWS.get()))
+                        .save(prov));
+
         // A heavy flat cap with an iron hinge, to shut the heat in.
         CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov ->
                 ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.FOUNDRY_LID.get())
@@ -761,8 +777,14 @@ public class ModRecipes {
      * bench. Nothing is lost - four ingots in, four out - because the cost is not in the
      * mixing but in the tin, which only comes out of washed iron.
      *
-     * <p>It needs turning, and a hand crank at 32 RPM is exactly enough for one mixer.
-     * That is the last thing the age asks for: everything built up to here, used at once.
+     * <p>It asks for the same fire the copper did, because metal that is being stirred
+     * is metal that is still molten. Which means the pit has to be held up a rung for the
+     * whole stir - and nobody has a spare hand for a bellows while turning a crank, so
+     * this is the recipe that makes the air pump necessary rather than convenient.
+     *
+     * <p>A hand crank makes 256 SU at 32 RPM, and the pump and the mixer take 128 each.
+     * One crank drives exactly those two and nothing else. That is the shape of the last
+     * thing the age asks for: everything built up to here, saturated, used at once.
      */
     private static void registerAlloying() {
         CreateMoonScentyPresents.REGISTRATE.addDataGenerator(ProviderType.RECIPE, prov -> {
@@ -776,6 +798,7 @@ public class ModRecipes {
                                     ModFluids.MOLTEN_COPPER.get().getSource(), COPPER_PER_BRONZE))
                             .output(new FluidStack(ModFluids.MOLTEN_BRONZE.get().getSource(),
                                     TIN_PER_BRONZE + COPPER_PER_BRONZE))
+                            .requiresHeat(HeatCondition.HEATED)
                             .duration(ALLOYING_TIME)
                             .build(), null);
         });

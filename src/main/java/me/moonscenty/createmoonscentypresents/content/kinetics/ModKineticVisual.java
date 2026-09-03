@@ -2,6 +2,7 @@ package me.moonscenty.createmoonscentypresents.content.kinetics;
 
 import java.util.function.Consumer;
 
+import com.simibubi.create.content.kinetics.base.DirectionalKineticBlock;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.content.kinetics.base.RotatingInstance;
@@ -48,6 +49,22 @@ public class ModKineticVisual {
             VisualizationContext context, T blockEntity, float partialTick) {
         return new SingleAxisRotatingVisual<>(context, blockEntity, partialTick,
                 Models.partial(ModPartialModels.rotating(blockEntity.getBlockState().getBlock())));
+    }
+
+    /**
+     * The same, for a machine that can be pointed anywhere.
+     *
+     * <p>The millstone always turns about Y, so its cog can be drawn exactly as it was
+     * modelled. A machine with a facing cannot: its part is modelled for one direction
+     * and has to be turned to the one it was placed in before the spin is applied, or it
+     * turns about an axis it is not lying on.
+     */
+    public static <T extends KineticBlockEntity> BlockEntityVisual<T> facingRotatingCore(
+            VisualizationContext context, T blockEntity, float partialTick) {
+        BlockState state = blockEntity.getBlockState();
+        return new SingleAxisRotatingVisual<>(context, blockEntity, partialTick,
+                state.getValue(DirectionalKineticBlock.FACING),
+                Models.partial(ModPartialModels.rotating(state.getBlock())));
     }
 
     /** Large cogs render their shaft separately so its teeth can be offset to mesh. */

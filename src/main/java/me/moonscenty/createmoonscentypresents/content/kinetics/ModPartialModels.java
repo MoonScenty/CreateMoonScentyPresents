@@ -44,6 +44,7 @@ public class ModPartialModels {
         largeCogwheel("large_stone_cogwheel", "cogwheel_shaft");
         ROTATING.put("primitive_millstone", block("primitive_millstone/inner"));
         ROTATING.put("primitive_sifter", block("primitive_sifter/inner"));
+        ROTATING.put("mechanical_air_pump", block("mechanical_air_pump/cog"));
         CRANK_HANDLES.put("primitive_hand_crank", block("primitive_hand_crank/handle"));
         CRANK_BASES.put("primitive_hand_crank", block("primitive_hand_crank/block"));
         GEARBOX_SHAFTS.put("primitive_gearbox", block("wooden_shaft_half"));
@@ -75,6 +76,24 @@ public class ModPartialModels {
 
     public static PartialModel bellowsBottom() {
         return BELLOWS_BOTTOM;
+    }
+
+    // The three parts of the foundry mixer that move: the cog on top, the pole that
+    // drops, and the head on the end of it.
+    private static final PartialModel MIXER_COG = block("foundry_mixer/cog");
+    private static final PartialModel MIXER_POLE = block("foundry_mixer/pole");
+    private static final PartialModel MIXER_HEAD = block("foundry_mixer/head");
+
+    public static PartialModel mixerCog() {
+        return MIXER_COG;
+    }
+
+    public static PartialModel mixerPole() {
+        return MIXER_POLE;
+    }
+
+    public static PartialModel mixerHead() {
+        return MIXER_HEAD;
     }
 
     private static PartialModel block(String path) {

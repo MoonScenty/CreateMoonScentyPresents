@@ -21,12 +21,15 @@ import me.moonscenty.createmoonscentypresents.content.foundry.FaucetBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.foundry.FoundryBasinBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.foundry.FoundryLidBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.foundry.FoundryMixerBlockEntity;
+import me.moonscenty.createmoonscentypresents.content.foundry.FoundryMixerRenderer;
 import me.moonscenty.createmoonscentypresents.content.milling.MillstoneBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModRotatingCoreRenderer;
 import me.moonscenty.createmoonscentypresents.content.sifting.SifterBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModHandCrankBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModPoweredShaftBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRackBlockEntity;
+import me.moonscenty.createmoonscentypresents.content.bellows.AirPumpBlockEntity;
+import me.moonscenty.createmoonscentypresents.content.bellows.AirPumpRenderer;
 import me.moonscenty.createmoonscentypresents.content.bellows.BellowsBlockEntity;
 import me.moonscenty.createmoonscentypresents.content.bellows.BellowsRenderer;
 import me.moonscenty.createmoonscentypresents.content.processing.DryingRackRenderer;
@@ -103,6 +106,7 @@ public class ModBlockEntityTypes {
             CreateMoonScentyPresents.REGISTRATE
                     .blockEntity("foundry_mixer", FoundryMixerBlockEntity::new)
                     .validBlocks(ModBlocks.FOUNDRY_MIXER)
+                    .renderer(() -> FoundryMixerRenderer::new)
                     .register();
 
     // Drains whatever it is stuck to into whatever is under it.
@@ -117,6 +121,15 @@ public class ModBlockEntityTypes {
                     .blockEntity("charcoal_pit", CharcoalPitBlockEntity::new)
                     .validBlocks(ModBlocks.CHARCOAL_PIT)
                     .register();
+
+    // Shares the millstone's drawing: a housing with one turning part inside, which is
+    // what the pump is once the fluid handling is gone.
+    public static final BlockEntityEntry<AirPumpBlockEntity> AIR_PUMP = CreateMoonScentyPresents.REGISTRATE
+            .blockEntity("air_pump", AirPumpBlockEntity::new)
+            .visual(() -> ModKineticVisual::facingRotatingCore, true)
+            .validBlocks(ModBlocks.MECHANICAL_AIR_PUMP)
+            .renderer(() -> AirPumpRenderer::new)
+            .register();
 
     // Counts down one squeeze, which is the whole of what the renderer needs.
     public static final BlockEntityEntry<BellowsBlockEntity> BELLOWS = CreateMoonScentyPresents.REGISTRATE

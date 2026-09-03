@@ -3,8 +3,6 @@ package me.moonscenty.createmoonscentypresents.compat.jei;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.simibubi.create.content.processing.recipe.HeatCondition;
-
 import me.moonscenty.createmoonscentypresents.content.foundry.FoundryRecipe;
 import me.moonscenty.createmoonscentypresents.registry.ModBlocks;
 import me.moonscenty.createmoonscentypresents.registry.ModRecipes;
@@ -117,13 +115,8 @@ public class MeltingCategory implements IRecipeCategory<RecipeHolder<FoundryReci
         Component time = Component.translatable(ModRecipes.TIME_KEY, JeiFormat.seconds(ticks));
         graphics.drawString(font, time, GAP_CENTER - font.width(time) / 2, TIME_Y, TEXT_COLOUR, false);
 
-        // A foundry always needs some fire, so even Create's "no requirement" is worth
-        // saying out loud here - it means a campfire will do, not that nothing will.
-        HeatCondition heat = recipe.getRequiredHeat();
         Component needs = Component.translatable(ModRecipes.NEEDS_HEAT_KEY,
-                Component.translatable(heat == HeatCondition.NONE
-                        ? ModRecipes.ANY_FIRE_KEY
-                        : heat.getTranslationKey()))
+                JeiFormat.heatName(recipe.getRequiredHeat()))
                 .withStyle(ChatFormatting.GRAY);
         graphics.drawString(font, needs, GAP_CENTER - font.width(needs) / 2, HEAT_Y, TEXT_COLOUR, false);
     }

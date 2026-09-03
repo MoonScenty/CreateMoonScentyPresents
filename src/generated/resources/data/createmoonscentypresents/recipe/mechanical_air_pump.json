@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "createmoonscentypresents:bellows"
+    },
+    "C": {
+      "item": "minecraft:copper_ingot"
+    },
+    "S": {
+      "item": "createmoonscentypresents:wooden_shaft"
+    }
+  },
+  "pattern": [
+    "CSC",
+    " B "
+  ],
+  "result": {
+    "count": 1,
+    "id": "createmoonscentypresents:mechanical_air_pump"
+  }
+}

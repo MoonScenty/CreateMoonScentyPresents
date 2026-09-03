@@ -37,7 +37,9 @@ public class JadeLang {
         addLang(KILN_NEEDS_HEAT_KEY, "Needs %s");
 
         addLang(HeatLevel.WARM.getTranslationKey(), "a fire");
-        addLang(HeatLevel.HEATED.getTranslationKey(), "a blaze burner");
+        // Two ways to reach this rung now, and the bellows is the one that exists in the
+        // stone age - so it is the one named first.
+        addLang(HeatLevel.HEATED.getTranslationKey(), "a bellows, or a blaze burner");
         addLang(HeatLevel.SUPERHEATED.getTranslationKey(), "a blaze burner on blaze cake");
     }
 

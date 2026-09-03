@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "createmoonscentypresents:block/mechanical_air_pump/block",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "createmoonscentypresents:block/mechanical_air_pump/block",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "createmoonscentypresents:block/mechanical_air_pump/block",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "createmoonscentypresents:block/mechanical_air_pump/block",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "createmoonscentypresents:block/mechanical_air_pump/block"
+    },
+    "facing=west": {
+      "model": "createmoonscentypresents:block/mechanical_air_pump/block",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

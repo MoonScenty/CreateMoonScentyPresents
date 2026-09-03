@@ -20,6 +20,7 @@ import me.moonscenty.createmoonscentypresents.content.kinetics.ModGearboxBlock;
 import me.moonscenty.createmoonscentypresents.content.kinetics.ModHandCrankBlock;
 import me.moonscenty.createmoonscentypresents.content.milling.MillstoneBlock;
 import me.moonscenty.createmoonscentypresents.content.casting.CastingTableBlock;
+import me.moonscenty.createmoonscentypresents.content.bellows.AirPumpBlock;
 import me.moonscenty.createmoonscentypresents.content.bellows.BellowsBlock;
 import me.moonscenty.createmoonscentypresents.content.charring.CharcoalPitBlock;
 import me.moonscenty.createmoonscentypresents.content.firing.PitKilnBlock;
@@ -230,6 +231,10 @@ public class ModBlocks {
             .block("foundry_basin", FoundryBasinBlock::new)
             .initialProperties(() -> Blocks.BRICKS)
             .properties(p -> p.mapColor(MapColor.COLOR_GRAY).noOcclusion())
+            // The basin texture has 144 fully transparent pixels in it, and the solid
+            // layer draws those black - which is what the inside of the bowl is made of.
+            // Create puts its own basin on this layer for the same reason.
+            .addLayer(() -> RenderType::cutoutMipped)
             .transform(TagGen.pickaxeOnly())
             .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
                     prov.models().getExistingFile(prov.modLoc("block/foundry_basin/block"))))
@@ -250,6 +255,8 @@ public class ModBlocks {
             .block("foundry_mixer", FoundryMixerBlock::new)
             .initialProperties(() -> Blocks.BRICKS)
             .properties(p -> p.mapColor(MapColor.COLOR_GRAY).noOcclusion())
+            // Same reason as the basin; Create's own mixer is on this layer too.
+            .addLayer(() -> RenderType::cutoutMipped)
             .transform(TagGen.pickaxeOnly())
             .onRegister(block -> BlockStressValues.IMPACTS.register(block, () -> 4.0))
             .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(),
@@ -326,6 +333,28 @@ public class ModBlocks {
             // The item shows the whole thing, since nothing is animating it in a hand.
             .model((ctx, prov) -> prov.withExistingParent(ctx.getName(),
                     prov.modLoc("block/bellows/item")))
+            .build()
+            .register();
+
+    // Stone Age - the bellows with a shaft on it. Create's mechanical pump taken whole:
+    // its housing, cog and the way it takes rotation are reused, and its model and
+    // texture are copied into this mod so they can be redrawn. The pumping is gone; what
+    // is left drives the charcoal pit it faces.
+    //
+    // Create's own impact, 4.0, which at 32 RPM is 128 SU - and so is the mixer. A hand
+    // crank makes 256, so one crank drives exactly these two and nothing else. That is
+    // the arrangement the last chapter of the age is built around; see the alloying
+    // recipe, which needs the fire held up while the mixer turns.
+    public static final BlockEntry<AirPumpBlock> MECHANICAL_AIR_PUMP = CreateMoonScentyPresents.REGISTRATE
+            .block("mechanical_air_pump", AirPumpBlock::new)
+            .initialProperties(() -> Blocks.COPPER_BLOCK)
+            .properties(p -> p.mapColor(MapColor.TERRACOTTA_ORANGE).noOcclusion())
+            .transform(TagGen.pickaxeOnly())
+            .onRegister(block -> BlockStressValues.IMPACTS.register(block, () -> 4.0))
+            .blockstate(BlockStateGen.directionalBlockProvider(true))
+            .item()
+            .model((ctx, prov) -> prov.withExistingParent(ctx.getName(),
+                    prov.modLoc("block/mechanical_air_pump/item")))
             .build()
             .register();
 

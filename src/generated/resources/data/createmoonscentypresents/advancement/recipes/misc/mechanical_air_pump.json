@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_bellows": {
+      "conditions": {
+        "items": [
+          {
+            "items": "createmoonscentypresents:bellows"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "createmoonscentypresents:mechanical_air_pump"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_bellows"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "createmoonscentypresents:mechanical_air_pump"
+    ]
+  }
+}
